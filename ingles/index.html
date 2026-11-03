@@ -64,6 +64,10 @@
   .pill { font-size: .72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
   .pill.done { background: var(--good-soft); color: var(--good); }
   .pill.n { background: var(--primary-soft); color: var(--primary); }
+  .mural-h { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; color: var(--fg); }
+  .mural-h:first-of-type { margin-top: 6px; }
+  .mural-h.hdone { color: var(--muted); }
+  .mural-h .count { font-size: .76rem; font-weight: 800; background: var(--surface-2); color: var(--muted); border-radius: 999px; padding: 2px 9px; }
 
   /* ---------- WIZARD ---------- */
   .wizard { flex: 1; min-height: 0; display: flex; flex-direction: column; }
@@ -860,6 +864,153 @@ const TOPICS = [
       { t:"mc", q:"___ is your phone number?", o:["What","Who"], a:"What", e:"Un dato → <b>What</b>.", h:"Un dato → What." },
       { t:"mc", q:"___ do you live? — In Madrid.", o:["Where","Why"], a:"Where", e:"Un lugar → <b>Where</b>.", h:"Un lugar → Where." }
     ]
+  },
+  {
+    id: "verbs", emoji: "🏃", en: "Common Verbs", es: "Los verbos más comunes",
+    slides: [
+      { k: "Empezamos", t: "¿Qué es un <span class='en'>verb</span>?", h: `
+        <p>Un <b>verbo</b> es una palabra de <b>acción</b> (run, eat) o de estado (be, have). En inglés el infinitivo lleva <span class="hl">to</span>.</p>
+        <ul class="ex">
+          <li>to eat <span class="t">comer</span></li>
+          <li>to play <span class="t">jugar / tocar</span></li>
+          <li>to go <span class="t">ir</span></li>
+        </ul>
+        <div class="tip">💡 Aquí repasamos su <b>significado</b>. Para conjugarlos, mira el tema <i>Present Simple</i>.</div>` },
+      { k: "Rutina diaria", t: "Verbos del día a día", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>get up</td><td>levantarse</td></tr>
+          <tr><td>have breakfast</td><td>desayunar</td></tr>
+          <tr><td>go to school</td><td>ir al colegio</td></tr>
+          <tr><td>study</td><td>estudiar</td></tr>
+          <tr><td>do homework</td><td>hacer los deberes</td></tr>
+          <tr><td>have lunch / dinner</td><td>comer / cenar</td></tr>
+          <tr><td>watch TV</td><td>ver la tele</td></tr>
+          <tr><td>go to bed</td><td>irse a la cama</td></tr>
+        </table></div>` },
+      { k: "Acción y tiempo libre", t: "Verbos de acción", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>play</td><td>jugar / tocar</td></tr><tr><td>read</td><td>leer</td></tr>
+          <tr><td>write</td><td>escribir</td></tr><tr><td>listen</td><td>escuchar</td></tr>
+          <tr><td>run</td><td>correr</td></tr><tr><td>swim</td><td>nadar</td></tr>
+          <tr><td>sing</td><td>cantar</td></tr><tr><td>dance</td><td>bailar</td></tr>
+          <tr><td>cook</td><td>cocinar</td></tr><tr><td>clean</td><td>limpiar</td></tr>
+        </table></div>` },
+      { k: "Muy útiles", t: "Verbos que usarás siempre", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>be</td><td>ser / estar</td></tr><tr><td>have</td><td>tener</td></tr>
+          <tr><td>do / make</td><td>hacer</td></tr><tr><td>want</td><td>querer</td></tr>
+          <tr><td>like</td><td>gustar</td></tr><tr><td>need</td><td>necesitar</td></tr>
+          <tr><td>go</td><td>ir</td></tr><tr><td>come</td><td>venir</td></tr>
+        </table></div>
+        <div class="tip warn">⚠️ <b>do homework</b> (deberes), pero <b>make</b> = fabricar/crear (make a cake).</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"to eat = ___", o:["comer","beber"], a:"comer", e:"to eat = comer.", h:"Lo haces con la comida 🍎." },
+      { t:"mc", q:"to drink = ___", o:["beber","comer"], a:"beber", e:"to drink = beber.", h:"Lo haces con el agua 💧." },
+      { t:"mc", q:"to run = ___", o:["correr","andar"], a:"correr", e:"to run = correr.", h:"Ir muy rápido con los pies." },
+      { t:"mc", q:"to read = ___", o:["leer","escribir"], a:"leer", e:"to read = leer.", h:"Lo haces con un libro." },
+      { t:"mc", q:"to write = ___", o:["escribir","leer"], a:"escribir", e:"to write = escribir.", h:"Lo haces con un bolígrafo." },
+      { t:"mc", q:"to listen = ___", o:["escuchar","hablar"], a:"escuchar", e:"to listen = escuchar.", h:"Lo haces con los oídos 👂." },
+      { t:"mc", q:"to speak = ___", o:["hablar","escuchar"], a:"hablar", e:"to speak = hablar.", h:"Lo haces con la boca." },
+      { t:"mc", q:"to sleep = ___", o:["dormir","despertarse"], a:"dormir", e:"to sleep = dormir.", h:"Lo haces en la cama 😴." },
+      { t:"mc", q:"to buy = ___", o:["comprar","vender"], a:"comprar", e:"to buy = comprar.", h:"En la tienda, con dinero." },
+      { t:"mc", q:"to open = ___", o:["abrir","cerrar"], a:"abrir", e:"to open = abrir.", h:"Lo contrario de cerrar." },
+      { t:"mc", q:"to close = ___", o:["cerrar","abrir"], a:"cerrar", e:"to close = cerrar.", h:"Lo contrario de abrir." },
+      { t:"mc", q:"to swim = ___", o:["nadar","correr"], a:"nadar", e:"to swim = nadar.", h:"Lo haces en la piscina 🏊." },
+      { t:"mc", q:"to sing = ___", o:["cantar","bailar"], a:"cantar", e:"to sing = cantar.", h:"Lo haces con una canción 🎤." },
+      { t:"mc", q:"to dance = ___", o:["bailar","cantar"], a:"bailar", e:"to dance = bailar.", h:"Lo haces con música 💃." },
+      { t:"mc", q:"to cook = ___", o:["cocinar","limpiar"], a:"cocinar", e:"to cook = cocinar.", h:"Lo haces en la cocina 🍳." },
+      { t:"mc", q:"to clean = ___", o:["limpiar","cocinar"], a:"limpiar", e:"to clean = limpiar.", h:"Dejar algo sin suciedad." },
+      { t:"mc", q:"to help = ___", o:["ayudar","necesitar"], a:"ayudar", e:"to help = ayudar.", h:"Echar una mano 🤝." },
+      { t:"mc", q:"to want = ___", o:["querer","poder"], a:"querer", e:"to want = querer.", h:"Desear algo." },
+      { t:"mc", q:"to need = ___", o:["necesitar","querer"], a:"necesitar", e:"to need = necesitar.", h:"Hacer falta algo." },
+      { t:"mc", q:"to live = ___", o:["vivir","trabajar"], a:"vivir", e:"to live = vivir.", h:"Donde está tu casa." },
+      { t:"mc", q:"correr = ___", o:["to run","to walk"], a:"to run", e:"correr = to run.", h:"Ir rápido → run." },
+      { t:"mc", q:"comprar = ___", o:["to buy","to sell"], a:"to buy", e:"comprar = to buy.", h:"Con dinero → buy." },
+      { t:"mc", q:"estudiar = ___", o:["to study","to play"], a:"to study", e:"estudiar = to study.", h:"Para el examen → study." },
+      { t:"mc", q:"ver la tele = ___", o:["watch TV","read a book"], a:"watch TV", e:"ver la tele = watch TV.", h:"Con la tele se usa 'watch'." },
+      { t:"mc", q:"levantarse = ___", o:["get up","go to bed"], a:"get up", e:"levantarse = to get up.", h:"Lo primero por la mañana." },
+      { t:"mc", q:"I ___ a book every night.", o:["read","run"], a:"read", e:"read a book = leer un libro.", h:"Con 'a book' va el verbo leer." },
+      { t:"mc", q:"She can ___ very fast.", o:["run","eat"], a:"run", e:"run fast = correr rápido.", h:"'very fast' → correr." },
+      { t:"mc", q:"We ___ English at school.", o:["study","sleep"], a:"study", e:"study English = estudiar inglés.", h:"En el colegio se estudia." },
+      { t:"mc", q:"They ___ dinner at 9.", o:["have","go"], a:"have", e:"have dinner = cenar.", h:"Para comidas se usa 'have'." },
+      { t:"mc", q:"hacer los deberes = ___", o:["do homework","make homework"], a:"do homework", e:"'homework' va con <b>do</b>.", h:"Con homework se usa 'do'." }
+    ]
+  },
+  {
+    id: "vocab", emoji: "🗂️", en: "Vocabulary", es: "Vocabulario básico",
+    slides: [
+      { k: "La familia", t: "Family", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>mother / mum</td><td>madre / mamá</td></tr>
+          <tr><td>father / dad</td><td>padre / papá</td></tr>
+          <tr><td>brother</td><td>hermano</td></tr>
+          <tr><td>sister</td><td>hermana</td></tr>
+          <tr><td>grandfather</td><td>abuelo</td></tr>
+          <tr><td>grandmother</td><td>abuela</td></tr>
+          <tr><td>uncle / aunt</td><td>tío / tía</td></tr>
+          <tr><td>cousin</td><td>primo / prima</td></tr>
+          <tr><td>parents</td><td>padres</td></tr>
+        </table></div>` },
+      { k: "Los colores", t: "Colours", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>red</td><td>rojo</td></tr><tr><td>blue</td><td>azul</td></tr>
+          <tr><td>green</td><td>verde</td></tr><tr><td>yellow</td><td>amarillo</td></tr>
+          <tr><td>black</td><td>negro</td></tr><tr><td>white</td><td>blanco</td></tr>
+          <tr><td>orange</td><td>naranja</td></tr><tr><td>pink</td><td>rosa</td></tr>
+          <tr><td>brown</td><td>marrón</td></tr><tr><td>grey</td><td>gris</td></tr>
+          <tr><td>purple</td><td>morado</td></tr>
+        </table></div>` },
+      { k: "El aula", t: "In the classroom", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>book</td><td>libro</td></tr><tr><td>notebook</td><td>cuaderno</td></tr>
+          <tr><td>pen</td><td>bolígrafo</td></tr><tr><td>pencil</td><td>lápiz</td></tr>
+          <tr><td>rubber</td><td>goma</td></tr><tr><td>ruler</td><td>regla</td></tr>
+          <tr><td>bag</td><td>mochila</td></tr><tr><td>desk</td><td>pupitre</td></tr>
+          <tr><td>chair</td><td>silla</td></tr><tr><td>board</td><td>pizarra</td></tr>
+        </table></div>` },
+      { k: "Días y meses", t: "Days & Months", h: `
+        <p>Los <b>días</b> de la semana:</p>
+        <div class="table-wrap"><table class="grx">
+          <tr><td>Monday</td><td>lunes</td></tr><tr><td>Tuesday</td><td>martes</td></tr>
+          <tr><td>Wednesday</td><td>miércoles</td></tr><tr><td>Thursday</td><td>jueves</td></tr>
+          <tr><td>Friday</td><td>viernes</td></tr><tr><td>Saturday</td><td>sábado</td></tr>
+          <tr><td>Sunday</td><td>domingo</td></tr>
+        </table></div>
+        <div class="tip">💡 En inglés los días y los meses van con <b>mayúscula</b>: Monday, January.</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"mother = ___", o:["madre","padre"], a:"madre", e:"mother = madre.", h:"Familia; empieza por M." },
+      { t:"mc", q:"father = ___", o:["padre","madre"], a:"padre", e:"father = padre.", h:"Familia; empieza por F." },
+      { t:"mc", q:"sister = ___", o:["hermana","hermano"], a:"hermana", e:"sister = hermana.", h:"La chica de la familia." },
+      { t:"mc", q:"brother = ___", o:["hermano","hermana"], a:"hermano", e:"brother = hermano.", h:"El chico de la familia." },
+      { t:"mc", q:"grandmother = ___", o:["abuela","tía"], a:"abuela", e:"grandmother = abuela.", h:"grand + mother (madre)." },
+      { t:"mc", q:"uncle = ___", o:["tío","abuelo"], a:"tío", e:"uncle = tío.", h:"El hermano de tu padre/madre." },
+      { t:"mc", q:"aunt = ___", o:["tía","prima"], a:"tía", e:"aunt = tía.", h:"La hermana de tu padre/madre." },
+      { t:"mc", q:"cousin = ___", o:["primo/a","sobrino/a"], a:"primo/a", e:"cousin = primo/a.", h:"Hij@ de tus tíos." },
+      { t:"mc", q:"parents = ___", o:["padres","hermanos"], a:"padres", e:"parents = padres (padre y madre).", h:"Padre + madre juntos." },
+      { t:"mc", q:"hija = ___", o:["daughter","son"], a:"daughter", e:"hija = daughter (son = hijo).", h:"Chica → daughter." },
+      { t:"fill", q:"rojo = ___", a:["red"], e:"rojo = red.", h:"El color del tomate 🍅." },
+      { t:"mc", q:"blue = ___", o:["azul","verde"], a:"azul", e:"blue = azul.", h:"El color del cielo." },
+      { t:"mc", q:"green = ___", o:["verde","azul"], a:"verde", e:"green = verde.", h:"El color de la hierba." },
+      { t:"mc", q:"yellow = ___", o:["amarillo","naranja"], a:"amarillo", e:"yellow = amarillo.", h:"El color del sol ☀️." },
+      { t:"mc", q:"black = ___", o:["negro","blanco"], a:"negro", e:"black = negro.", h:"El color de la noche." },
+      { t:"mc", q:"white = ___", o:["blanco","negro"], a:"blanco", e:"white = blanco.", h:"El color de la nieve." },
+      { t:"mc", q:"marrón = ___", o:["brown","grey"], a:"brown", e:"marrón = brown.", h:"El color del chocolate." },
+      { t:"mc", q:"pink = ___", o:["rosa","morado"], a:"rosa", e:"pink = rosa.", h:"Rojo + blanco." },
+      { t:"mc", q:"grey = ___", o:["gris","marrón"], a:"gris", e:"grey = gris.", h:"El color de las nubes de lluvia." },
+      { t:"mc", q:"naranja (color) = ___", o:["orange","purple"], a:"orange", e:"naranja = orange.", h:"Igual que la fruta 🍊." },
+      { t:"mc", q:"book = ___", o:["libro","cuaderno"], a:"libro", e:"book = libro.", h:"Del aula; lo lees." },
+      { t:"mc", q:"pen = ___", o:["bolígrafo","lápiz"], a:"bolígrafo", e:"pen = bolígrafo.", h:"Escribe con tinta." },
+      { t:"mc", q:"pencil = ___", o:["lápiz","bolígrafo"], a:"lápiz", e:"pencil = lápiz.", h:"Se borra con goma." },
+      { t:"mc", q:"rubber = ___", o:["goma","regla"], a:"goma", e:"rubber = goma de borrar.", h:"Borra el lápiz." },
+      { t:"mc", q:"ruler = ___", o:["regla","goma"], a:"regla", e:"ruler = regla.", h:"Hace líneas rectas." },
+      { t:"mc", q:"mochila = ___", o:["bag","desk"], a:"bag", e:"mochila = bag.", h:"La llevas a la espalda 🎒." },
+      { t:"mc", q:"chair = ___", o:["silla","pupitre"], a:"silla", e:"chair = silla.", h:"Te sientas en ella." },
+      { t:"mc", q:"board = ___", o:["pizarra","puerta"], a:"pizarra", e:"board = pizarra.", h:"El profe escribe en ella." },
+      { t:"mc", q:"Monday = ___", o:["lunes","martes"], a:"lunes", e:"Monday = lunes.", h:"El primer día de clase." },
+      { t:"mc", q:"miércoles = ___", o:["Wednesday","Thursday"], a:"Wednesday", e:"miércoles = Wednesday.", h:"El día del medio de la semana." }
+    ]
   }
 ];
 
@@ -916,7 +1067,7 @@ function gradeColor(p) { return p === 100 ? "var(--good)" : p >= 60 ? "var(--acc
 /* ---------- HOME ---------- */
 function renderHome() {
   const scores = loadScores();
-  const cards = TOPICS.map(t => {
+  function cardHtml(t) {
     const rec = scores[t.id];
     const badge = rec
       ? `<span class="pill done">✓ Hecha · ${rec.last}%</span><span class="pill">${caducaTxt(rec)}</span>`
@@ -927,7 +1078,21 @@ function renderHome() {
       <span class="t-es">${esc(t.es)}</span>
       <span class="foot">${badge}</span>
     </button>`;
-  }).join("");
+  }
+  // Pendientes (sin hacer o caducadas) primero; hechas al final, las que caducan antes arriba.
+  const pend = TOPICS.filter(t => !scores[t.id]);
+  const done = TOPICS.filter(t => scores[t.id]).sort((a, b) => daysLeft(scores[a.id]) - daysLeft(scores[b.id]));
+
+  let body;
+  if (pend.length && done.length) {
+    body = `
+      <h2 class="mural-h">📌 Por practicar <span class="count">${pend.length}</span></h2>
+      <div class="grid">${pend.map(cardHtml).join("")}</div>
+      <h2 class="mural-h hdone">✅ Hechas esta semana <span class="count">${done.length}</span></h2>
+      <div class="grid">${done.map(cardHtml).join("")}</div>`;
+  } else {
+    body = `<div class="grid">${pend.concat(done).map(cardHtml).join("")}</div>`;
+  }
 
   app.innerHTML = `<div class="scroll"><div class="wrap">
     <section class="hero">
@@ -935,7 +1100,7 @@ function renderHome() {
       <h1>Aprende y practica, paso a paso</h1>
       <p>Elige un tema. Primero te lo explico pantalla a pantalla y luego haces un examen de ${PICK} preguntas (elegidas al azar entre 30, así nunca son las mismas). Te corrige al instante y, si te atascas, tienes el botón 💡 de pista.</p>
     </section>
-    <div class="grid">${cards}</div>
+    ${body}
     <footer>Hecho con cariño para estudiar · ${TOPICS.length} temas · banco de 30 preguntas por tema</footer>
   </div></div>`;
   app.querySelectorAll(".card").forEach(c => c.addEventListener("click", () => { location.hash = c.dataset.id; }));
