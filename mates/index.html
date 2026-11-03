@@ -137,6 +137,7 @@
   .btn.ghost:hover { border-color: var(--primary); }
   .btn.accent { background: var(--accent); color: #fff; }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn.ico { flex: none; padding: 10px 13px; font-size: 1.15rem; line-height: 1; }
   .wiz-nav .grow { flex: 1; }
   .wiz-nav .btn.wide { min-width: 150px; justify-content: center; }
   .wiz-nav.stack { flex-wrap: wrap; }
@@ -850,8 +851,14 @@ function startTopic(id) {
     <div class="slide-area" id="slideArea"></div>
     <div class="wiz-nav" id="wizNav"></div>
   </div>`;
+  // El botón de salir se re-crea en cada pantalla; lo escuchamos en el contenedor (persiste).
+  document.getElementById("wizNav").addEventListener("click", e => {
+    if (e.target.closest("#wizExit")) location.hash = "";
+  });
   renderSlide();
 }
+
+const EXIT_BTN = '<button class="btn ghost ico" id="wizExit" title="Salir al menú principal" aria-label="Salir al menú principal">🏠</button>';
 
 function totalSlides() { return wiz.topic.slides.length + wiz.questions.length + 1; }
 
@@ -874,6 +881,7 @@ function renderSlide() {
       <div class="kicker">${esc(s.k)}</div><h2>${s.t}</h2>${s.h}
     </div></div>`;
     nav.innerHTML = `
+      ${EXIT_BTN}
       <button class="btn ghost" id="prevBtn" ${i === 0 ? "disabled" : ""}>← Atrás</button>
       <span class="grow"></span>
       <button class="btn primary wide" id="nextBtn">${i === nSlides - 1 ? "Empezar examen →" : "Siguiente →"}</button>`;
@@ -944,6 +952,7 @@ function renderSlide() {
   document.getElementById("hintBtn").onclick = () => openHint(qi);
 
   nav.innerHTML = `
+    ${EXIT_BTN}
     <button class="btn ghost" id="prevBtn">← Atrás</button>
     <span class="grow"></span>
     ${checked
