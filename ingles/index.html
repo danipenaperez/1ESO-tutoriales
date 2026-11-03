@@ -139,6 +139,8 @@
   .btn:disabled { opacity: .4; cursor: not-allowed; }
   .wiz-nav .grow { flex: 1; }
   .wiz-nav .btn.wide { min-width: 150px; justify-content: center; }
+  .wiz-nav.stack { flex-wrap: wrap; }
+  .wiz-nav.stack .btn { flex: 1 1 100%; min-width: 0; }
 
   .back { background: none; border: 0; color: var(--primary); font-weight: 800; cursor: pointer; padding: 6px 0; font-size: .95rem; font-family: var(--font-body); }
   .topic-head { display: flex; align-items: center; gap: 12px; margin: 6px 0 2px; }
@@ -1459,6 +1461,7 @@ function renderSlide() {
   const i = wiz.index;
   const area = document.getElementById("slideArea");
   const nav = document.getElementById("wizNav");
+  nav.className = "wiz-nav";
 
   document.getElementById("pbar").style.width = ((i + 1) / total * 100) + "%";
 
@@ -1588,10 +1591,10 @@ function renderResult(area, nav) {
   </div></div>`;
   area.scrollTop = 0;
 
+  nav.className = "wiz-nav stack";
   nav.innerHTML = `
     <button class="btn accent wide" id="retryBtn">↻ Repetir (otras preguntas)</button>
-    <span class="grow"></span>
-    <button class="btn primary wide" id="exitBtn">Salir al índice</button>`;
+    <button class="btn primary wide" id="exitBtn">← Salir al menú principal</button>`;
   document.getElementById("retryBtn").onclick = () => startTopic(topic.id);
   document.getElementById("exitBtn").onclick = () => { location.hash = ""; };
 }
