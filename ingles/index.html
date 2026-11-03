@@ -1,0 +1,1208 @@
+<title>English A1+ Trainer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: wizard a pantalla completa. Home = rejilla de temas con scroll propio;
+     cada tema = explicación paso a paso + examen de 15 preguntas elegidas al azar
+     de un banco de 30. Barra de progreso arriba, navegación Atrás/Siguiente abajo. */
+  :root {
+    --bg: #fbf7f0; --surface: #ffffff; --surface-2: #f4eee3; --fg: #2b2a26; --muted: #726d63; --border: #e7ddcd;
+    --primary: #2f6d63; --primary-soft: #dcefe9; --accent: #e8743b; --accent-soft: #fbe6d8;
+    --good: #2e7d4f; --good-soft: #dcf0e2; --bad: #c23c3c; --bad-soft: #f8e0dd;
+    --shadow: 0 2px 4px rgba(40,30,15,.05), 0 8px 24px rgba(40,30,15,.06);
+    --radius: 16px; --font-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif; --font-body: "Nunito", system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1916; --surface: #262420; --surface-2: #2f2c27; --fg: #f1ece2; --muted: #aba497; --border: #3a362f;
+      --primary: #6fc3b4; --primary-soft: #223f3a; --accent: #f08a56; --accent-soft: #3d2a1e;
+      --good: #6cc48b; --good-soft: #223a2b; --bad: #ec7b7b; --bad-soft: #3d2322;
+      --shadow: 0 2px 4px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.3); color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1916; --surface: #262420; --surface-2: #2f2c27; --fg: #f1ece2; --muted: #aba497; --border: #3a362f;
+    --primary: #6fc3b4; --primary-soft: #223f3a; --accent: #f08a56; --accent-soft: #3d2a1e;
+    --good: #6cc48b; --good-soft: #223a2b; --bad: #ec7b7b; --bad-soft: #3d2322;
+    --shadow: 0 2px 4px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.3); color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--font-body); line-height: 1.55; display: flex; flex-direction: column; overflow: hidden; }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; letter-spacing: -.01em; }
+  a { color: var(--primary); }
+
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); }
+  header.bar {
+    flex: none; background: var(--surface); border-bottom: 1px solid var(--border);
+    padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px));
+    padding-block: 9px; display: flex; align-items: center; gap: 10px;
+  }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; cursor: pointer; background: none; border: 0; color: var(--fg); padding: 4px 6px; border-radius: 10px; }
+  .bar .brand:hover { background: var(--surface-2); }
+  .bar .logo { width: 29px; height: 29px; border-radius: 9px; background: var(--primary); color: #fff; display: grid; place-items: center; font-size: .95rem; flex: none; }
+  .bar .spacer { flex: 1; }
+  .icon-btn { background: var(--surface-2); border: 1px solid var(--border); color: var(--fg); width: 37px; height: 37px; border-radius: 10px; font-size: 1rem; cursor: pointer; display: grid; place-items: center; flex: none; }
+  .icon-btn:hover { border-color: var(--primary); }
+
+  main { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .scroll { flex: 1; min-height: 0; overflow-y: auto; }
+  .wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 22px 48px; }
+
+  .hero { margin-bottom: 20px; }
+  .hero .eyebrow { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; }
+  .hero h1 { font-size: clamp(1.7rem, 6vw, 2.4rem); margin: 4px 0 8px; }
+  .hero p { color: var(--muted); max-width: 60ch; margin: 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .card { text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; box-shadow: var(--shadow); color: var(--fg); display: flex; flex-direction: column; gap: 6px; transition: transform .15s ease, border-color .15s ease; min-width: 0; }
+  .card:hover { transform: translateY(-3px); border-color: var(--primary); }
+  .card .emoji { font-size: 1.7rem; }
+  .card .t-en { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; line-height: 1.2; }
+  .card .t-es { color: var(--muted); font-size: .9rem; }
+  .card .foot { margin-top: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .pill { font-size: .72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+  .pill.done { background: var(--good-soft); color: var(--good); }
+  .pill.n { background: var(--primary-soft); color: var(--primary); }
+
+  /* ---------- WIZARD ---------- */
+  .wizard { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .wiz-top { flex: none; border-bottom: 1px solid var(--border); background: var(--surface); padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px)); padding-block: 8px; }
+  .wiz-top .row { display: flex; align-items: center; gap: 10px; }
+  .wiz-close { background: none; border: 0; color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; padding: 2px 6px; border-radius: 8px; flex: none; }
+  .wiz-close:hover { background: var(--surface-2); color: var(--fg); }
+  .wiz-title { font-family: var(--font-display); font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 7px; min-width: 0; }
+  .wiz-title .em { font-size: 1.15rem; }
+  .wiz-title .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .wiz-step { margin-left: auto; color: var(--muted); font-size: .82rem; font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
+  .pbar { height: 6px; border-radius: 999px; background: var(--surface-2); margin-top: 8px; overflow: hidden; }
+  .pbar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .25s ease; }
+
+  .slide-area { flex: 1; min-height: 0; overflow-y: auto; }
+  .slide-wrap { min-height: 100%; display: flex; flex-direction: column; justify-content: center; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); padding-block: 22px; }
+  .slide { width: 100%; max-width: 640px; margin: 0 auto; }
+
+  .kicker { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: .07em; font-size: .72rem; }
+  .slide h2 { font-size: clamp(1.4rem, 5.5vw, 1.9rem); margin: 4px 0 12px; }
+  .slide p { margin: .5em 0; font-size: 1.04rem; }
+  .en { font-weight: 700; color: var(--primary); }
+  .hl { background: var(--accent-soft); color: var(--accent); font-weight: 800; padding: 0 4px; border-radius: 5px; }
+  ul.ex { list-style: none; padding: 0; margin: 12px 0; display: flex; flex-direction: column; gap: 7px; }
+  ul.ex li { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 10px; padding: 8px 12px; font-size: 1.02rem; }
+  ul.ex li .t { display: block; color: var(--muted); font-size: .88rem; font-style: italic; margin-top: 1px; }
+  .tip { background: var(--primary-soft); color: var(--primary); border-radius: 12px; padding: 10px 14px; margin: 14px 0 2px; font-size: .96rem; font-weight: 600; }
+  .tip.warn { background: var(--accent-soft); color: var(--accent); }
+  ul.bul { margin: 10px 0; padding-left: 1.1em; }
+  ul.bul li { margin: .35em 0; }
+  .table-wrap { overflow-x: auto; margin: 12px 0; }
+  table.grx { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  table.grx th, table.grx td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; }
+  table.grx th { background: var(--surface-2); font-family: var(--font-display); font-weight: 700; }
+
+  .q-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .q-kicker { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: .07em; font-size: .72rem; }
+  .hint-btn { margin-left: auto; background: var(--accent-soft); color: var(--accent); border: 1px solid transparent; font-family: var(--font-body); font-weight: 800; font-size: .85rem; padding: 7px 13px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .hint-btn:hover { border-color: var(--accent); }
+  .q-prompt { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.35rem, 5vw, 1.8rem); margin: 0 0 18px; line-height: 1.3; }
+  .q-prompt .blank { display: inline-block; min-width: 46px; border-bottom: 3px dashed var(--muted); text-align: center; color: var(--accent); }
+  .opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt { font: inherit; text-align: left; cursor: pointer; padding: 13px 16px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--fg); font-weight: 700; font-size: 1.05rem; display: flex; align-items: center; gap: 10px; }
+  .opt::before { content: ""; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); flex: none; }
+  .opt:hover { border-color: var(--primary); }
+  .opt.sel { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .opt.sel::before { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 3px var(--primary-soft); }
+  input.fill { font: inherit; font-size: 1.15rem; padding: 12px 16px; border: 2px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--fg); width: 100%; font-weight: 700; }
+  input.fill:focus { outline: none; border-color: var(--primary); }
+  .q.checked .opt { cursor: default; }
+  .q.checked .opt.answer { border-color: var(--good); background: var(--good-soft); color: var(--good); }
+  .q.checked .opt.answer::before { border-color: var(--good); background: var(--good); box-shadow: none; }
+  .q.checked .opt.sel.wrong { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+  .q.checked .opt.sel.wrong::before { border-color: var(--bad); background: var(--bad); box-shadow: none; }
+  input.fill.okin { border-color: var(--good); color: var(--good); background: var(--good-soft); }
+  input.fill.noin { border-color: var(--bad); color: var(--bad); background: var(--bad-soft); }
+  .feedback { margin-top: 16px; border-radius: 12px; padding: 12px 15px; font-size: 1rem; }
+  .feedback.ok { background: var(--good-soft); color: var(--good); }
+  .feedback.no { background: var(--bad-soft); color: var(--bad); }
+  .feedback b { font-family: var(--font-display); }
+  .feedback .sol { color: var(--fg); }
+  .feedback .expl { color: var(--fg); display: block; margin-top: 4px; }
+
+  .res { text-align: center; }
+  .res .ring { width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 14px; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 2rem; }
+  .res h2 { margin: 0 0 6px; }
+  .res p { color: var(--muted); margin: 0 auto 4px; max-width: 42ch; }
+
+  .wiz-nav { flex: none; border-top: 1px solid var(--border); background: var(--surface); display: flex; gap: 10px; align-items: center; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 11px; padding-bottom: max(11px, env(safe-area-inset-bottom, 0px)); }
+  .btn { font: inherit; font-family: var(--font-display); font-weight: 700; cursor: pointer; border-radius: 12px; padding: 12px 18px; border: 2px solid transparent; font-size: 1.02rem; }
+  .btn.primary { background: var(--primary); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.07); }
+  .btn.ghost { background: var(--surface); color: var(--fg); border-color: var(--border); }
+  .btn.ghost:hover { border-color: var(--primary); }
+  .btn.accent { background: var(--accent); color: #fff; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .wiz-nav .grow { flex: 1; }
+  .wiz-nav .btn.wide { min-width: 150px; justify-content: center; }
+
+  .back { background: none; border: 0; color: var(--primary); font-weight: 800; cursor: pointer; padding: 6px 0; font-size: .95rem; font-family: var(--font-body); }
+  .topic-head { display: flex; align-items: center; gap: 12px; margin: 6px 0 2px; }
+  .topic-head .emoji { font-size: 2rem; }
+  .topic-head h1 { font-size: clamp(1.5rem, 5vw, 2rem); margin: 0; }
+  .topic-head .t-es { color: var(--muted); font-weight: 600; }
+  .summary { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin: 16px 0; flex-wrap: wrap; }
+  .summary .ring { width: 80px; height: 80px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; flex: none; }
+  .summary h3 { margin: 0 0 2px; }
+  .summary p { margin: 0; color: var(--muted); }
+  table.grx.progress td, table.grx.progress th { padding: 10px 12px; vertical-align: middle; }
+  table.grx.progress .pemoji { margin-right: 6px; }
+  table.grx.progress .muted { color: var(--muted); }
+  table.grx.progress tr.pending td { color: var(--muted); }
+  .grade { display: inline-block; min-width: 48px; text-align: center; color: #fff; font-family: var(--font-display); font-weight: 800; padding: 3px 8px; border-radius: 999px; font-size: .9rem; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+  footer { text-align: center; color: var(--muted); font-size: .82rem; margin-top: 26px; }
+
+  .modal-ov { position: fixed; inset: 0; z-index: 50; background: rgba(25,18,10,.55); display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top,0px)) max(16px, env(safe-area-inset-right,0px)) max(16px, env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px)); animation: ovIn .15s ease; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; width: 100%; max-width: 460px; max-height: 85%; overflow-y: auto; box-shadow: 0 14px 44px rgba(0,0,0,.3); padding: 18px; display: flex; flex-direction: column; gap: 12px; animation: modIn .2s ease; }
+  .modal-head { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; }
+  .modal-head .em { font-size: 1.35rem; }
+  .modal-x { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 0 4px; }
+  .modal-x:hover { color: var(--fg); }
+  .modal-body { font-size: 1.05rem; }
+  .modal-body p { margin: .4em 0; }
+  .modal-body .big { font-family: var(--font-display); font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+  .modal .modal-ok { align-self: stretch; }
+  @keyframes ovIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes modIn { from { opacity: 0; transform: translateY(12px) scale(.98) } to { opacity: 1; transform: none } }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } .modal-ov, .modal { animation: none !important; } }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap">
+
+<header class="bar">
+  <button class="brand" id="homeBtn" aria-label="Inicio"><span class="logo">A1</span><span>English Trainer</span></button>
+  <a class="icon-btn" href="../" title="Otras materias" aria-label="Otras materias">←</a>
+  <span class="spacer"></span>
+  <button class="icon-btn" id="progressBtn" aria-label="Ver progreso" title="Progreso">📊</button>
+  <button class="icon-btn" id="themeBtn" aria-label="Cambiar tema" title="Claro / oscuro">◐</button>
+</header>
+
+<main id="app"></main>
+
+<script>
+/* =======================================================================
+   CONTENIDO — 11 temas de inglés A1+
+   slides: {k:kicker, t:título(HTML), h:cuerpo(HTML)}  -> pantallas de explicación
+   pool:   banco de 30 preguntas. En cada examen se eligen 15 al azar.
+     q:{ t:"mc"|"fill", q:enunciado, o:[opciones], a:respuesta, e:explicación, h:pista }
+     (en "fill", a es un array de respuestas válidas)
+   ======================================================================= */
+const TOPICS = [
+  {
+    id: "tobe", emoji: "🧍", en: "Verb to be", es: "El verbo ser/estar",
+    slides: [
+      { k: "Empezamos", t: "¿Qué es el verbo <span class='en'>to be</span>?", h: `
+        <p>Es el verbo más importante del inglés. En español equivale a <b>ser</b> y también a <b>estar</b>: un solo verbo para los dos.</p>
+        <ul class="ex">
+          <li>I <b>am</b> Marta. <span class="t">Yo <b>soy</b> Marta.</span></li>
+          <li>I <b>am</b> at home. <span class="t">Yo <b>estoy</b> en casa.</span></li>
+          <li>She <b>is</b> happy. <span class="t">Ella <b>está</b> contenta.</span></li>
+        </ul>
+        <div class="tip">💡 El mismo verbo sirve para decir quién eres, cómo estás y dónde estás.</div>` },
+      { k: "Afirmativa", t: "Las formas: am · is · are", h: `
+        <p>Cada sujeto usa una forma. Fíjate en las <b>contracciones</b> (la forma corta del día a día):</p>
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Sujeto</th><th>Forma</th><th>Contracción</th></tr>
+          <tr><td>I</td><td>am</td><td>I'm</td></tr>
+          <tr><td>You / We / They</td><td>are</td><td>you're · we're · they're</td></tr>
+          <tr><td>He / She / It</td><td>is</td><td>he's · she's · it's</td></tr>
+        </table></div>` },
+      { k: "Negativa y preguntas", t: "Decir NO y preguntar", h: `
+        <p><b>Negativa:</b> añadimos <span class="hl">not</span> (normalmente contraído):</p>
+        <ul class="ex">
+          <li>She <b>isn't</b> here. <span class="t">Ella no está aquí.</span></li>
+          <li>They <b>aren't</b> Spanish. <span class="t">No son españoles.</span></li>
+        </ul>
+        <p><b>Preguntas:</b> el verbo va <b>delante</b> del sujeto:</p>
+        <ul class="ex">
+          <li><b>Are</b> you ok? — Yes, I <b>am</b>. / No, I'm <b>not</b>.</li>
+          <li><b>Is</b> she your sister? — Yes, she <b>is</b>. / No, she <b>isn't</b>.</li>
+        </ul>` },
+      { k: "Usos", t: "¿Cuándo se usa <span class='en'>to be</span>?", h: `
+        <ul class="bul">
+          <li><b>Nombre:</b> My name <b>is</b> Marta.</li>
+          <li><b>Edad:</b> I <b>am</b> twelve. <span style="color:var(--muted)">(¡no "I have 12"!)</span></li>
+          <li><b>Origen:</b> We <b>are</b> from Spain.</li>
+          <li><b>Sentimientos:</b> He <b>is</b> happy / tired / hungry.</li>
+          <li><b>El tiempo:</b> It <b>is</b> cold today.</li>
+        </ul>
+        <div class="tip warn">⚠️ La edad y el tiempo se dicen con <b>to be</b>, no con <i>have</i>.</div>` }
+    ],
+    pool: [
+      { t:"fill", q:"I ___ a student.", a:["am","i'm","'m"], e:"Con <b>I</b> siempre usamos <b>am</b>.", h:"Con el sujeto <b>I</b> → <span class='big'>am</span>." },
+      { t:"mc", q:"She ___ a doctor.", o:["am","is","are"], a:"is", e:"He/she/it → <b>is</b>.", h:"He, she, it → <span class='big'>is</span>." },
+      { t:"mc", q:"They ___ my friends.", o:["is","are"], a:"are", e:"They → <b>are</b>.", h:"You, we, they → <span class='big'>are</span>." },
+      { t:"fill", q:"We ___ at school.", a:["are","'re"], e:"We → <b>are</b>.", h:"You, we, they → <span class='big'>are</span>." },
+      { t:"mc", q:"___ he your brother?", o:["Am","Is","Are"], a:"Is", e:"Pregunta con he → <b>Is he…?</b>", h:"En preguntas el verbo va delante. Con <b>he</b> → Is." },
+      { t:"mc", q:"You ___ very tall.", o:["am","is","are"], a:"are", e:"You → <b>are</b>.", h:"Con <b>you</b> → are." },
+      { t:"fill", q:"It ___ a big dog.", a:["is","'s"], e:"It → <b>is</b>.", h:"He, she, it → <span class='big'>is</span>." },
+      { t:"mc", q:"My parents ___ at home.", o:["is","are"], a:"are", e:"Parents = they → <b>are</b>.", h:"Parents es plural (they) → are." },
+      { t:"mc", q:"___ you from Italy?", o:["Am","Is","Are"], a:"Are", e:"Pregunta con you → <b>Are you…?</b>", h:"Con <b>you</b> → Are you…?" },
+      { t:"fill", q:"My name ___ Sara.", a:["is","'s"], e:"Name = it → <b>is</b>.", h:"Name es una cosa (it) → is." },
+      { t:"mc", q:"The cat ___ black.", o:["is","are"], a:"is", e:"The cat = it → <b>is</b>.", h:"Un animal/cosa en singular → is." },
+      { t:"mc", q:"I ___ not tired.", o:["am","is","are"], a:"am", e:"I → am (I am not).", h:"Con <b>I</b> → am, también en negativa." },
+      { t:"fill", q:"He ___ ten years old.", a:["is","'s"], e:"La edad va con to be. He → <b>is</b>.", h:"La edad se dice con to be. He → is." },
+      { t:"mc", q:"___ it cold today?", o:["Am","Is","Are"], a:"Is", e:"El tiempo = it → <b>Is it…?</b>", h:"El tiempo va con it → Is it…?" },
+      { t:"mc", q:"She ___ not my teacher.", o:["am","is","are"], a:"is", e:"She → is (she is not).", h:"He, she, it → is." },
+      { t:"fill", q:"You and I ___ friends.", a:["are","'re"], e:"You and I = we → <b>are</b>.", h:"You and I = we → are." },
+      { t:"mc", q:"Tom and Ben ___ brothers.", o:["is","are"], a:"are", e:"Dos personas = they → <b>are</b>.", h:"Dos personas (they) → are." },
+      { t:"mc", q:"Is she happy? — Yes, she ___.", o:["is","are"], a:"is", e:"Respuesta corta: she <b>is</b>.", h:"En respuestas cortas repetimos el verbo." },
+      { t:"mc", q:"Are they ready? — No, they ___.", o:["isn't","aren't"], a:"aren't", e:"They → <b>aren't</b>.", h:"Negativa de they are → aren't." },
+      { t:"fill", q:"The books ___ on the table.", a:["are"], e:"Books es plural → <b>are</b>.", h:"Books es plural → are." },
+      { t:"mc", q:"My sister ___ a nurse.", o:["is","are"], a:"is", e:"Sister = she → <b>is</b>.", h:"Una persona en singular → is." },
+      { t:"mc", q:"I'm from Spain. I ___ Spanish.", o:["am","is","are"], a:"am", e:"I → <b>am</b>.", h:"Con <b>I</b> → am." },
+      { t:"fill", q:"This ___ my pen.", a:["is","'s"], e:"This (una cosa) → <b>is</b>.", h:"Una cosa en singular → is." },
+      { t:"mc", q:"___ I late?", o:["Am","Is","Are"], a:"Am", e:"Pregunta con I → <b>Am I…?</b>", h:"En preguntas con <b>I</b> → Am I…?" },
+      { t:"mc", q:"We ___ in class 1B.", o:["is","are"], a:"are", e:"We → <b>are</b>.", h:"You, we, they → are." },
+      { t:"mc", q:"The weather ___ nice.", o:["is","are"], a:"is", e:"Weather = it → <b>is</b>.", h:"El tiempo va con is." },
+      { t:"fill", q:"Where ___ you? (tú)", a:["are","'re"], e:"You → <b>are</b>.", h:"Con <b>you</b> → are." },
+      { t:"mc", q:"He ___ a good student.", o:["is","are"], a:"is", e:"He → <b>is</b>.", h:"He, she, it → is." },
+      { t:"mc", q:"Those ___ my shoes.", o:["is","are"], a:"are", e:"Those = plural → <b>are</b>.", h:"Those (varias cosas) → are." },
+      { t:"mc", q:"Is it Monday? — No, it ___.", o:["isn't","aren't"], a:"isn't", e:"It → <b>isn't</b>.", h:"Negativa de it is → isn't." }
+    ]
+  },
+  {
+    id: "havegot", emoji: "🎒", en: "Have got", es: "Tener",
+    slides: [
+      { k: "Empezamos", t: "¿Qué significa <span class='en'>have got</span>?", h: `
+        <p>Usamos <span class="en">have got</span> para decir que <b>tenemos</b> algo: cosas, familia o características físicas.</p>
+        <ul class="ex">
+          <li>I <b>have got</b> a bike. <span class="t">Tengo una bici.</span></li>
+          <li>She <b>has got</b> blue eyes. <span class="t">Tiene los ojos azules.</span></li>
+        </ul>` },
+      { k: "Formas", t: "have got · has got", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Sujeto</th><th>Afirmativa</th><th>Contracción</th></tr>
+          <tr><td>I / You / We / They</td><td><span class="en">have got</span></td><td>I've got · you've got</td></tr>
+          <tr><td>He / She / It</td><td><span class="en">has got</span></td><td>he's got · she's got</td></tr>
+        </table></div>
+        <div class="tip warn">⚠️ <b>He, she, it</b> usan <span class="hl">has</span>, nunca <i>have</i>.</div>` },
+      { k: "Negativa y preguntas", t: "Decir NO y preguntar", h: `
+        <p><b>Negativa:</b> haven't got / hasn't got.</p>
+        <ul class="ex">
+          <li>I <b>haven't got</b> a phone. <span class="t">No tengo móvil.</span></li>
+          <li>He <b>hasn't got</b> a car. <span class="t">No tiene coche.</span></li>
+        </ul>
+        <p><b>Preguntas y respuestas cortas:</b></p>
+        <ul class="ex">
+          <li><b>Have</b> you got a pet? — Yes, I <b>have</b>. / No, I <b>haven't</b>.</li>
+          <li><b>Has</b> she got a sister? — Yes, she <b>has</b>. / No, she <b>hasn't</b>.</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"mc", q:"She ___ got a dog.", o:["have","has"], a:"has", e:"She → <b>has got</b>.", h:"He, she, it → <span class='big'>has got</span>." },
+      { t:"fill", q:"I ___ got a sister.", a:["have","'ve"], e:"I → <b>have got</b>.", h:"I, you, we, they → have got." },
+      { t:"mc", q:"They ___ got a big house.", o:["have","has"], a:"have", e:"They → <b>have got</b>.", h:"They → have got." },
+      { t:"mc", q:"He ___ got black hair.", o:["have","has"], a:"has", e:"He → <b>has got</b>.", h:"He, she, it → has got." },
+      { t:"mc", q:"___ you got a bike?", o:["Have","Has"], a:"Have", e:"Pregunta con you → <b>Have you got…?</b>", h:"Con you la pregunta empieza por <b>Have</b>." },
+      { t:"fill", q:"We ___ got two cats.", a:["have","'ve"], e:"We → <b>have got</b>.", h:"We → have got." },
+      { t:"mc", q:"The dog ___ got a ball.", o:["have","has"], a:"has", e:"The dog = it → <b>has got</b>.", h:"The dog = it → has got." },
+      { t:"mc", q:"My friends ___ got a boat.", o:["have","has"], a:"have", e:"Friends = they → <b>have got</b>.", h:"Friends es plural (they) → have." },
+      { t:"mc", q:"___ she got a phone?", o:["Have","Has"], a:"Has", e:"Pregunta con she → <b>Has she got…?</b>", h:"Con she la pregunta empieza por <b>Has</b>." },
+      { t:"mc", q:"You ___ got nice eyes.", o:["have","has"], a:"have", e:"You → <b>have got</b>.", h:"Con you → have got." },
+      { t:"mc", q:"It ___ got four legs.", o:["have","has"], a:"has", e:"It → <b>has got</b>.", h:"It → has got." },
+      { t:"fill", q:"Tom ___ got a new car.", a:["has","'s"], e:"Tom = he → <b>has got</b>.", h:"Tom = he → has got." },
+      { t:"mc", q:"I ___ got a headache.", o:["have","has"], a:"have", e:"I → <b>have got</b>.", h:"I → have got." },
+      { t:"mc", q:"___ they got any pets?", o:["Have","Has"], a:"Have", e:"Pregunta con they → <b>Have they got…?</b>", h:"They → la pregunta empieza por Have." },
+      { t:"mc", q:"She ___ got a sister. (negativa)", o:["haven't","hasn't"], a:"hasn't", e:"She → <b>hasn't got</b>.", h:"Negativa con she → hasn't." },
+      { t:"mc", q:"We ___ got a garden. (negativa)", o:["haven't","hasn't"], a:"haven't", e:"We → <b>haven't got</b>.", h:"Negativa con we → haven't." },
+      { t:"mc", q:"Has he got a bike? — Yes, he ___.", o:["have","has"], a:"has", e:"Respuesta corta: he <b>has</b>.", h:"Respuesta corta con he → has." },
+      { t:"mc", q:"Have you got a pen? — No, I ___.", o:["haven't","hasn't"], a:"haven't", e:"I → <b>haven't</b>.", h:"Respuesta corta con I → haven't." },
+      { t:"fill", q:"My mum ___ got blue eyes.", a:["has","'s"], e:"Mum = she → <b>has got</b>.", h:"Mum = she → has got." },
+      { t:"mc", q:"The twins ___ got red hair.", o:["have","has"], a:"have", e:"Twins = they → <b>have got</b>.", h:"Twins es plural → have." },
+      { t:"mc", q:"___ your brother got a job?", o:["Have","Has"], a:"Has", e:"Brother = he → <b>Has he got…?</b>", h:"Brother = he → Has." },
+      { t:"mc", q:"I ___ got your number. (negativa)", o:["haven't","hasn't"], a:"haven't", e:"I → <b>haven't got</b>.", h:"Negativa con I → haven't." },
+      { t:"mc", q:"This house ___ got three rooms.", o:["have","has"], a:"has", e:"House = it → <b>has got</b>.", h:"House = it → has got." },
+      { t:"mc", q:"Has she got long hair? — No, she ___.", o:["haven't","hasn't"], a:"hasn't", e:"She → <b>hasn't</b>.", h:"Respuesta corta con she → hasn't." },
+      { t:"fill", q:"They ___ got a nice garden.", a:["have","'ve"], e:"They → <b>have got</b>.", h:"They → have got." },
+      { t:"mc", q:"Peter ___ got a guitar.", o:["have","has"], a:"has", e:"Peter = he → <b>has got</b>.", h:"Peter = he → has got." },
+      { t:"mc", q:"___ we got any homework?", o:["Have","Has"], a:"Have", e:"We → <b>Have we got…?</b>", h:"We → la pregunta empieza por Have." },
+      { t:"mc", q:"The baby ___ got small hands.", o:["have","has"], a:"has", e:"Baby = it → <b>has got</b>.", h:"The baby = it → has got." },
+      { t:"mc", q:"Have they got a car? — Yes, they ___.", o:["have","has"], a:"have", e:"They → <b>have</b>.", h:"Respuesta corta con they → have." },
+      { t:"mc", q:"You ___ got a ticket. (negativa)", o:["haven't","hasn't"], a:"haven't", e:"You → <b>haven't got</b>.", h:"Negativa con you → haven't." }
+    ]
+  },
+  {
+    id: "thereis", emoji: "📍", en: "There is / There are", es: "Hay",
+    slides: [
+      { k: "Empezamos", t: "<span class='en'>There is / There are</span> = Hay", h: `
+        <p>Sirve para decir que <b>hay</b> algo en un sitio.</p>
+        <ul class="ex">
+          <li><b>There is</b> a cat on the sofa. <span class="t">Hay un gato en el sofá.</span></li>
+          <li><b>There are</b> five books here. <span class="t">Hay cinco libros aquí.</span></li>
+        </ul>` },
+      { k: "Singular y plural", t: "¿is o are?", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Cuándo</th><th>Forma</th><th>Ejemplo</th></tr>
+          <tr><td>1 cosa (singular)</td><td><span class="en">There is</span></td><td>There is a pen.</td></tr>
+          <tr><td>incontable</td><td><span class="en">There is</span></td><td>There is some milk.</td></tr>
+          <tr><td>varias (plural)</td><td><span class="en">There are</span></td><td>There are two pens.</td></tr>
+        </table></div>
+        <div class="tip">💡 <b>There is</b> se puede contraer en <b>There's</b>.</div>` },
+      { k: "Negativa y preguntas", t: "NO hay / ¿Hay…?", h: `
+        <p><b>Negativa:</b> There <b>isn't</b> / There <b>aren't</b> + <span class="hl">any</span>.</p>
+        <p><b>Preguntas:</b> <b>Is there…?</b> / <b>Are there…?</b></p>
+        <ul class="ex">
+          <li><b>Is there</b> any water? — Yes, there is.</li>
+          <li><b>Are there</b> any apples? — No, there aren't.</li>
+        </ul>
+        <div class="tip warn">⚠️ En negativas y preguntas usamos <b>any</b>, no <i>some</i>.</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"___ a dog in the garden.", o:["There is","There are"], a:"There is", e:"a dog = singular → <b>There is</b>.", h:"Una sola cosa (singular) → <span class='big'>There is</span>." },
+      { t:"mc", q:"___ four cats here.", o:["There is","There are"], a:"There are", e:"four cats = plural → <b>There are</b>.", h:"Varias cosas (plural) → <span class='big'>There are</span>." },
+      { t:"fill", q:"There ___ some juice.", a:["is","'s"], e:"Juice es incontable → <b>is</b>.", h:"Incontable → is." },
+      { t:"fill", q:"There ___ three apples.", a:["are"], e:"three apples = plural → <b>are</b>.", h:"Plural → are." },
+      { t:"mc", q:"___ there any milk?", o:["Is","Are"], a:"Is", e:"Milk es incontable → <b>Is there…?</b>", h:"Milk incontable → Is there…?" },
+      { t:"mc", q:"___ there any eggs?", o:["Is","Are"], a:"Are", e:"eggs = plural → <b>Are there…?</b>", h:"Eggs es plural → Are there…?" },
+      { t:"mc", q:"There ___ a book on the desk.", o:["is","are"], a:"is", e:"a book = singular → <b>is</b>.", h:"Singular → is." },
+      { t:"mc", q:"There ___ two windows.", o:["is","are"], a:"are", e:"two windows = plural → <b>are</b>.", h:"Plural → are." },
+      { t:"mc", q:"There ___ any bread. (negativa)", o:["isn't","aren't"], a:"isn't", e:"Bread es incontable → <b>isn't</b>.", h:"Bread incontable → isn't." },
+      { t:"mc", q:"There ___ any chairs. (negativa)", o:["isn't","aren't"], a:"aren't", e:"chairs = plural → <b>aren't</b>.", h:"Chairs plural → aren't." },
+      { t:"mc", q:"Is there ___ water?", o:["some","any"], a:"any", e:"Pregunta → <b>any</b>.", h:"En preguntas → any." },
+      { t:"mc", q:"There is ___ cheese.", o:["some","any"], a:"some", e:"Afirmativa → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"There ___ a lot of milk.", o:["is","are"], a:"is", e:"Milk es incontable → <b>is</b>.", h:"Milk incontable → is." },
+      { t:"mc", q:"There ___ some people outside.", o:["is","are"], a:"are", e:"People es plural → <b>are</b>.", h:"People (gente) es plural → are." },
+      { t:"fill", q:"There ___ a cat under the table.", a:["is","'s"], e:"a cat = singular → <b>is</b>.", h:"Singular → is." },
+      { t:"mc", q:"___ there a park near here?", o:["Is","Are"], a:"Is", e:"a park = singular → <b>Is there…?</b>", h:"Singular → Is there…?" },
+      { t:"mc", q:"There ___ five students.", o:["is","are"], a:"are", e:"plural → <b>are</b>.", h:"Plural → are." },
+      { t:"mc", q:"Are there any shops? — Yes, there ___.", o:["is","are"], a:"are", e:"Respuesta: there <b>are</b>.", h:"Respuesta corta en plural → are." },
+      { t:"mc", q:"Is there a pen? — No, there ___.", o:["isn't","aren't"], a:"isn't", e:"Singular → <b>isn't</b>.", h:"Respuesta negativa singular → isn't." },
+      { t:"mc", q:"There ___ some sugar in the tea.", o:["is","are"], a:"is", e:"Sugar es incontable → <b>is</b>.", h:"Sugar incontable → is." },
+      { t:"mc", q:"There ___ any oranges. (negativa)", o:["isn't","aren't"], a:"aren't", e:"plural → <b>aren't</b>.", h:"Oranges plural → aren't." },
+      { t:"mc", q:"There ___ an apple in the bag.", o:["is","are"], a:"is", e:"an apple = singular → <b>is</b>.", h:"Singular → is." },
+      { t:"mc", q:"There ___ many cars.", o:["is","are"], a:"are", e:"many cars = plural → <b>are</b>.", h:"Plural → are." },
+      { t:"mc", q:"Is there ___ homework?", o:["some","any"], a:"any", e:"Pregunta → <b>any</b>.", h:"En preguntas → any." },
+      { t:"fill", q:"There ___ two dogs.", a:["are"], e:"plural → <b>are</b>.", h:"Plural → are." },
+      { t:"mc", q:"There ___ a problem.", o:["is","are"], a:"is", e:"a problem = singular → <b>is</b>.", h:"Singular → is." },
+      { t:"mc", q:"There ___ lots of flowers.", o:["is","are"], a:"are", e:"flowers = plural → <b>are</b>.", h:"Plural → are." },
+      { t:"mc", q:"There is ___ rice.", o:["some","any"], a:"some", e:"Afirmativa + incontable → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"Are there any boys? — No, there ___.", o:["isn't","aren't"], a:"aren't", e:"plural → <b>aren't</b>.", h:"Respuesta negativa plural → aren't." },
+      { t:"mc", q:"___ there any money?", o:["Is","Are"], a:"Is", e:"Money es incontable → <b>Is there…?</b>", h:"Money incontable → Is there…?" }
+    ]
+  },
+  {
+    id: "quantifiers", emoji: "🍎", en: "a · an · some · any", es: "Artículos y cantidades",
+    slides: [
+      { k: "Empezamos", t: "Contables e incontables", h: `
+        <p><b>Contables:</b> se pueden contar (one dog, two dogs).<br><b>Incontables:</b> no se cuentan de uno en uno (water, milk, bread, money).</p>` },
+      { k: "a / an", t: "¿<span class='en'>a</span> o <span class='en'>an</span>?", h: `
+        <p>Para <b>una</b> cosa (singular, contable):</p>
+        <ul class="bul">
+          <li><span class="hl">a</span> + sonido de consonante: <b>a</b> dog, <b>a</b> book</li>
+          <li><span class="hl">an</span> + sonido de vocal: <b>an</b> apple, <b>an</b> egg, <b>an</b> umbrella</li>
+        </ul>
+        <div class="tip">💡 Mira el <b>sonido</b>, no solo la letra.</div>` },
+      { k: "some / any", t: "<span class='en'>some</span> y <span class='en'>any</span>", h: `
+        <p>Para plurales e incontables:</p>
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Frase</th><th>Usamos</th><th>Ejemplo</th></tr>
+          <tr><td>Afirmativa</td><td><span class="hl">some</span></td><td>I have some eggs.</td></tr>
+          <tr><td>Negativa</td><td><span class="hl">any</span></td><td>I don't have any eggs.</td></tr>
+          <tr><td>Pregunta</td><td><span class="hl">any</span></td><td>Have you got any eggs?</td></tr>
+        </table></div>` }
+    ],
+    pool: [
+      { t:"mc", q:"I have ___ apple.", o:["a","an"], a:"an", e:"apple empieza por vocal → <b>an</b>.", h:"Sonido de vocal → <span class='big'>an</span>." },
+      { t:"mc", q:"She has ___ dog.", o:["a","an"], a:"a", e:"dog empieza por consonante → <b>a</b>.", h:"Sonido de consonante → <span class='big'>a</span>." },
+      { t:"mc", q:"It's ___ egg.", o:["a","an"], a:"an", e:"egg empieza por vocal → <b>an</b>.", h:"Sonido de vocal → an." },
+      { t:"mc", q:"He's ___ teacher.", o:["a","an"], a:"a", e:"teacher → consonante → <b>a</b>.", h:"Sonido de consonante → a." },
+      { t:"fill", q:"There is ___ water.", a:["some"], e:"Afirmativa + incontable → <b>some</b>.", h:"Afirmativa + incontable → some." },
+      { t:"mc", q:"Have you got ___ money?", o:["some","any"], a:"any", e:"Pregunta → <b>any</b>.", h:"En preguntas → any." },
+      { t:"mc", q:"There aren't ___ eggs.", o:["some","any"], a:"any", e:"Negativa → <b>any</b>.", h:"En negativa → any." },
+      { t:"mc", q:"We have ___ friends here.", o:["some","any"], a:"some", e:"Afirmativa + plural → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"It's ___ umbrella.", o:["a","an"], a:"an", e:"umbrella → vocal → <b>an</b>.", h:"Sonido de vocal → an." },
+      { t:"mc", q:"I'd like ___ orange.", o:["a","an"], a:"an", e:"orange → vocal → <b>an</b>.", h:"Sonido de vocal → an." },
+      { t:"mc", q:"That's ___ house.", o:["a","an"], a:"a", e:"house → consonante → <b>a</b>.", h:"Sonido de consonante → a." },
+      { t:"mc", q:"There is ___ milk.", o:["some","any"], a:"some", e:"Afirmativa + incontable → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"Is there ___ sugar?", o:["some","any"], a:"any", e:"Pregunta → <b>any</b>.", h:"En preguntas → any." },
+      { t:"mc", q:"I don't have ___ brothers.", o:["some","any"], a:"any", e:"Negativa → <b>any</b>.", h:"En negativa → any." },
+      { t:"mc", q:"She's got ___ book.", o:["a","an"], a:"a", e:"book → consonante → <b>a</b>.", h:"Sonido de consonante → a." },
+      { t:"mc", q:"It's ___ idea.", o:["a","an"], a:"an", e:"idea → vocal → <b>an</b>.", h:"Sonido de vocal → an." },
+      { t:"mc", q:"We need ___ bread.", o:["some","any"], a:"some", e:"Afirmativa + incontable → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"Are there ___ chairs?", o:["some","any"], a:"any", e:"Pregunta → <b>any</b>.", h:"En preguntas → any." },
+      { t:"mc", q:"He has ___ old car.", o:["a","an"], a:"an", e:"old → vocal → <b>an</b>.", h:"old empieza por vocal → an." },
+      { t:"mc", q:"There are ___ birds in the tree.", o:["some","any"], a:"some", e:"Afirmativa + plural → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"I haven't got ___ time.", o:["some","any"], a:"any", e:"Negativa → <b>any</b>.", h:"En negativa → any." },
+      { t:"mc", q:"Can I have ___ banana?", o:["a","an"], a:"a", e:"banana → consonante → <b>a</b>.", h:"Sonido de consonante → a." },
+      { t:"mc", q:"There's ___ cat in the box.", o:["a","an"], a:"a", e:"cat → consonante → <b>a</b>.", h:"Sonido de consonante → a." },
+      { t:"fill", q:"There are ___ oranges on the table.", a:["some"], e:"Afirmativa + plural → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"Do you have ___ questions?", o:["some","any"], a:"any", e:"Pregunta → <b>any</b>.", h:"En preguntas → any." },
+      { t:"mc", q:"It's ___ interesting film.", o:["a","an"], a:"an", e:"interesting → vocal → <b>an</b>.", h:"Sonido de vocal → an." },
+      { t:"mc", q:"There isn't ___ cheese.", o:["some","any"], a:"any", e:"Negativa → <b>any</b>.", h:"En negativa → any." },
+      { t:"mc", q:"She wants ___ ice cream.", o:["a","an"], a:"an", e:"ice → vocal → <b>an</b>.", h:"Sonido de vocal → an." },
+      { t:"mc", q:"We've got ___ homework.", o:["some","any"], a:"some", e:"Afirmativa + incontable → <b>some</b>.", h:"Afirmativa → some." },
+      { t:"mc", q:"There's ___ bus to the city.", o:["a","an"], a:"a", e:"bus → consonante → <b>a</b>.", h:"Sonido de consonante → a." }
+    ]
+  },
+  {
+    id: "presentsimple", emoji: "🔁", en: "Present Simple", es: "Rutinas y hábitos",
+    slides: [
+      { k: "Empezamos", t: "¿Para qué sirve el <span class='en'>Present Simple</span>?", h: `
+        <p>Para <b>rutinas, hábitos</b> y cosas que son <b>verdad siempre</b>.</p>
+        <ul class="ex">
+          <li>I <b>get up</b> at seven. <span class="t">Me levanto a las siete.</span></li>
+          <li>She <b>plays</b> tennis on Sundays. <span class="t">Juega al tenis los domingos.</span></li>
+        </ul>
+        <div class="tip">💡 Suele ir con: every day, always, usually, sometimes, never, on Mondays…</div>` },
+      { k: "Afirmativa", t: "La <span class='hl'>-s</span> mágica de he/she/it", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Sujeto</th><th>Verbo</th><th>Ejemplo</th></tr>
+          <tr><td>I / You / We / They</td><td>play</td><td>They play football.</td></tr>
+          <tr><td>He / She / It</td><td>play<span class="hl">s</span></td><td>He play<b>s</b> football.</td></tr>
+        </table></div>
+        <p><b>Ortografía de la -s:</b></p>
+        <ul class="bul">
+          <li>normal: eat → eat<b>s</b></li>
+          <li>tras s, sh, ch, x, o → <b>+es</b>: watch → watch<b>es</b>, go → go<b>es</b></li>
+          <li>consonante + y → <b>ies</b>: cry → cr<b>ies</b>, study → stud<b>ies</b></li>
+        </ul>` },
+      { k: "Negativa", t: "don't / doesn't", h: `
+        <p>Usamos <b>don't</b> o <b>doesn't</b> + verbo <b>en su forma base</b> (sin -s).</p>
+        <ul class="ex">
+          <li>I <b>don't</b> like fish.</li>
+          <li>She <b>doesn't</b> like fish. <span class="t">(¡la -s ya está en doesn't!)</span></li>
+        </ul>
+        <div class="tip warn">⚠️ Nunca "She doesn't likes". El verbo va sin -s: She doesn't <b>like</b>.</div>` },
+      { k: "Preguntas", t: "Do…? / Does…?", h: `
+        <ul class="ex">
+          <li><b>Do</b> you speak English? — Yes, I <b>do</b>. / No, I <b>don't</b>.</li>
+          <li><b>Does</b> he live here? — Yes, he <b>does</b>. / No, he <b>doesn't</b>.</li>
+        </ul>
+        <div class="tip">💡 Con he/she/it → <b>Does</b> + sujeto + verbo base.</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"She ___ to school.", o:["go","goes"], a:"goes", e:"she + go → <b>goes</b> (-o → +es).", h:"he/she/it: verbo en -o → +es (go→goes)." },
+      { t:"fill", q:"I ___ football.", a:["play"], e:"Con I no cambia → <b>play</b>.", h:"Con I el verbo no cambia." },
+      { t:"mc", q:"He ___ like fish. (negativa)", o:["don't","doesn't"], a:"doesn't", e:"he → <b>doesn't</b> + verbo base.", h:"Negativa con he → doesn't." },
+      { t:"fill", q:"___ you speak English?", a:["do"], e:"Pregunta con you → <b>Do</b>.", h:"Pregunta con you → Do." },
+      { t:"mc", q:"My mum ___ breakfast.", o:["make","makes"], a:"makes", e:"Mum = she → <b>makes</b>.", h:"Mum = she → verbo +s." },
+      { t:"fill", q:"___ she live here?", a:["does"], e:"Pregunta con she → <b>Does</b>.", h:"Pregunta con she → Does." },
+      { t:"mc", q:"He ___ TV every day.", o:["watch","watches"], a:"watches", e:"watch + es (acaba en -ch).", h:"Verbo en -ch → +es (watch→watches)." },
+      { t:"fill", q:"They ___ get up early. (negativa)", a:["don't","do not"], e:"they → <b>don't</b>.", h:"Negativa con they → don't." },
+      { t:"mc", q:"The baby ___ a lot.", o:["cry","cries"], a:"cries", e:"consonante + y → ies (cry→cries).", h:"Consonante + y → ies." },
+      { t:"mc", q:"We ___ in London.", o:["live","lives"], a:"live", e:"We → <b>live</b> (sin -s).", h:"I/you/we/they → verbo sin -s." },
+      { t:"mc", q:"She ___ her homework.", o:["do","does"], a:"does", e:"she → <b>does</b>.", h:"she + do → does." },
+      { t:"mc", q:"Dad ___ to work by car.", o:["go","goes"], a:"goes", e:"Dad = he → <b>goes</b>.", h:"Dad = he, go → goes." },
+      { t:"fill", q:"I ___ like coffee. (negativa)", a:["don't","do not"], e:"I → <b>don't</b>.", h:"Negativa con I → don't." },
+      { t:"mc", q:"___ he play tennis?", o:["Do","Does"], a:"Does", e:"Pregunta con he → <b>Does</b>.", h:"Pregunta con he → Does." },
+      { t:"mc", q:"Cats ___ milk.", o:["drink","drinks"], a:"drink", e:"Cats = they → <b>drink</b>.", h:"Cats es plural (they) → sin -s." },
+      { t:"mc", q:"She ___ three languages.", o:["speak","speaks"], a:"speaks", e:"she → <b>speaks</b>.", h:"he/she/it → verbo +s." },
+      { t:"mc", q:"He ___ eat meat. (negativa)", o:["don't","doesn't"], a:"doesn't", e:"he → <b>doesn't</b>.", h:"Negativa con he → doesn't." },
+      { t:"fill", q:"My sister ___ a lot. (study)", a:["studies"], e:"study → <b>studies</b> (consonante+y).", h:"study: consonante + y → studies." },
+      { t:"mc", q:"___ they live near you?", o:["Do","Does"], a:"Do", e:"Pregunta con they → <b>Do</b>.", h:"Pregunta con they → Do." },
+      { t:"mc", q:"The shop ___ at 9.", o:["open","opens"], a:"opens", e:"shop = it → <b>opens</b>.", h:"The shop = it → +s." },
+      { t:"mc", q:"We ___ watch TV. (negativa)", o:["don't","doesn't"], a:"don't", e:"we → <b>don't</b>.", h:"Negativa con we → don't." },
+      { t:"mc", q:"She ___ to Paris. (fly)", o:["fly","flies"], a:"flies", e:"fly → <b>flies</b> (consonante+y).", h:"fly: consonante + y → flies." },
+      { t:"mc", q:"Do you like pizza? — Yes, I ___.", o:["do","does"], a:"do", e:"Respuesta corta: I <b>do</b>.", h:"Respuesta corta con I → do." },
+      { t:"mc", q:"Does he work here? — No, he ___.", o:["don't","doesn't"], a:"doesn't", e:"he → <b>doesn't</b>.", h:"Respuesta corta con he → doesn't." },
+      { t:"fill", q:"He ___ his car. (wash)", a:["washes"], e:"wash + es (acaba en -sh).", h:"Verbo en -sh → +es (wash→washes)." },
+      { t:"mc", q:"They ___ English at school.", o:["learn","learns"], a:"learn", e:"they → <b>learn</b>.", h:"they → verbo sin -s." },
+      { t:"mc", q:"My dog ___ in the park.", o:["run","runs"], a:"runs", e:"dog = it → <b>runs</b>.", h:"My dog = it → +s." },
+      { t:"mc", q:"___ your mum work?", o:["Do","Does"], a:"Does", e:"mum = she → <b>Does</b>.", h:"mum = she → Does." },
+      { t:"mc", q:"I ___ to music.", o:["listen","listens"], a:"listen", e:"I → <b>listen</b>.", h:"Con I → verbo sin -s." },
+      { t:"mc", q:"She ___ to bed late. (go)", o:["go","goes"], a:"goes", e:"she + go → <b>goes</b>.", h:"she, go → goes." }
+    ]
+  },
+  {
+    id: "possadj", emoji: "👉", en: "Possessive Adjectives", es: "my · your · his · her…",
+    slides: [
+      { k: "Empezamos", t: "Los <span class='en'>possessive adjectives</span>", h: `
+        <p>Dicen <b>de quién</b> es algo y van <b>delante del nombre</b>.</p>
+        <ul class="ex">
+          <li>This is <b>my</b> book. <span class="t">Este es mi libro.</span></li>
+          <li>I like <b>her</b> dress. <span class="t">Me gusta su vestido (de ella).</span></li>
+        </ul>` },
+      { k: "La tabla", t: "Todos juntos", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Sujeto</th><th>Adjetivo</th></tr>
+          <tr><td>I</td><td>my</td></tr><tr><td>You</td><td>your</td></tr>
+          <tr><td>He</td><td>his</td></tr><tr><td>She</td><td>her</td></tr>
+          <tr><td>It</td><td>its</td></tr><tr><td>We</td><td>our</td></tr>
+          <tr><td>They</td><td>their</td></tr>
+        </table></div>` },
+      { k: "Cuidado", t: "Trampas típicas", h: `
+        <ul class="bul">
+          <li><b>its</b> = su (de ello) · <b>it's</b> = it is</li>
+          <li><b>your</b> = tu · <b>you're</b> = you are</li>
+          <li><b>their</b> = su (de ellos) · <b>they're</b> = they are · <b>there</b> = allí</li>
+        </ul>
+        <div class="tip warn">⚠️ Si lleva apóstrofe (it's, you're) es el verbo <i>to be</i>, no posesión.</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"This is ___ book. (I)", o:["my","mine"], a:"my", e:"Delante del nombre → <b>my</b>.", h:"De I, delante del nombre → <span class='big'>my</span>." },
+      { t:"fill", q:"She loves ___ dog. (she)", a:["her"], e:"De she → <b>her</b>.", h:"De she → her." },
+      { t:"mc", q:"He rides ___ bike. (he)", o:["his","her"], a:"his", e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"fill", q:"We clean ___ room. (we)", a:["our"], e:"De we → <b>our</b>.", h:"De we → our." },
+      { t:"mc", q:"The cat drinks ___ milk. (it)", o:["its","it's"], a:"its", e:"Posesivo de it → <b>its</b> (sin apóstrofe).", h:"De it → its (it's = it is)." },
+      { t:"fill", q:"They paint ___ house. (they)", a:["their"], e:"De they → <b>their</b>.", h:"De they → their." },
+      { t:"mc", q:"What's ___ name? (you)", o:["your","you're"], a:"your", e:"Posesivo de you → <b>your</b>.", h:"De you → your (you're = you are)." },
+      { t:"mc", q:"___ sister is nice. (she)", o:["His","Her"], a:"Her", e:"De she → <b>Her</b>.", h:"De she → Her." },
+      { t:"fill", q:"I like ___ teacher. (I)", a:["my"], e:"De I → <b>my</b>.", h:"De I → my." },
+      { t:"mc", q:"He plays with ___ friends. (he)", o:["his","her"], a:"his", e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"mc", q:"The dog wags ___ tail. (it)", o:["its","it's"], a:"its", e:"De it → <b>its</b>.", h:"De it → its (sin apóstrofe)." },
+      { t:"fill", q:"You forgot ___ bag. (you)", a:["your"], e:"De you → <b>your</b>.", h:"De you → your." },
+      { t:"mc", q:"She calls ___ mum. (she)", o:["his","her"], a:"her", e:"De she → <b>her</b>.", h:"De she → her." },
+      { t:"mc", q:"We love ___ grandparents. (we)", o:["our","their"], a:"our", e:"De we → <b>our</b>.", h:"De we → our." },
+      { t:"fill", q:"They do ___ homework. (they)", a:["their"], e:"De they → <b>their</b>.", h:"De they → their." },
+      { t:"mc", q:"This is ___ car. (he)", o:["his","her"], a:"his", e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"mc", q:"Is this ___ pen? (you)", o:["your","you're"], a:"your", e:"De you → <b>your</b>.", h:"De you → your." },
+      { t:"mc", q:"The bird is in ___ nest. (it)", o:["its","it's"], a:"its", e:"De it → <b>its</b>.", h:"De it → its." },
+      { t:"fill", q:"I brush ___ teeth. (I)", a:["my"], e:"De I → <b>my</b>.", h:"De I → my." },
+      { t:"mc", q:"Maria and I like ___ school. (we)", o:["our","my"], a:"our", e:"Maria and I = we → <b>our</b>.", h:"Maria and I = we → our." },
+      { t:"mc", q:"He kisses ___ wife. (he)", o:["his","her"], a:"his", e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"mc", q:"The girls love ___ toys. (they)", o:["their","our"], a:"their", e:"De they → <b>their</b>.", h:"The girls = they → their." },
+      { t:"fill", q:"She wears ___ coat. (she)", a:["her"], e:"De she → <b>her</b>.", h:"De she → her." },
+      { t:"mc", q:"___ dog is big. (we)", o:["Our","Your"], a:"Our", e:"De we → <b>Our</b>.", h:"De we → Our." },
+      { t:"mc", q:"You and Sam, bring ___ books. (vosotros)", o:["your","their"], a:"your", e:"you (vosotros) → <b>your</b>.", h:"De you (vosotros) → your." },
+      { t:"mc", q:"The company has ___ office here. (it)", o:["its","it's"], a:"its", e:"De it → <b>its</b>.", h:"De it → its." },
+      { t:"fill", q:"He washes ___ hands. (he)", a:["his"], e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"mc", q:"I love ___ family. (I)", o:["my","mine"], a:"my", e:"Delante del nombre → <b>my</b>.", h:"De I + nombre → my." },
+      { t:"mc", q:"They sell ___ car. (they)", o:["their","there"], a:"their", e:"De they → <b>their</b> (there = allí).", h:"De they → their (there = allí)." },
+      { t:"mc", q:"She reads ___ book. (she)", o:["her","hers"], a:"her", e:"Delante del nombre → <b>her</b> (hers va sin nombre).", h:"Delante del nombre → her." }
+    ]
+  },
+  {
+    id: "posspron", emoji: "🙌", en: "Possessive Pronouns", es: "mine · yours · hers…",
+    slides: [
+      { k: "Empezamos", t: "Los <span class='en'>possessive pronouns</span>", h: `
+        <p>Sustituyen a <b>adjetivo + nombre</b> para no repetir. <b>No</b> llevan nombre detrás.</p>
+        <ul class="ex">
+          <li>This is <b>my book</b> → This book is <b>mine</b>. <span class="t">Es mío.</span></li>
+          <li>That is <b>her bag</b> → That bag is <b>hers</b>. <span class="t">Es suyo (de ella).</span></li>
+        </ul>` },
+      { k: "La tabla", t: "Adjetivo → Pronombre", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Adjetivo</th><th>Pronombre</th></tr>
+          <tr><td>my</td><td>mine</td></tr><tr><td>your</td><td>yours</td></tr>
+          <tr><td>his</td><td>his</td></tr><tr><td>her</td><td>hers</td></tr>
+          <tr><td>our</td><td>ours</td></tr><tr><td>their</td><td>theirs</td></tr>
+        </table></div>
+        <div class="tip warn">⚠️ <b>its</b> no se usa como pronombre. Y ojo: es <b>hers</b>, no "her's".</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"This book is ___. (I)", o:["my","mine"], a:"mine", e:"Sin nombre detrás → <b>mine</b>.", h:"Sin nombre detrás, de I → <span class='big'>mine</span>." },
+      { t:"fill", q:"That car is ___. (they)", a:["theirs"], e:"De they → <b>theirs</b>.", h:"De they → theirs." },
+      { t:"mc", q:"Is this pen ___? (you)", o:["your","yours"], a:"yours", e:"Sin nombre detrás → <b>yours</b>.", h:"Sin nombre detrás → yours." },
+      { t:"fill", q:"The red bag is ___. (she)", a:["hers"], e:"De she → <b>hers</b>.", h:"De she → hers (sin apóstrofe)." },
+      { t:"mc", q:"These seats are ___. (we)", o:["our","ours"], a:"ours", e:"De we → <b>ours</b>.", h:"De we → ours." },
+      { t:"mc", q:"The ball is ___. (he)", o:["his","him"], a:"his", e:"De he → <b>his</b>.", h:"De he → his (him = a él)." },
+      { t:"fill", q:"Whose is this? It's ___. (I)", a:["mine"], e:"De I → <b>mine</b>.", h:"De I → mine." },
+      { t:"mc", q:"The house is ___. (they)", o:["their","theirs"], a:"theirs", e:"Sin nombre detrás → <b>theirs</b>.", h:"Sin nombre → theirs." },
+      { t:"mc", q:"This phone is ___. (she)", o:["her","hers"], a:"hers", e:"Sin nombre detrás → <b>hers</b>.", h:"Sin nombre → hers." },
+      { t:"mc", q:"Those shoes are ___. (we)", o:["our","ours"], a:"ours", e:"De we → <b>ours</b>.", h:"De we → ours." },
+      { t:"mc", q:"Is it ___? (you)", o:["your","yours"], a:"yours", e:"Sin nombre detrás → <b>yours</b>.", h:"Sin nombre → yours." },
+      { t:"fill", q:"The dog is ___. (I)", a:["mine"], e:"De I → <b>mine</b>.", h:"De I → mine." },
+      { t:"mc", q:"That bike is ___. (he)", o:["his","he"], a:"his", e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"mc", q:"The keys are ___. (they)", o:["theirs","their"], a:"theirs", e:"Sin nombre detrás → <b>theirs</b>.", h:"Sin nombre → theirs." },
+      { t:"fill", q:"This seat is ___. (she)", a:["hers"], e:"De she → <b>hers</b>.", h:"De she → hers." },
+      { t:"mc", q:"The garden is ___. (we)", o:["ours","our"], a:"ours", e:"Sin nombre detrás → <b>ours</b>.", h:"Sin nombre → ours." },
+      { t:"mc", q:"Whose pen is this? — It's ___. (you)", o:["yours","your"], a:"yours", e:"Sin nombre detrás → <b>yours</b>.", h:"Sin nombre → yours." },
+      { t:"mc", q:"The books are ___. (I)", o:["mine","my"], a:"mine", e:"Sin nombre detrás → <b>mine</b>.", h:"Sin nombre → mine." },
+      { t:"mc", q:"This cat is ___. (she)", o:["hers","her"], a:"hers", e:"Sin nombre detrás → <b>hers</b>.", h:"Sin nombre → hers." },
+      { t:"mc", q:"The money is ___. (they)", o:["theirs","their"], a:"theirs", e:"Sin nombre detrás → <b>theirs</b>.", h:"Sin nombre → theirs." },
+      { t:"mc", q:"That umbrella is ___. (he)", o:["his","him"], a:"his", e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"fill", q:"These toys are ___. (we)", a:["ours"], e:"De we → <b>ours</b>.", h:"De we → ours." },
+      { t:"mc", q:"The idea was ___. (she)", o:["hers","her"], a:"hers", e:"Sin nombre detrás → <b>hers</b>.", h:"Sin nombre → hers." },
+      { t:"fill", q:"The choice is ___. (you)", a:["yours"], e:"De you → <b>yours</b>.", h:"De you → yours." },
+      { t:"mc", q:"The tickets are ___. (we)", o:["ours","our"], a:"ours", e:"Sin nombre detrás → <b>ours</b>.", h:"Sin nombre → ours." },
+      { t:"mc", q:"The fault is ___. (I)", o:["mine","my"], a:"mine", e:"Sin nombre detrás → <b>mine</b>.", h:"Sin nombre → mine." },
+      { t:"mc", q:"The car outside is ___. (they)", o:["theirs","their"], a:"theirs", e:"Sin nombre detrás → <b>theirs</b>.", h:"Sin nombre → theirs." },
+      { t:"mc", q:"This jacket is ___. (he)", o:["his","him"], a:"his", e:"De he → <b>his</b>.", h:"De he → his." },
+      { t:"fill", q:"That room is ___. (she)", a:["hers"], e:"De she → <b>hers</b>.", h:"De she → hers." },
+      { t:"mc", q:"The win is ___! (we)", o:["ours","our"], a:"ours", e:"Sin nombre detrás → <b>ours</b>.", h:"Sin nombre → ours." }
+    ]
+  },
+  {
+    id: "saxon", emoji: "✍️", en: "Saxon Genitive ('s)", es: "El apóstrofo de posesión",
+    slides: [
+      { k: "Empezamos", t: "El <span class='en'>'s</span> de posesión", h: `
+        <p>El <b>'s</b> indica <b>de quién</b> es algo. Primero el <b>dueño</b> + 's, luego la cosa.</p>
+        <ul class="ex">
+          <li>John<b>'s</b> car <span class="t">= el coche de John</span></li>
+          <li>the dog<b>'s</b> bone <span class="t">= el hueso del perro</span></li>
+        </ul>` },
+      { k: "Las reglas", t: "¿'s o solo '?", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Caso</th><th>Regla</th><th>Ejemplo</th></tr>
+          <tr><td>Singular</td><td>+ <span class="hl">'s</span></td><td>my sister's room</td></tr>
+          <tr><td>Plural acabado en -s</td><td>solo <span class="hl">'</span></td><td>my friends' party</td></tr>
+          <tr><td>Plural irregular</td><td>+ <span class="hl">'s</span></td><td>the children's toys</td></tr>
+        </table></div>` },
+      { k: "Plurales irregulares", t: "Ojo con estos", h: `
+        <p>Algunos plurales no acaban en -s, así que llevan <b>'s</b> normal:</p>
+        <ul class="ex">
+          <li>the <b>children's</b> toys <span class="t">(children = niños)</span></li>
+          <li>the <b>men's</b> room <span class="t">(men = hombres)</span></li>
+          <li>the <b>people's</b> opinion</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"mc", q:"This is ___ book. (Anna)", o:["Anna's","Annas"], a:"Anna's", e:"Singular → <b>Anna's</b>.", h:"Dueño singular → + <span class='big'>'s</span>." },
+      { t:"mc", q:"The ___ toys. (children)", o:["children's","childrens'"], a:"children's", e:"Plural irregular → <b>children's</b>.", h:"Plural sin -s → + 's." },
+      { t:"mc", q:"My ___ party. (friends)", o:["friends'","friend's"], a:"friends'", e:"Plural en -s → solo <b>'</b>.", h:"Plural en -s → solo '." },
+      { t:"fill", q:"The ___ name is Rex. (dog)", a:["dog's","dogs"], e:"Singular → <b>dog's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ books. (students)", o:["students'","student's"], a:"students'", e:"Plural en -s → <b>students'</b>.", h:"Plural en -s → solo '." },
+      { t:"fill", q:"My ___ birthday. (sister)", a:["sister's","sisters"], e:"Singular → <b>sister's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ room. (men)", o:["men's","mens'"], a:"men's", e:"Plural irregular → <b>men's</b>.", h:"Plural sin -s → + 's." },
+      { t:"mc", q:"___ car is red. (Tom)", o:["Tom's","Toms"], a:"Tom's", e:"Singular → <b>Tom's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ tails are long. (cats)", o:["cats'","cat's"], a:"cats'", e:"Plural en -s → <b>cats'</b>.", h:"Plural en -s → solo '." },
+      { t:"fill", q:"My ___ house. (grandma)", a:["grandma's","grandmas"], e:"Singular → <b>grandma's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ feet. (women)", o:["women's","womens'"], a:"women's", e:"Plural irregular → <b>women's</b>.", h:"Plural sin -s → + 's." },
+      { t:"mc", q:"The ___ wheels. (car)", o:["car's","cars'"], a:"car's", e:"Singular → <b>car's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"My ___ shoes. (brothers)", o:["brothers'","brother's"], a:"brothers'", e:"Plural en -s → <b>brothers'</b>.", h:"Plural en -s → solo '." },
+      { t:"fill", q:"The ___ office. (boss)", a:["boss's","bosss","boss'"], e:"Singular → <b>boss's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ playground. (children)", o:["children's","childrens'"], a:"children's", e:"Plural irregular → <b>children's</b>.", h:"Plural sin -s → + 's." },
+      { t:"mc", q:"___ phone is new. (Lucy)", o:["Lucy's","Lucys"], a:"Lucy's", e:"Singular → <b>Lucy's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ nests. (birds)", o:["birds'","bird's"], a:"birds'", e:"Plural en -s → <b>birds'</b>.", h:"Plural en -s → solo '." },
+      { t:"fill", q:"My ___ keys. (dad)", a:["dad's","dads"], e:"Singular → <b>dad's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ uniforms. (players)", o:["players'","player's"], a:"players'", e:"Plural en -s → <b>players'</b>.", h:"Plural en -s → solo '." },
+      { t:"mc", q:"The ___ teeth. (baby)", o:["baby's","babys"], a:"baby's", e:"Singular → <b>baby's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ coats. (people)", o:["people's","peoples'"], a:"people's", e:"Plural irregular → <b>people's</b>.", h:"People es plural irregular → + 's." },
+      { t:"mc", q:"___ bag is heavy. (James)", o:["James's","James"], a:"James's", e:"Singular → <b>James's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"My ___ garden. (neighbour)", o:["neighbour's","neighbours"], a:"neighbour's", e:"Singular → <b>neighbour's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ balls. (dogs)", o:["dogs'","dog's"], a:"dogs'", e:"Plural en -s → <b>dogs'</b>.", h:"Plural en -s → solo '." },
+      { t:"mc", q:"The ___ books. (teacher)", o:["teacher's","teachers'"], a:"teacher's", e:"Un profesor (singular) → <b>teacher's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"My two ___ bikes. (cousins)", o:["cousins'","cousin's"], a:"cousins'", e:"Plural en -s → <b>cousins'</b>.", h:"Plural en -s → solo '." },
+      { t:"fill", q:"The ___ tail. (cat)", a:["cat's","cats"], e:"Singular → <b>cat's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ toys. (child)", o:["child's","childs"], a:"child's", e:"child (singular) → <b>child's</b>.", h:"Singular → + 's." },
+      { t:"mc", q:"The ___ cars. (families)", o:["families'","family's"], a:"families'", e:"Plural en -s → <b>families'</b>.", h:"Plural en -s → solo '." },
+      { t:"mc", q:"___ hair is long. (Mary)", o:["Mary's","Marys"], a:"Mary's", e:"Singular → <b>Mary's</b>.", h:"Singular → + 's." }
+    ]
+  },
+  {
+    id: "ordinals", emoji: "🔢", en: "Ordinal Numbers", es: "Números ordinales y fechas",
+    slides: [
+      { k: "Empezamos", t: "¿Qué son los <span class='en'>ordinal numbers</span>?", h: `
+        <p>Indican el <b>orden</b> (1º, 2º, 3º…). Se escriben: 1<b>st</b>, 2<b>nd</b>, 3<b>rd</b>, 4<b>th</b>…</p>
+        <div class="table-wrap"><table class="grx">
+          <tr><td>1st first</td><td>2nd second</td><td>3rd third</td></tr>
+          <tr><td>4th fourth</td><td>5th fifth</td><td>6th sixth</td></tr>
+          <tr><td>7th seventh</td><td>8th eighth</td><td>9th ninth</td></tr>
+          <tr><td>10th tenth</td><td>11th eleventh</td><td>12th twelfth</td></tr>
+        </table></div>` },
+      { k: "Los especiales", t: "Los que hay que memorizar", h: `
+        <ul class="bul">
+          <li>5th → <b>fifth</b> (no "fiveth")</li>
+          <li>8th → <b>eighth</b> (una sola t)</li>
+          <li>9th → <b>ninth</b> (sin la e de nine)</li>
+          <li>12th → <b>twelfth</b></li>
+          <li>20th → <b>twentieth</b> · 21st → twenty-first</li>
+        </ul>` },
+      { k: "Las fechas", t: "Decir la fecha", h: `
+        <p>Para las fechas usamos siempre el ordinal:</p>
+        <ul class="ex">
+          <li>the <b>fourth</b> of July <span class="t">(no "four of July")</span></li>
+          <li>the <b>twenty-fifth</b> of December</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"mc", q:"3rd = ___", o:["third","threeth"], a:"third", e:"<b>3rd = third</b>.", h:"3 en ordinal se dice <b>third</b>." },
+      { t:"fill", q:"5th = ___", a:["fifth"], e:"<b>5th = fifth</b> (no fiveth).", h:"Especial: five → fif-th." },
+      { t:"mc", q:"2nd = ___", o:["second","twoth"], a:"second", e:"<b>2nd = second</b>.", h:"2 en ordinal se dice <b>second</b>." },
+      { t:"fill", q:"12th = ___", a:["twelfth"], e:"<b>12th = twelfth</b>.", h:"Especial: twelve → twelf-th." },
+      { t:"mc", q:"1st = ___", o:["first","oneth"], a:"first", e:"<b>1st = first</b>.", h:"1 en ordinal se dice <b>first</b>." },
+      { t:"fill", q:"9th = ___", a:["ninth"], e:"<b>9th = ninth</b> (sin e).", h:"Especial: nine pierde la e → nin-th." },
+      { t:"mc", q:"8th = ___", o:["eighth","eightth"], a:"eighth", e:"<b>8th = eighth</b> (una t).", h:"Especial: una sola t (eigh-th)." },
+      { t:"fill", q:"20th = ___", a:["twentieth"], e:"<b>20th = twentieth</b>.", h:"Decenas → -ieth (twent-ieth)." },
+      { t:"mc", q:"4th = ___", o:["fourth","fouth"], a:"fourth", e:"<b>4th = fourth</b>.", h:"four + th → fourth." },
+      { t:"fill", q:"6th = ___", a:["sixth"], e:"<b>6th = sixth</b>.", h:"six + th → sixth." },
+      { t:"fill", q:"7th = ___", a:["seventh"], e:"<b>7th = seventh</b>.", h:"seven + th → seventh." },
+      { t:"mc", q:"10th = ___", o:["tenth","tennth"], a:"tenth", e:"<b>10th = tenth</b>.", h:"ten + th → tenth." },
+      { t:"fill", q:"11th = ___", a:["eleventh"], e:"<b>11th = eleventh</b>.", h:"eleven + th → eleventh." },
+      { t:"mc", q:"13th = ___", o:["thirteenth","thirteen"], a:"thirteenth", e:"<b>13th = thirteenth</b>.", h:"thirteen + th → thirteenth." },
+      { t:"fill", q:"15th = ___", a:["fifteenth"], e:"<b>15th = fifteenth</b>.", h:"fif + teenth." },
+      { t:"mc", q:"21st = ___", o:["twenty-first","twenty-oneth"], a:"twenty-first", e:"<b>21st = twenty-first</b>.", h:"Las unidades vuelven a ordinal: …-first." },
+      { t:"fill", q:"30th = ___", a:["thirtieth"], e:"<b>30th = thirtieth</b>.", h:"Decenas → -ieth (thirt-ieth)." },
+      { t:"mc", q:"1/7: the ___ of July", o:["first","one"], a:"first", e:"En fechas usamos el ordinal → <b>first</b>.", h:"En fechas → ordinal (first, no one)." },
+      { t:"fill", q:"3/3: the ___ of March", a:["third"], e:"<b>third</b> of March.", h:"En fechas → ordinal (third)." },
+      { t:"mc", q:"22nd = ___", o:["twenty-second","twenty-twoth"], a:"twenty-second", e:"<b>22nd = twenty-second</b>.", h:"…-second en la unidad." },
+      { t:"fill", q:"25/12: the ___ of December", a:["twenty-fifth"], e:"<b>twenty-fifth</b> of December.", h:"25 → twenty-fifth." },
+      { t:"mc", q:"14th = ___", o:["fourteenth","forteenth"], a:"fourteenth", e:"<b>14th = fourteenth</b>.", h:"four + teenth." },
+      { t:"fill", q:"16th = ___", a:["sixteenth"], e:"<b>16th = sixteenth</b>.", h:"six + teenth." },
+      { t:"mc", q:"40th = ___", o:["fortieth","fourtieth"], a:"fortieth", e:"<b>40th = fortieth</b> (sin u).", h:"forty → fort-ieth (sin u)." },
+      { t:"fill", q:"19th = ___", a:["nineteenth"], e:"<b>19th = nineteenth</b>.", h:"nine + teenth." },
+      { t:"mc", q:"31st = ___", o:["thirty-first","thirty-oneth"], a:"thirty-first", e:"<b>31st = thirty-first</b>.", h:"…-first en la unidad." },
+      { t:"fill", q:"2/2: the ___ of February", a:["second"], e:"<b>second</b> of February.", h:"En fechas → ordinal (second)." },
+      { t:"mc", q:"18th = ___", o:["eighteenth","eighthteenth"], a:"eighteenth", e:"<b>18th = eighteenth</b>.", h:"eigh + teenth (una t)." },
+      { t:"fill", q:"17th = ___", a:["seventeenth"], e:"<b>17th = seventeenth</b>.", h:"seven + teenth." },
+      { t:"mc", q:"23rd = ___", o:["twenty-third","twenty-threeth"], a:"twenty-third", e:"<b>23rd = twenty-third</b>.", h:"…-third en la unidad." }
+    ]
+  },
+  {
+    id: "time", emoji: "🕑", en: "Telling the Time", es: "Decir la hora",
+    slides: [
+      { k: "Empezamos", t: "La hora en punto: <span class='en'>o'clock</span>", h: `
+        <p>Para preguntar: <b>What time is it?</b> Para responder: <b>It's…</b></p>
+        <ul class="ex">
+          <li>3:00 → It's three <b>o'clock</b>. <span class="t">Las tres en punto.</span></li>
+        </ul>` },
+      { k: "Y...", t: "<span class='hl'>past</span> = y (de la hora)", h: `
+        <p>De en punto hasta la media (minutos 1–30) usamos <b>past</b>, diciendo primero los minutos.</p>
+        <ul class="ex">
+          <li>2:10 → ten <b>past</b> two. <span class="t">Las dos y diez.</span></li>
+          <li>2:15 → <b>quarter past</b> two. <span class="t">Y cuarto.</span></li>
+          <li>2:30 → <b>half past</b> two. <span class="t">Y media.</span></li>
+        </ul>` },
+      { k: "Menos...", t: "<span class='hl'>to</span> = menos (para la hora)", h: `
+        <p>Pasada la media (minutos 31–59) usamos <b>to</b> y la <b>hora siguiente</b>.</p>
+        <ul class="ex">
+          <li>2:45 → <b>quarter to</b> three. <span class="t">Las tres menos cuarto.</span></li>
+          <li>2:50 → ten <b>to</b> three. <span class="t">Las tres menos diez.</span></li>
+        </ul>
+        <div class="tip warn">⚠️ Con <b>to</b> se dice la hora que viene: 2:50 → to <b>three</b>.</div>` },
+      { k: "Resumen", t: "De un vistazo (las 4:__)", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>4:00</td><td>four o'clock</td></tr>
+          <tr><td>4:15</td><td>quarter past four</td></tr>
+          <tr><td>4:30</td><td>half past four</td></tr>
+          <tr><td>4:45</td><td>quarter to five</td></tr>
+          <tr><td>4:20</td><td>twenty past four</td></tr>
+          <tr><td>4:40</td><td>twenty to five</td></tr>
+        </table></div>` }
+    ],
+    pool: [
+      { t:"mc", q:"3:00 → three ___", o:["o'clock","past"], a:"o'clock", e:"Hora exacta → <b>o'clock</b>.", h:"Hora en punto → <span class='big'>o'clock</span>." },
+      { t:"mc", q:"4:15 → ___ past four", o:["quarter","half"], a:"quarter", e:"15 min → <b>quarter</b>.", h:"15 min = cuarto (quarter)." },
+      { t:"mc", q:"5:30 → ___ past five", o:["quarter","half"], a:"half", e:"30 min → <b>half</b>.", h:"30 min = media (half)." },
+      { t:"mc", q:"6:45 → quarter ___ seven", o:["to","past"], a:"to", e:"Pasada la media → <b>to</b>.", h:"Pasada la media → to." },
+      { t:"fill", q:"2:10 → ten ___ two", a:["past"], e:"Antes de media → <b>past</b>.", h:"Antes de la media → past." },
+      { t:"fill", q:"8:50 → ten ___ nine", a:["to"], e:"Pasada la media → <b>to</b> + hora siguiente.", h:"Pasada la media → to." },
+      { t:"mc", q:"7:30 → half past ___", o:["seven","eight"], a:"seven", e:"Con past se dice la hora actual → <b>seven</b>.", h:"Con past → la hora actual." },
+      { t:"mc", q:"9:45 → quarter to ___", o:["nine","ten"], a:"ten", e:"Con to → hora siguiente → <b>ten</b>.", h:"Con to → la hora siguiente." },
+      { t:"mc", q:"1:00 → one ___", o:["o'clock","to"], a:"o'clock", e:"Hora exacta → <b>o'clock</b>.", h:"Hora en punto → o'clock." },
+      { t:"mc", q:"2:20 → twenty ___ two", o:["past","to"], a:"past", e:"Antes de media → <b>past</b>.", h:"Antes de la media → past." },
+      { t:"mc", q:"3:40 → twenty ___ four", o:["past","to"], a:"to", e:"Pasada la media → <b>to</b>.", h:"Pasada la media → to." },
+      { t:"mc", q:"10:15 → quarter past ___", o:["ten","eleven"], a:"ten", e:"Con past → hora actual → <b>ten</b>.", h:"Con past → la hora actual." },
+      { t:"mc", q:"11:45 → quarter to ___", o:["eleven","twelve"], a:"twelve", e:"Con to → hora siguiente → <b>twelve</b>.", h:"Con to → la hora siguiente." },
+      { t:"fill", q:"5:05 → five ___ five", a:["past"], e:"Antes de media → <b>past</b>.", h:"Antes de la media → past." },
+      { t:"fill", q:"6:55 → five ___ seven", a:["to"], e:"Pasada la media → <b>to</b>.", h:"Pasada la media → to." },
+      { t:"mc", q:"12:30 → half past ___", o:["twelve","one"], a:"twelve", e:"Con past → hora actual → <b>twelve</b>.", h:"Con past → la hora actual." },
+      { t:"mc", q:"4:25 → twenty-five ___ four", o:["past","to"], a:"past", e:"Antes de media → <b>past</b>.", h:"Antes de la media → past." },
+      { t:"mc", q:"8:35 → twenty-five ___ nine", o:["past","to"], a:"to", e:"Pasada la media → <b>to</b>.", h:"Pasada la media → to." },
+      { t:"mc", q:"It's ___ half past three.", o:["It's","Its"], a:"It's", e:"It's = it is (its = su).", h:"It's = it is (its = su)." },
+      { t:"mc", q:"The class starts ___ nine o'clock.", o:["at","in"], a:"at", e:"Con horas usamos <b>at</b>.", h:"Con horas → at (at nine)." },
+      { t:"mc", q:"9:15 → quarter past ___", o:["nine","ten"], a:"nine", e:"Con past → hora actual → <b>nine</b>.", h:"Con past → la hora actual." },
+      { t:"mc", q:"7:50 → ten to ___", o:["seven","eight"], a:"eight", e:"Con to → hora siguiente → <b>eight</b>.", h:"Con to → la hora siguiente." },
+      { t:"fill", q:"2:30 → half ___ two", a:["past"], e:"Y media → <b>half past</b>.", h:"Media → half past." },
+      { t:"mc", q:"6:15 → ___ past six", o:["quarter","half"], a:"quarter", e:"15 min → <b>quarter</b>.", h:"15 min = cuarto." },
+      { t:"mc", q:"3:45 → quarter to ___", o:["three","four"], a:"four", e:"Con to → hora siguiente → <b>four</b>.", h:"Con to → la hora siguiente." },
+      { t:"mc", q:"10:30 → half past ___", o:["ten","eleven"], a:"ten", e:"Con past → hora actual → <b>ten</b>.", h:"Con past → la hora actual." },
+      { t:"mc", q:"1:10 → ten past ___", o:["one","two"], a:"one", e:"Con past → hora actual → <b>one</b>.", h:"Con past → la hora actual." },
+      { t:"mc", q:"11:55 → five to ___", o:["eleven","twelve"], a:"twelve", e:"Con to → hora siguiente → <b>twelve</b>.", h:"Con to → la hora siguiente." },
+      { t:"mc", q:"12:00 → twelve ___", o:["o'clock","past"], a:"o'clock", e:"Hora exacta → <b>o'clock</b>.", h:"Hora en punto → o'clock." },
+      { t:"mc", q:"4:30 → ___ past four", o:["half","quarter"], a:"half", e:"30 min → <b>half</b>.", h:"30 min = media (half)." }
+    ]
+  },
+  {
+    id: "questions", emoji: "❓", en: "Question Words", es: "Las palabras interrogativas",
+    slides: [
+      { k: "Empezamos", t: "Las <span class='en'>Wh- questions</span>", h: `
+        <p>Sirven para pedir información. Van al <b>principio</b> de la pregunta.</p>
+        <ul class="ex">
+          <li><b>Who</b> → persona: Who is that boy?</li>
+          <li><b>Where</b> → lugar: Where do you live?</li>
+          <li><b>When</b> → tiempo: When is your birthday?</li>
+        </ul>` },
+      { k: "Más palabras", t: "why · what · how", h: `
+        <ul class="ex">
+          <li><b>Why</b> → razón: Why are you late? — Because…</li>
+          <li><b>What</b> → cosa: What's your name?</li>
+          <li><b>How</b> → de qué manera: How do you go to school? — By bus.</li>
+        </ul>
+        <div class="tip">💡 <b>How old…?</b> = ¿qué edad? · <b>How much/many…?</b> = ¿cuánto/cuántos?</div>` },
+      { k: "Elección y cantidad", t: "which · how many · how often", h: `
+        <ul class="ex">
+          <li><b>Which</b> → elegir: Which colour, red or blue?</li>
+          <li><b>How many</b> → cantidad (contables): How many brothers?</li>
+          <li><b>How often</b> → frecuencia: How often do you swim?</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"mc", q:"___ is your name?", o:["What","Who"], a:"What", e:"Para el nombre → <b>What</b>.", h:"Un dato/cosa (nombre) → <span class='big'>What</span>." },
+      { t:"mc", q:"___ do you live?", o:["Where","When"], a:"Where", e:"Un lugar → <b>Where</b>.", h:"Un lugar → Where." },
+      { t:"fill", q:"___ are you late? — Because I missed the bus.", a:["why"], e:"Una razón (Because…) → <b>Why</b>.", h:"Si contestan 'Because…' → Why." },
+      { t:"mc", q:"___ is that boy?", o:["Who","What"], a:"Who", e:"Una persona → <b>Who</b>.", h:"Una persona → Who." },
+      { t:"fill", q:"___ old are you?", a:["how"], e:"La edad → <b>How old…?</b>", h:"La edad → How old…?" },
+      { t:"mc", q:"___ do you go to school? — By bus.", o:["How","Where"], a:"How", e:"De qué manera (By bus) → <b>How</b>.", h:"Si contestan el medio (By bus) → How." },
+      { t:"mc", q:"___ many brothers have you got?", o:["How","What"], a:"How", e:"Cantidad → <b>How many</b>.", h:"Cantidad de contables → How many." },
+      { t:"fill", q:"___ is your birthday? — In May.", a:["when"], e:"Un momento → <b>When</b>.", h:"Un momento/tiempo (In May) → When." },
+      { t:"mc", q:"___ colour do you like, red or blue?", o:["Which","How"], a:"Which", e:"Elegir entre opciones → <b>Which</b>.", h:"Elegir entre opciones → Which." },
+      { t:"mc", q:"___ is your favourite food?", o:["What","Who"], a:"What", e:"Una cosa → <b>What</b>.", h:"Una cosa → What." },
+      { t:"mc", q:"___ are my keys?", o:["Where","When"], a:"Where", e:"Un lugar → <b>Where</b>.", h:"Un lugar → Where." },
+      { t:"mc", q:"___ is she crying?", o:["Why","What"], a:"Why", e:"Una razón → <b>Why</b>.", h:"Preguntar la razón → Why." },
+      { t:"mc", q:"___ is your teacher? — Mr Lee.", o:["Who","Where"], a:"Who", e:"Una persona → <b>Who</b>.", h:"Una persona → Who." },
+      { t:"fill", q:"___ does the film start? — At 8.", a:["when"], e:"Un momento → <b>When</b>.", h:"Un momento (At 8) → When." },
+      { t:"mc", q:"___ much is it?", o:["How","What"], a:"How", e:"Precio/cantidad → <b>How much</b>.", h:"Precio → How much." },
+      { t:"mc", q:"___ is this? — It's a pen.", o:["What","Who"], a:"What", e:"Una cosa → <b>What</b>.", h:"Una cosa → What." },
+      { t:"mc", q:"___ do you spell it?", o:["How","What"], a:"How", e:"De qué manera → <b>How</b>.", h:"De qué manera → How." },
+      { t:"mc", q:"___ pen is yours, this or that?", o:["Which","Who"], a:"Which", e:"Elegir → <b>Which</b>.", h:"Elegir entre opciones → Which." },
+      { t:"fill", q:"___ do you get up? — At seven.", a:["when"], e:"Un momento → <b>When</b>.", h:"Un momento (At seven) → When." },
+      { t:"mc", q:"___ are you from?", o:["Where","Who"], a:"Where", e:"Un lugar/origen → <b>Where</b>.", h:"Origen → Where are you from?" },
+      { t:"mc", q:"___ is your bag? — The red one.", o:["Which","Why"], a:"Which", e:"Elegir → <b>Which</b>.", h:"Elegir entre varios → Which." },
+      { t:"mc", q:"___ often do you swim?", o:["How","What"], a:"How", e:"Frecuencia → <b>How often</b>.", h:"Frecuencia → How often." },
+      { t:"mc", q:"___ lives here? — My uncle.", o:["Who","Where"], a:"Who", e:"Una persona → <b>Who</b>.", h:"Una persona → Who." },
+      { t:"fill", q:"___ is the weather? — Sunny.", a:["how"], e:"Estado del tiempo → <b>How</b>.", h:"Cómo está algo → How." },
+      { t:"mc", q:"___ do you want, tea or coffee?", o:["Which","Why"], a:"Which", e:"Elegir → <b>Which</b>.", h:"Elegir entre opciones → Which." },
+      { t:"mc", q:"___ are you doing? — I'm reading.", o:["What","Who"], a:"What", e:"Una acción/cosa → <b>What</b>.", h:"Qué haces → What." },
+      { t:"mc", q:"___ is your house? — Near the park.", o:["Where","When"], a:"Where", e:"Un lugar → <b>Where</b>.", h:"Un lugar → Where." },
+      { t:"fill", q:"___ many pets have you got?", a:["how"], e:"Cantidad → <b>How many</b>.", h:"Cantidad → How many." },
+      { t:"mc", q:"___ is your phone number?", o:["What","Who"], a:"What", e:"Un dato → <b>What</b>.", h:"Un dato → What." },
+      { t:"mc", q:"___ do you live? — In Madrid.", o:["Where","Why"], a:"Where", e:"Un lugar → <b>Where</b>.", h:"Un lugar → Where." }
+    ]
+  }
+];
+
+const PICK = 15; // preguntas por examen (de las 30 del banco)
+
+/* =======================================================================
+   MOTOR
+   ======================================================================= */
+const app = document.getElementById("app");
+const STORE_KEY = "englishA1_scores";
+
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000; // las notas caducan a la semana
+function loadScores() {
+  // Devuelve solo las notas NO caducadas (y borra de paso las caducadas).
+  let raw = {};
+  try { raw = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; }
+  const out = {}; const now = Date.now(); let changed = false;
+  for (const k in raw) {
+    let v = raw[k];
+    if (typeof v === "number") { v = { last: v, best: v, date: null, ts: 0 }; } // formato antiguo → caducado
+    if (typeof v.ts !== "number") v.ts = 0;
+    if (now - v.ts > WEEK_MS) { changed = true; continue; }                      // caducada → se descarta
+    out[k] = v;
+  }
+  if (changed) { try { localStorage.setItem(STORE_KEY, JSON.stringify(out)); } catch (e) {} }
+  return out;
+}
+function saveScore(id, pct) {
+  try {
+    const s = loadScores();
+    const prev = s[id] || { best: 0 };
+    s[id] = { last: pct, best: Math.max(pct, prev.best || 0), date: new Date().toISOString().slice(0, 10), ts: Date.now() };
+    localStorage.setItem(STORE_KEY, JSON.stringify(s));
+  } catch (e) {}
+}
+function daysLeft(rec) {
+  const ms = WEEK_MS - (Date.now() - (rec.ts || 0));
+  return Math.max(0, Math.ceil(ms / (24 * 60 * 60 * 1000)));
+}
+function caducaTxt(rec) { const d = daysLeft(rec); return d <= 1 ? "caduca hoy" : "caduca en " + d + " días"; }
+function resetScores() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function norm(s) {
+  return (s || "").toString().toLowerCase().trim().replace(/[‘’]/g, "'").replace(/\s+/g, " ").replace(/[.?!]+$/, "");
+}
+function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+function gradeColor(p) { return p === 100 ? "var(--good)" : p >= 60 ? "var(--accent)" : "var(--bad)"; }
+
+/* ---------- HOME ---------- */
+function renderHome() {
+  const scores = loadScores();
+  const cards = TOPICS.map(t => {
+    const rec = scores[t.id];
+    const badge = rec
+      ? `<span class="pill done">✓ Hecha · ${rec.last}%</span><span class="pill">${caducaTxt(rec)}</span>`
+      : `<span class="pill n">Examen de ${PICK}</span>`;
+    return `<button class="card" data-id="${t.id}">
+      <span class="emoji">${t.emoji}</span>
+      <span class="t-en">${esc(t.en)}</span>
+      <span class="t-es">${esc(t.es)}</span>
+      <span class="foot">${badge}</span>
+    </button>`;
+  }).join("");
+
+  app.innerHTML = `<div class="scroll"><div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Inglés · Nivel A1+</div>
+      <h1>Aprende y practica, paso a paso</h1>
+      <p>Elige un tema. Primero te lo explico pantalla a pantalla y luego haces un examen de ${PICK} preguntas (elegidas al azar entre 30, así nunca son las mismas). Te corrige al instante y, si te atascas, tienes el botón 💡 de pista.</p>
+    </section>
+    <div class="grid">${cards}</div>
+    <footer>Hecho con cariño para estudiar · ${TOPICS.length} temas · banco de 30 preguntas por tema</footer>
+  </div></div>`;
+  app.querySelectorAll(".card").forEach(c => c.addEventListener("click", () => { location.hash = c.dataset.id; }));
+}
+
+/* ---------- WIZARD ---------- */
+let wiz = null; // { topic, index, questions:[...], answers:{qi:{given,ok}} }
+
+function startTopic(id) {
+  const topic = TOPICS.find(x => x.id === id);
+  if (!topic) { location.hash = ""; return; }
+  const questions = shuffle(topic.pool).slice(0, Math.min(PICK, topic.pool.length));
+  wiz = { topic, index: 0, questions, answers: {} };
+  app.innerHTML = `<div class="wizard">
+    <div class="wiz-top">
+      <div class="row">
+        <button class="wiz-close" id="wizClose" aria-label="Cerrar">×</button>
+        <div class="wiz-title"><span class="em">${topic.emoji}</span><span class="txt">${esc(topic.en)}</span></div>
+        <div class="wiz-step" id="wizStep"></div>
+      </div>
+      <div class="pbar"><i id="pbar"></i></div>
+    </div>
+    <div class="slide-area" id="slideArea"></div>
+    <div class="wiz-nav" id="wizNav"></div>
+  </div>`;
+  document.getElementById("wizClose").addEventListener("click", () => { location.hash = ""; });
+  renderSlide();
+}
+
+function totalSlides() { return wiz.topic.slides.length + wiz.questions.length + 1; }
+
+function renderSlide() {
+  const topic = wiz.topic;
+  const nSlides = topic.slides.length;
+  const nQ = wiz.questions.length;
+  const total = totalSlides();
+  const i = wiz.index;
+  const area = document.getElementById("slideArea");
+  const nav = document.getElementById("wizNav");
+
+  document.getElementById("wizStep").textContent = (i + 1) + " / " + total;
+  document.getElementById("pbar").style.width = ((i + 1) / total * 100) + "%";
+
+  // teach slide
+  if (i < nSlides) {
+    const s = topic.slides[i];
+    area.innerHTML = `<div class="slide-wrap"><div class="slide">
+      <div class="kicker">${esc(s.k)}</div><h2>${s.t}</h2>${s.h}
+    </div></div>`;
+    nav.innerHTML = `
+      <button class="btn ghost" id="prevBtn" ${i === 0 ? "disabled" : ""}>← Atrás</button>
+      <span class="grow"></span>
+      <button class="btn primary wide" id="nextBtn">${i === nSlides - 1 ? "Empezar examen →" : "Siguiente →"}</button>`;
+    document.getElementById("prevBtn").onclick = goPrev;
+    document.getElementById("nextBtn").onclick = goNext;
+    area.scrollTop = 0;
+    return;
+  }
+
+  // result slide
+  if (i >= nSlides + nQ) { renderResult(area, nav); return; }
+
+  // question slide
+  const qi = i - nSlides;
+  const q = wiz.questions[qi];
+  const ans = wiz.answers[qi];
+  const checked = !!ans;
+  const promptHtml = esc(q.q).replace("___", '<span class="blank">?</span>');
+
+  let control;
+  if (q.t === "mc") {
+    control = `<div class="opts">` + q.o.map(o => {
+      const isAns = norm(o) === norm(q.a);
+      const isSel = checked && norm(o) === norm(ans.given);
+      let cls = "opt";
+      if (!checked && isSel) cls += " sel";
+      if (checked && isAns) cls += " answer";
+      if (checked && isSel && !ans.ok) cls += " sel wrong";
+      return `<button class="${cls}" data-val="${esc(o)}" ${checked ? "disabled" : ""}>${esc(o)}</button>`;
+    }).join("") + `</div>`;
+  } else {
+    const val = checked ? esc(ans.given) : "";
+    const cls = checked ? (ans.ok ? "okin" : "noin") : "";
+    control = `<input class="fill ${cls}" id="fillInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="escribe la respuesta…" value="${val}" ${checked ? "readonly" : ""}>`;
+  }
+
+  let feedback = "";
+  if (checked) {
+    const sol = Array.isArray(q.a) ? q.a[0] : q.a;
+    feedback = ans.ok
+      ? `<div class="feedback ok"><b>¡Correcto! ✓</b><span class="expl">${q.e}</span></div>`
+      : `<div class="feedback no"><b>Casi… ✗</b> Respuesta correcta: <span class="sol">${esc(sol)}</span>.<span class="expl">${q.e}</span></div>`;
+  }
+
+  area.innerHTML = `<div class="slide-wrap"><div class="slide q ${checked ? "checked" : ""}">
+    <div class="q-head">
+      <div class="q-kicker">Pregunta ${qi + 1} de ${nQ}</div>
+      <button class="hint-btn" id="hintBtn">💡 Pista</button>
+    </div>
+    <div class="q-prompt">${promptHtml}</div>
+    ${control}
+    ${feedback}
+  </div></div>`;
+  area.scrollTop = 0;
+
+  if (!checked) {
+    if (q.t === "mc") {
+      area.querySelectorAll(".opt").forEach(opt => opt.addEventListener("click", () => {
+        area.querySelectorAll(".opt").forEach(o => o.classList.remove("sel"));
+        opt.classList.add("sel");
+      }));
+    } else {
+      const inp = document.getElementById("fillInput");
+      inp.focus();
+      inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); checkCurrent(); } });
+    }
+  }
+  document.getElementById("hintBtn").onclick = () => openHint(qi);
+
+  nav.innerHTML = `
+    <button class="btn ghost" id="prevBtn">← Atrás</button>
+    <span class="grow"></span>
+    ${checked
+      ? `<button class="btn primary wide" id="nextBtn">${i === nSlides + nQ - 1 ? "Ver resultado →" : "Siguiente →"}</button>`
+      : `<button class="btn accent wide" id="checkBtn">Comprobar</button>`}`;
+  document.getElementById("prevBtn").onclick = goPrev;
+  if (checked) document.getElementById("nextBtn").onclick = goNext;
+  else document.getElementById("checkBtn").onclick = checkCurrent;
+}
+
+function checkCurrent() {
+  const topic = wiz.topic;
+  const qi = wiz.index - topic.slides.length;
+  const q = wiz.questions[qi];
+  let given = "", ok = false;
+  if (q.t === "mc") {
+    const sel = document.querySelector(".opt.sel");
+    if (!sel) return; // obliga a elegir
+    given = sel.dataset.val;
+    ok = norm(given) === norm(q.a);
+  } else {
+    const inp = document.getElementById("fillInput");
+    given = inp.value;
+    const valid = Array.isArray(q.a) ? q.a : [q.a];
+    ok = given.trim() !== "" && valid.some(a => norm(a) === norm(given));
+  }
+  wiz.answers[qi] = { given, ok };
+  renderSlide();
+}
+
+function renderResult(area, nav) {
+  const topic = wiz.topic;
+  const nQ = wiz.questions.length;
+  let correct = 0;
+  for (let k = 0; k < nQ; k++) if (wiz.answers[k] && wiz.answers[k].ok) correct++;
+  const pct = Math.round(correct / nQ * 100);
+  saveScore(topic.id, pct);
+
+  const msg = pct === 100 ? "¡Perfecto! Dominas este tema. 🎉"
+    : pct >= 60 ? "¡Muy bien! Repasa los fallos y vuelve a intentarlo."
+    : "Vuelve a leer la explicación y reinténtalo. ¡Tú puedes! 💪";
+
+  area.innerHTML = `<div class="slide-wrap"><div class="slide res">
+    <div class="ring" style="background:${gradeColor(pct)}">${pct}%</div>
+    <h2>${correct} de ${nQ} correctas</h2>
+    <p>${msg}</p>
+  </div></div>`;
+  area.scrollTop = 0;
+
+  nav.innerHTML = `
+    <button class="btn accent wide" id="retryBtn">↻ Repetir (otras preguntas)</button>
+    <span class="grow"></span>
+    <button class="btn primary wide" id="exitBtn">Salir al índice</button>`;
+  document.getElementById("retryBtn").onclick = () => startTopic(topic.id);
+  document.getElementById("exitBtn").onclick = () => { location.hash = ""; };
+}
+
+function goNext() { if (wiz.index < totalSlides() - 1) { wiz.index++; renderSlide(); } }
+function goPrev() { if (wiz.index > 0) { wiz.index--; renderSlide(); } }
+
+/* ---------- PISTA (ventana contextual) ---------- */
+function openHint(qi) {
+  const topic = wiz.topic;
+  const q = wiz.questions[qi];
+  const hint = q.h || "Repasa la explicación del tema.";
+  const ov = document.createElement("div");
+  ov.className = "modal-ov";
+  ov.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="Pista">
+    <div class="modal-head"><span class="em">${topic.emoji}</span><span>Pista</span>
+      <button class="modal-x" aria-label="Cerrar">×</button></div>
+    <div class="modal-body">${hint}</div>
+    <button class="btn primary modal-ok">¡Entendido!</button>
+  </div>`;
+  document.body.appendChild(ov);
+  function close() { ov.remove(); document.removeEventListener("keydown", onEsc); }
+  function onEsc(e) { if (e.key === "Escape") close(); }
+  ov.addEventListener("click", e => { if (e.target === ov) close(); });
+  ov.querySelector(".modal-x").onclick = close;
+  ov.querySelector(".modal-ok").onclick = close;
+  document.addEventListener("keydown", onEsc);
+}
+
+/* ---------- PROGRESO ---------- */
+function renderProgress() {
+  const scores = loadScores();
+  const done = TOPICS.filter(t => scores[t.id]);
+  const avg = done.length ? Math.round(done.reduce((a, t) => a + scores[t.id].last, 0) / done.length) : null;
+  const rows = TOPICS.map(t => {
+    const rec = scores[t.id];
+    if (!rec) return `<tr class="pending"><td><span class="pemoji">${t.emoji}</span> ${esc(t.en)}</td><td colspan="3" class="muted">Sin hacer todavía</td></tr>`;
+    return `<tr>
+      <td><span class="pemoji">${t.emoji}</span> ${esc(t.en)}</td>
+      <td><span class="grade" style="background:${gradeColor(rec.last)}">${rec.last}%</span></td>
+      <td class="muted">${rec.best}%</td>
+      <td class="muted">${rec.date ? esc(rec.date) : "—"}<br><span style="font-size:.8em">${caducaTxt(rec)}</span></td>
+    </tr>`;
+  }).join("");
+
+  app.innerHTML = `<div class="scroll"><div class="wrap">
+    <button class="back" id="backBtn">← Todos los temas</button>
+    <div class="topic-head"><span class="emoji">📊</span><div><h1>Mi progreso</h1><div class="t-es">Última nota de cada prueba</div></div></div>
+    <div class="summary">
+      <div class="ring" style="background:${avg === null ? 'var(--muted)' : gradeColor(avg)}">${avg === null ? '—' : avg + '%'}</div>
+      <div><h3>${done.length} de ${TOPICS.length} temas practicados</h3><p>${avg === null ? 'Aún no hay notas. ¡Empieza por cualquier tema!' : 'Media de las últimas notas.'}</p></div>
+    </div>
+    <div class="table-wrap"><table class="grx progress">
+      <tr><th>Tema</th><th>Última</th><th>Mejor</th><th>Fecha</th></tr>${rows}
+    </table></div>
+    <div class="actions">
+      <button class="btn primary" id="backBtn2">← Volver a los temas</button>
+      <button class="btn ghost" id="resetBtn">Borrar progreso</button>
+    </div>
+    <footer>Las notas se guardan en este navegador y <b>caducan a los 7 días</b>: después hay que volver a hacer el tema.</footer>
+  </div></div>`;
+
+  document.getElementById("backBtn").onclick = () => { location.hash = ""; };
+  document.getElementById("backBtn2").onclick = () => { location.hash = ""; };
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (this.dataset.armed === "1") { resetScores(); renderProgress(); }
+    else { this.dataset.armed = "1"; this.textContent = "¿Seguro? Pulsa otra vez"; }
+  });
+}
+
+/* ---------- router + tema ---------- */
+function route() {
+  const id = (location.hash || "").replace(/^#/, "");
+  if (id === "progreso") renderProgress();
+  else if (id && TOPICS.some(t => t.id === id)) startTopic(id);
+  else renderHome();
+}
+window.addEventListener("hashchange", route);
+document.getElementById("homeBtn").addEventListener("click", () => { location.hash = ""; });
+document.getElementById("progressBtn").addEventListener("click", () => { location.hash = "progreso"; });
+
+(function themeInit() {
+  const btn = document.getElementById("themeBtn");
+  let saved = null;
+  try { saved = localStorage.getItem("englishA1_theme"); } catch (e) {}
+  if (saved) document.documentElement.setAttribute("data-theme", saved);
+  btn.addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    const isDark = cur === "dark" || (!cur && matchMedia("(prefers-color-scheme: dark)").matches);
+    const next = isDark ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("englishA1_theme", next); } catch (e) {}
+  });
+})();
+
+route();
+</script>
