@@ -72,16 +72,8 @@
 
   /* ---------- WIZARD ---------- */
   .wizard { flex: 1; min-height: 0; display: flex; flex-direction: column; }
-  .wiz-top { flex: none; border-bottom: 1px solid var(--border); background: var(--surface); padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px)); padding-block: 8px; }
-  .wiz-top .row { display: flex; align-items: center; gap: 10px; }
-  .wiz-close { background: none; border: 0; color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; padding: 2px 6px; border-radius: 8px; flex: none; }
-  .wiz-close:hover { background: var(--surface-2); color: var(--fg); }
-  .wiz-title { font-family: var(--font-display); font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 7px; min-width: 0; }
-  .wiz-title .em { font-size: 1.15rem; }
-  .wiz-title .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .wiz-step { margin-left: auto; color: var(--muted); font-size: .82rem; font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
-  .pbar { height: 6px; border-radius: 999px; background: var(--surface-2); margin-top: 8px; overflow: hidden; }
-  .pbar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .25s ease; }
+  .pbar { flex: none; height: 4px; background: var(--surface-2); overflow: hidden; }
+  .pbar > i { display: block; height: 100%; background: var(--accent); transition: width .25s ease; }
 
   .slide-area { flex: 1; min-height: 0; overflow-y: auto; }
   .slide-wrap { min-height: 100%; display: flex; flex-direction: column; justify-content: center; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); padding-block: 22px; }
@@ -852,18 +844,10 @@ function startTopic(id) {
   const questions = shuffle(topic.pool).slice(0, Math.min(PICK, topic.pool.length));
   wiz = { topic, index: 0, questions, answers: {} };
   app.innerHTML = `<div class="wizard">
-    <div class="wiz-top">
-      <div class="row">
-        <button class="wiz-close" id="wizClose" aria-label="Cerrar">×</button>
-        <div class="wiz-title"><span class="em">${topic.emoji}</span><span class="txt">${esc(topic.en)}</span></div>
-        <div class="wiz-step" id="wizStep"></div>
-      </div>
-      <div class="pbar"><i id="pbar"></i></div>
-    </div>
+    <div class="pbar"><i id="pbar"></i></div>
     <div class="slide-area" id="slideArea"></div>
     <div class="wiz-nav" id="wizNav"></div>
   </div>`;
-  document.getElementById("wizClose").addEventListener("click", () => { location.hash = ""; });
   renderSlide();
 }
 
@@ -878,7 +862,6 @@ function renderSlide() {
   const area = document.getElementById("slideArea");
   const nav = document.getElementById("wizNav");
 
-  document.getElementById("wizStep").textContent = (i + 1) + " / " + total;
   document.getElementById("pbar").style.width = ((i + 1) / total * 100) + "%";
 
   // teach slide
