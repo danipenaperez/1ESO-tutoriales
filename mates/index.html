@@ -1,0 +1,987 @@
+<title>Matemáticas 1º ESO</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /* Layout: wizard a pantalla completa. Home = rejilla de temas con scroll propio;
+     cada tema = explicación paso a paso + examen de 15 preguntas elegidas al azar
+     de un banco de 30. Barra de progreso arriba, navegación Atrás/Siguiente abajo. */
+  :root {
+    --bg: #fbf7f0; --surface: #ffffff; --surface-2: #f4eee3; --fg: #2b2a26; --muted: #726d63; --border: #e7ddcd;
+    --primary: #2f6d63; --primary-soft: #dcefe9; --accent: #e8743b; --accent-soft: #fbe6d8;
+    --good: #2e7d4f; --good-soft: #dcf0e2; --bad: #c23c3c; --bad-soft: #f8e0dd;
+    --shadow: 0 2px 4px rgba(40,30,15,.05), 0 8px 24px rgba(40,30,15,.06);
+    --radius: 16px; --font-display: "Baloo 2", "Trebuchet MS", system-ui, sans-serif; --font-body: "Nunito", system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1a1916; --surface: #262420; --surface-2: #2f2c27; --fg: #f1ece2; --muted: #aba497; --border: #3a362f;
+      --primary: #6fc3b4; --primary-soft: #223f3a; --accent: #f08a56; --accent-soft: #3d2a1e;
+      --good: #6cc48b; --good-soft: #223a2b; --bad: #ec7b7b; --bad-soft: #3d2322;
+      --shadow: 0 2px 4px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.3); color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1a1916; --surface: #262420; --surface-2: #2f2c27; --fg: #f1ece2; --muted: #aba497; --border: #3a362f;
+    --primary: #6fc3b4; --primary-soft: #223f3a; --accent: #f08a56; --accent-soft: #3d2a1e;
+    --good: #6cc48b; --good-soft: #223a2b; --bad: #ec7b7b; --bad-soft: #3d2322;
+    --shadow: 0 2px 4px rgba(0,0,0,.2), 0 8px 24px rgba(0,0,0,.3); color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--font-body); line-height: 1.55; display: flex; flex-direction: column; overflow: hidden; }
+  h1, h2, h3 { font-family: var(--font-display); font-weight: 700; text-wrap: balance; letter-spacing: -.01em; }
+  a { color: var(--primary); }
+
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 20; background: var(--surface); }
+  header.bar {
+    flex: none; background: var(--surface); border-bottom: 1px solid var(--border);
+    padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px));
+    padding-block: 9px; display: flex; align-items: center; gap: 10px;
+  }
+  .bar .brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; cursor: pointer; background: none; border: 0; color: var(--fg); padding: 4px 6px; border-radius: 10px; }
+  .bar .brand:hover { background: var(--surface-2); }
+  .bar .logo { width: 29px; height: 29px; border-radius: 9px; background: var(--primary); color: #fff; display: grid; place-items: center; font-size: .95rem; flex: none; }
+  .bar .spacer { flex: 1; }
+  .icon-btn { background: var(--surface-2); border: 1px solid var(--border); color: var(--fg); width: 37px; height: 37px; border-radius: 10px; font-size: 1rem; cursor: pointer; display: grid; place-items: center; flex: none; }
+  .icon-btn:hover { border-color: var(--primary); }
+
+  main { flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
+  .scroll { flex: 1; min-height: 0; overflow-y: auto; }
+  .wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 22px 48px; }
+
+  .hero { margin-bottom: 20px; }
+  .hero .eyebrow { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .72rem; }
+  .hero h1 { font-size: clamp(1.7rem, 6vw, 2.4rem); margin: 4px 0 8px; }
+  .hero p { color: var(--muted); max-width: 60ch; margin: 0; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+  .card { text-align: left; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; cursor: pointer; box-shadow: var(--shadow); color: var(--fg); display: flex; flex-direction: column; gap: 6px; transition: transform .15s ease, border-color .15s ease; min-width: 0; }
+  .card:hover { transform: translateY(-3px); border-color: var(--primary); }
+  .card .emoji { font-size: 1.7rem; }
+  .card .t-en { font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; line-height: 1.2; }
+  .card .t-es { color: var(--muted); font-size: .9rem; }
+  .card .foot { margin-top: 8px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .pill { font-size: .72rem; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--surface-2); color: var(--muted); }
+  .pill.done { background: var(--good-soft); color: var(--good); }
+  .pill.n { background: var(--primary-soft); color: var(--primary); }
+  .mural-h { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; color: var(--fg); }
+  .mural-h:first-of-type { margin-top: 6px; }
+  .mural-h.hdone { color: var(--muted); }
+  .mural-h .count { font-size: .76rem; font-weight: 800; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 9px; }
+  .mural-h .count.ok { background: var(--good-soft); color: var(--good); }
+
+  /* ---------- WIZARD ---------- */
+  .wizard { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+  .wiz-top { flex: none; border-bottom: 1px solid var(--border); background: var(--surface); padding-left: max(14px, env(safe-area-inset-left, 0px)); padding-right: max(14px, env(safe-area-inset-right, 0px)); padding-block: 8px; }
+  .wiz-top .row { display: flex; align-items: center; gap: 10px; }
+  .wiz-close { background: none; border: 0; color: var(--muted); font-size: 1.4rem; line-height: 1; cursor: pointer; padding: 2px 6px; border-radius: 8px; flex: none; }
+  .wiz-close:hover { background: var(--surface-2); color: var(--fg); }
+  .wiz-title { font-family: var(--font-display); font-weight: 700; font-size: 1rem; display: flex; align-items: center; gap: 7px; min-width: 0; }
+  .wiz-title .em { font-size: 1.15rem; }
+  .wiz-title .txt { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .wiz-step { margin-left: auto; color: var(--muted); font-size: .82rem; font-weight: 700; font-variant-numeric: tabular-nums; flex: none; }
+  .pbar { height: 6px; border-radius: 999px; background: var(--surface-2); margin-top: 8px; overflow: hidden; }
+  .pbar > i { display: block; height: 100%; background: var(--accent); border-radius: 999px; transition: width .25s ease; }
+
+  .slide-area { flex: 1; min-height: 0; overflow-y: auto; }
+  .slide-wrap { min-height: 100%; display: flex; flex-direction: column; justify-content: center; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: max(18px, env(safe-area-inset-right, 0px)); padding-block: 22px; }
+  .slide { width: 100%; max-width: 640px; margin: 0 auto; }
+
+  .kicker { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: .07em; font-size: .72rem; }
+  .slide h2 { font-size: clamp(1.4rem, 5.5vw, 1.9rem); margin: 4px 0 12px; }
+  .slide p { margin: .5em 0; font-size: 1.04rem; }
+  .en { font-weight: 700; color: var(--primary); }
+  .hl { background: var(--accent-soft); color: var(--accent); font-weight: 800; padding: 0 4px; border-radius: 5px; }
+  ul.ex { list-style: none; padding: 0; margin: 12px 0; display: flex; flex-direction: column; gap: 7px; }
+  ul.ex li { background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--primary); border-radius: 10px; padding: 8px 12px; font-size: 1.02rem; }
+  ul.ex li .t { display: block; color: var(--muted); font-size: .88rem; font-style: italic; margin-top: 1px; }
+  .tip { background: var(--primary-soft); color: var(--primary); border-radius: 12px; padding: 10px 14px; margin: 14px 0 2px; font-size: .96rem; font-weight: 600; }
+  .tip.warn { background: var(--accent-soft); color: var(--accent); }
+  ul.bul { margin: 10px 0; padding-left: 1.1em; }
+  ul.bul li { margin: .35em 0; }
+  .table-wrap { overflow-x: auto; margin: 12px 0; }
+  table.grx { width: 100%; border-collapse: collapse; font-size: .95rem; }
+  table.grx th, table.grx td { border: 1px solid var(--border); padding: 7px 10px; text-align: left; }
+  table.grx th { background: var(--surface-2); font-family: var(--font-display); font-weight: 700; }
+
+  .q-head { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .q-kicker { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: .07em; font-size: .72rem; }
+  .hint-btn { margin-left: auto; background: var(--accent-soft); color: var(--accent); border: 1px solid transparent; font-family: var(--font-body); font-weight: 800; font-size: .85rem; padding: 7px 13px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; }
+  .hint-btn:hover { border-color: var(--accent); }
+  .q-prompt { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.35rem, 5vw, 1.8rem); margin: 0 0 18px; line-height: 1.3; }
+  .q-prompt .blank { display: inline-block; min-width: 46px; border-bottom: 3px dashed var(--muted); text-align: center; color: var(--accent); }
+  .opts { display: flex; flex-direction: column; gap: 10px; }
+  .opt { font: inherit; text-align: left; cursor: pointer; padding: 13px 16px; border-radius: 12px; border: 2px solid var(--border); background: var(--surface); color: var(--fg); font-weight: 700; font-size: 1.05rem; display: flex; align-items: center; gap: 10px; }
+  .opt::before { content: ""; width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--border); flex: none; }
+  .opt:hover { border-color: var(--primary); }
+  .opt.sel { border-color: var(--primary); background: var(--primary-soft); color: var(--primary); }
+  .opt.sel::before { border-color: var(--primary); background: var(--primary); box-shadow: inset 0 0 0 3px var(--primary-soft); }
+  input.fill { font: inherit; font-size: 1.15rem; padding: 12px 16px; border: 2px solid var(--border); border-radius: 12px; background: var(--surface); color: var(--fg); width: 100%; font-weight: 700; }
+  input.fill:focus { outline: none; border-color: var(--primary); }
+  .q.checked .opt { cursor: default; }
+  .q.checked .opt.answer { border-color: var(--good); background: var(--good-soft); color: var(--good); }
+  .q.checked .opt.answer::before { border-color: var(--good); background: var(--good); box-shadow: none; }
+  .q.checked .opt.sel.wrong { border-color: var(--bad); background: var(--bad-soft); color: var(--bad); }
+  .q.checked .opt.sel.wrong::before { border-color: var(--bad); background: var(--bad); box-shadow: none; }
+  input.fill.okin { border-color: var(--good); color: var(--good); background: var(--good-soft); }
+  input.fill.noin { border-color: var(--bad); color: var(--bad); background: var(--bad-soft); }
+  .feedback { margin-top: 16px; border-radius: 12px; padding: 12px 15px; font-size: 1rem; }
+  .feedback.ok { background: var(--good-soft); color: var(--good); }
+  .feedback.no { background: var(--bad-soft); color: var(--bad); }
+  .feedback b { font-family: var(--font-display); }
+  .feedback .sol { color: var(--fg); }
+  .feedback .expl { color: var(--fg); display: block; margin-top: 4px; }
+
+  .res { text-align: center; }
+  .res .ring { width: 120px; height: 120px; border-radius: 50%; display: grid; place-items: center; margin: 0 auto 14px; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 2rem; }
+  .res h2 { margin: 0 0 6px; }
+  .res p { color: var(--muted); margin: 0 auto 4px; max-width: 42ch; }
+
+  .wiz-nav { flex: none; border-top: 1px solid var(--border); background: var(--surface); display: flex; gap: 10px; align-items: center; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 11px; padding-bottom: max(11px, env(safe-area-inset-bottom, 0px)); }
+  .btn { font: inherit; font-family: var(--font-display); font-weight: 700; cursor: pointer; border-radius: 12px; padding: 12px 18px; border: 2px solid transparent; font-size: 1.02rem; }
+  .btn.primary { background: var(--primary); color: #fff; }
+  .btn.primary:hover { filter: brightness(1.07); }
+  .btn.ghost { background: var(--surface); color: var(--fg); border-color: var(--border); }
+  .btn.ghost:hover { border-color: var(--primary); }
+  .btn.accent { background: var(--accent); color: #fff; }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .wiz-nav .grow { flex: 1; }
+  .wiz-nav .btn.wide { min-width: 150px; justify-content: center; }
+
+  .back { background: none; border: 0; color: var(--primary); font-weight: 800; cursor: pointer; padding: 6px 0; font-size: .95rem; font-family: var(--font-body); }
+  .topic-head { display: flex; align-items: center; gap: 12px; margin: 6px 0 2px; }
+  .topic-head .emoji { font-size: 2rem; }
+  .topic-head h1 { font-size: clamp(1.5rem, 5vw, 2rem); margin: 0; }
+  .topic-head .t-es { color: var(--muted); font-weight: 600; }
+  .summary { display: flex; align-items: center; gap: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin: 16px 0; flex-wrap: wrap; }
+  .summary .ring { width: 80px; height: 80px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-family: var(--font-display); font-weight: 800; font-size: 1.4rem; flex: none; }
+  .summary h3 { margin: 0 0 2px; }
+  .summary p { margin: 0; color: var(--muted); }
+  table.grx.progress td, table.grx.progress th { padding: 10px 12px; vertical-align: middle; }
+  table.grx.progress .pemoji { margin-right: 6px; }
+  table.grx.progress .muted { color: var(--muted); }
+  table.grx.progress tr.pending td { color: var(--muted); }
+  .grade { display: inline-block; min-width: 48px; text-align: center; color: #fff; font-family: var(--font-display); font-weight: 800; padding: 3px 8px; border-radius: 999px; font-size: .9rem; }
+  .actions { display: flex; gap: 10px; flex-wrap: wrap; margin: 18px 0; }
+  footer { text-align: center; color: var(--muted); font-size: .82rem; margin-top: 26px; }
+
+  .modal-ov { position: fixed; inset: 0; z-index: 50; background: rgba(25,18,10,.55); display: flex; align-items: center; justify-content: center; padding: max(16px, env(safe-area-inset-top,0px)) max(16px, env(safe-area-inset-right,0px)) max(16px, env(safe-area-inset-bottom,0px)) max(16px, env(safe-area-inset-left,0px)); animation: ovIn .15s ease; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: 18px; width: 100%; max-width: 460px; max-height: 85%; overflow-y: auto; box-shadow: 0 14px 44px rgba(0,0,0,.3); padding: 18px; display: flex; flex-direction: column; gap: 12px; animation: modIn .2s ease; }
+  .modal-head { display: flex; align-items: center; gap: 9px; font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; }
+  .modal-head .em { font-size: 1.35rem; }
+  .modal-x { margin-left: auto; background: none; border: 0; color: var(--muted); font-size: 1.5rem; line-height: 1; cursor: pointer; padding: 0 4px; }
+  .modal-x:hover { color: var(--fg); }
+  .modal-body { font-size: 1.05rem; }
+  .modal-body p { margin: .4em 0; }
+  .modal-body .big { font-family: var(--font-display); font-weight: 700; color: var(--primary); font-size: 1.1rem; }
+  .modal .modal-ok { align-self: stretch; }
+  @keyframes ovIn { from { opacity: 0 } to { opacity: 1 } }
+  @keyframes modIn { from { opacity: 0; transform: translateY(12px) scale(.98) } to { opacity: 1; transform: none } }
+
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } .modal-ov, .modal { animation: none !important; } }
+</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap">
+
+<header class="bar">
+  <button class="brand" id="homeBtn" aria-label="Inicio"><span class="logo">M1</span><span>Mates 1º ESO</span></button>
+  <a class="icon-btn" href="../" title="Otras materias" aria-label="Otras materias">←</a>
+  <span class="spacer"></span>
+  <button class="icon-btn" id="progressBtn" aria-label="Ver progreso" title="Progreso">📊</button>
+  <button class="icon-btn" id="themeBtn" aria-label="Cambiar tema" title="Claro / oscuro">◐</button>
+</header>
+
+<main id="app"></main>
+
+<script>
+/* =======================================================================
+   CONTENIDO — 11 temas de inglés A1+
+   slides: {k:kicker, t:título(HTML), h:cuerpo(HTML)}  -> pantallas de explicación
+   pool:   banco de 30 preguntas. En cada examen se eligen 15 al azar.
+     q:{ t:"mc"|"fill", q:enunciado, o:[opciones], a:respuesta, e:explicación, h:pista }
+     (en "fill", a es un array de respuestas válidas)
+   ======================================================================= */
+const TOPICS = [
+  {
+    id: "combinadas", emoji: "🧮", en: "Operaciones combinadas", es: "La jerarquía de operaciones",
+    slides: [
+      { k: "Empezamos", t: "El <span class='en'>orden</span> de las operaciones", h: `
+        <p>Cuando hay varias operaciones, se resuelven en este orden:</p>
+        <ul class="bul">
+          <li>1º <b>Paréntesis</b> ( )</li>
+          <li>2º <b>Potencias</b> y raíces</li>
+          <li>3º <b>Multiplicaciones y divisiones</b> (de izquierda a derecha)</li>
+          <li>4º <b>Sumas y restas</b> (de izquierda a derecha)</li>
+        </ul>
+        <div class="tip">💡 Multiplicar/dividir va <b>antes</b> que sumar/restar.</div>` },
+      { k: "Sin paréntesis", t: "Primero × y :", h: `
+        <ul class="ex">
+          <li>4 + 5 · 3 = 4 + <b>15</b> = 19</li>
+          <li>20 − 6 : 2 = 20 − <b>3</b> = 17</li>
+          <li>6 · 3 − 4 · 2 = <b>18</b> − <b>8</b> = 10</li>
+        </ul>` },
+      { k: "Con paréntesis", t: "De dentro hacia fuera", h: `
+        <ul class="ex">
+          <li>(2 + 3) · 4 = <b>5</b> · 4 = 20</li>
+          <li>3 · (10 − 4) = 3 · <b>6</b> = 18</li>
+          <li>30 : (2 + 3) = 30 : <b>5</b> = 6</li>
+        </ul>
+        <div class="tip warn">⚠️ Lo de dentro del paréntesis <b>siempre</b> se hace primero.</div>` }
+    ],
+    pool: [
+      { t:"fill", q:"2 + 3 · 4 =", a:["14"], e:"3·4=12, luego 12+2=14.", h:"Primero la multiplicación." },
+      { t:"fill", q:"10 − 6 : 2 =", a:["7"], e:"6:2=3, luego 10−3=7.", h:"Primero la división." },
+      { t:"fill", q:"5 · 2 + 3 =", a:["13"], e:"5·2=10, +3=13.", h:"Primero ×." },
+      { t:"fill", q:"20 : 4 + 1 =", a:["6"], e:"20:4=5, +1=6.", h:"Primero :." },
+      { t:"fill", q:"(2 + 3) · 4 =", a:["20"], e:"Paréntesis: 5, ·4=20.", h:"Primero el paréntesis." },
+      { t:"fill", q:"2 + 3 · 4 − 1 =", a:["13"], e:"12+2−1=13.", h:"× antes que + y −." },
+      { t:"fill", q:"6 · 3 − 4 · 2 =", a:["10"], e:"18−8=10.", h:"Las dos × primero." },
+      { t:"fill", q:"15 − 2 · 5 =", a:["5"], e:"2·5=10, 15−10=5.", h:"Primero ×." },
+      { t:"fill", q:"8 + 12 : 4 =", a:["11"], e:"12:4=3, 8+3=11.", h:"Primero :." },
+      { t:"fill", q:"(10 − 4) : 2 =", a:["3"], e:"6:2=3.", h:"Primero el paréntesis." },
+      { t:"fill", q:"3 · (4 + 2) =", a:["18"], e:"3·6=18.", h:"Primero el paréntesis." },
+      { t:"fill", q:"4 · 5 − 10 : 2 =", a:["15"], e:"20−5=15.", h:"× y : antes que −." },
+      { t:"fill", q:"2 · (3 + 5) − 4 =", a:["12"], e:"2·8=16, −4=12.", h:"Primero el paréntesis." },
+      { t:"fill", q:"30 : (2 + 3) =", a:["6"], e:"30:5=6.", h:"Primero el paréntesis." },
+      { t:"fill", q:"7 + 2 · 3 − 1 =", a:["12"], e:"6→7+6−1=12.", h:"Primero ×." },
+      { t:"fill", q:"100 − 10 · 5 =", a:["50"], e:"50→100−50=50.", h:"Primero ×." },
+      { t:"fill", q:"(6 + 4) · (5 − 2) =", a:["30"], e:"10·3=30.", h:"Resuelve los dos paréntesis." },
+      { t:"fill", q:"18 : 2 : 3 =", a:["3"], e:"9:3=3 (de izq. a der.).", h:"De izquierda a derecha." },
+      { t:"fill", q:"5 + 5 · 0 =", a:["5"], e:"5·0=0, 5+0=5.", h:"Algo ·0 = 0." },
+      { t:"fill", q:"12 − (3 + 4) =", a:["5"], e:"12−7=5.", h:"Primero el paréntesis." },
+      { t:"fill", q:"2 · 3 · 4 =", a:["24"], e:"6·4=24.", h:"Multiplica en orden." },
+      { t:"fill", q:"50 : 5 − 2 =", a:["8"], e:"10−2=8.", h:"Primero :." },
+      { t:"fill", q:"9 + 3 · (2 + 2) =", a:["21"], e:"3·4=12, 9+12=21.", h:"Paréntesis, luego ×." },
+      { t:"fill", q:"(8 − 3) · 2 + 1 =", a:["11"], e:"5·2=10, +1=11.", h:"Paréntesis primero." },
+      { t:"fill", q:"40 : 8 + 2 · 3 =", a:["11"], e:"5+6=11.", h:": y × antes que +." },
+      { t:"mc", q:"¿Qué se hace primero en 2 + 3 · 4?", o:["la multiplicación","la suma"], a:"la multiplicación", e:"× antes que +.", h:"× antes que +." },
+      { t:"mc", q:"En (5 − 2) · 4, ¿qué va primero?", o:["el paréntesis","la multiplicación"], a:"el paréntesis", e:"El paréntesis primero.", h:"Siempre el paréntesis." },
+      { t:"fill", q:"3 · 4 + 2 · 5 =", a:["22"], e:"12+10=22.", h:"Las dos × primero." },
+      { t:"fill", q:"100 : 10 : 2 =", a:["5"], e:"10:2=5.", h:"De izquierda a derecha." },
+      { t:"fill", q:"6 + 4 · 3 − 8 : 2 =", a:["14"], e:"12 y 4 → 6+12−4=14.", h:"× y : antes que + y −." }
+    ]
+  },
+  {
+    id: "multdiv", emoji: "✖️", en: "Multiplicación y división", es: "Multiplicar y dividir",
+    slides: [
+      { k: "Empezamos", t: "Los <span class='en'>términos</span>", h: `
+        <ul class="bul">
+          <li>Multiplicación: <b>factor · factor = producto</b>. Ej: 7 · 8 = 56.</li>
+          <li>División: <b>dividendo : divisor = cociente</b> (y resto). Ej: 56 : 8 = 7.</li>
+        </ul>
+        <div class="tip">💡 El orden de los factores no cambia el producto: 7·8 = 8·7.</div>` },
+      { k: "La división", t: "Cociente y resto", h: `
+        <p>Al dividir, si no es exacta queda un <b>resto</b>.</p>
+        <ul class="ex">
+          <li>17 : 5 → cociente <b>3</b>, resto <b>2</b></li>
+        </ul>
+        <p>Prueba: dividendo = divisor · cociente + resto → 5·3 + 2 = 17.</p>
+        <div class="tip warn">⚠️ El resto siempre es <b>menor</b> que el divisor.</div>` },
+      { k: "Por 10, 100…", t: "Truco rápido", h: `
+        <ul class="ex">
+          <li>13 · 10 = 130 (se añade un cero)</li>
+          <li>250 : 10 = 25 (se quita un cero)</li>
+          <li>7 · 100 = 700</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"fill", q:"7 · 8 =", a:["56"], e:"7·8=56.", h:"Tabla del 7." },
+      { t:"fill", q:"9 · 6 =", a:["54"], e:"9·6=54.", h:"Tabla del 9." },
+      { t:"fill", q:"12 · 4 =", a:["48"], e:"12·4=48.", h:"12·4." },
+      { t:"fill", q:"56 : 8 =", a:["7"], e:"56:8=7.", h:"¿8 por cuánto es 56?" },
+      { t:"fill", q:"72 : 9 =", a:["8"], e:"72:9=8.", h:"¿9 por cuánto es 72?" },
+      { t:"fill", q:"15 · 3 =", a:["45"], e:"15·3=45.", h:"15·3." },
+      { t:"fill", q:"81 : 9 =", a:["9"], e:"81:9=9.", h:"9·9=81." },
+      { t:"fill", q:"6 · 7 =", a:["42"], e:"6·7=42.", h:"Tabla del 7." },
+      { t:"fill", q:"100 : 4 =", a:["25"], e:"100:4=25.", h:"4·25=100." },
+      { t:"fill", q:"25 · 4 =", a:["100"], e:"25·4=100.", h:"25·4." },
+      { t:"fill", q:"13 · 10 =", a:["130"], e:"Se añade un cero.", h:"·10 → añade un cero." },
+      { t:"fill", q:"250 : 10 =", a:["25"], e:"Se quita un cero.", h:":10 → quita un cero." },
+      { t:"fill", q:"8 · 12 =", a:["96"], e:"8·12=96.", h:"8·12." },
+      { t:"fill", q:"144 : 12 =", a:["12"], e:"12·12=144.", h:"12·12." },
+      { t:"fill", q:"11 · 11 =", a:["121"], e:"11·11=121.", h:"11·11." },
+      { t:"fill", q:"63 : 7 =", a:["9"], e:"7·9=63.", h:"7·9=63." },
+      { t:"fill", q:"En 20 : 6, el cociente es", a:["3"], e:"6·3=18, resto 2 → cociente 3.", h:"¿6 por cuánto se acerca a 20?" },
+      { t:"fill", q:"En 20 : 6, el resto es", a:["2"], e:"20−18=2.", h:"20 − (6·3)." },
+      { t:"fill", q:"17 : 5 → cociente =", a:["3"], e:"5·3=15, resto 2.", h:"5·3=15." },
+      { t:"fill", q:"17 : 5 → resto =", a:["2"], e:"17−15=2.", h:"17 − (5·3)." },
+      { t:"mc", q:"En 56 : 8 = 7, el 56 es el", o:["dividendo","divisor"], a:"dividendo", e:"El número que se reparte.", h:"el que se reparte." },
+      { t:"mc", q:"En 56 : 8 = 7, el 8 es el", o:["divisor","cociente"], a:"divisor", e:"Entre cuánto se divide.", h:"entre cuánto se divide." },
+      { t:"fill", q:"El resultado de una multiplicación se llama…", a:["producto","el producto"], e:"factor · factor = producto.", h:"factor · factor = …" },
+      { t:"fill", q:"45 · 2 =", a:["90"], e:"45·2=90.", h:"45·2." },
+      { t:"fill", q:"120 : 6 =", a:["20"], e:"6·20=120.", h:"6·20=120." },
+      { t:"fill", q:"7 · 100 =", a:["700"], e:"Se añaden dos ceros.", h:"·100 → añade dos ceros." },
+      { t:"fill", q:"3600 : 100 =", a:["36"], e:"Se quitan dos ceros.", h:":100 → quita dos ceros." },
+      { t:"fill", q:"14 · 5 =", a:["70"], e:"14·5=70.", h:"14·5." },
+      { t:"mc", q:"El resto siempre es ___ que el divisor.", o:["menor","mayor"], a:"menor", e:"resto < divisor.", h:"resto < divisor." },
+      { t:"fill", q:"23 : 4 → resto =", a:["3"], e:"4·5=20, 23−20=3.", h:"23 − (4·5)." }
+    ]
+  },
+  {
+    id: "potencias", emoji: "🔟", en: "Potencias", es: "Potencias y sus reglas",
+    slides: [
+      { k: "Empezamos", t: "¿Qué es una <span class='en'>potencia</span>?", h: `
+        <p>Una potencia es multiplicar un número por sí mismo varias veces.</p>
+        <ul class="ex">
+          <li>2³ = 2 · 2 · 2 = <b>8</b></li>
+        </ul>
+        <p>El de abajo es la <b>base</b> (2) y el pequeño de arriba, el <b>exponente</b> (3): cuántas veces se multiplica.</p>
+        <div class="tip">💡 Elevar al cuadrado = exponente 2. Elevar al cubo = exponente 3.</div>` },
+      { k: "Casos especiales", t: "Para recordar", h: `
+        <ul class="bul">
+          <li>a¹ = a (ej: 8¹ = 8)</li>
+          <li>a⁰ = 1 (ej: 5⁰ = 1)</li>
+          <li>Potencias de 10: 10² = 100, 10³ = 1000 (un 1 y tantos ceros como el exponente)</li>
+        </ul>` },
+      { k: "Misma base", t: "Multiplicar potencias", h: `
+        <p>Si la base es la misma, al multiplicar se <b>suman</b> los exponentes:</p>
+        <ul class="ex">
+          <li>2² · 2³ = 2⁵</li>
+        </ul>
+        <div class="tip">💡 2²·2³ = (2·2)·(2·2·2) = 2⁵.</div>` }
+    ],
+    pool: [
+      { t:"fill", q:"3² =", a:["9"], e:"3·3=9.", h:"3·3." },
+      { t:"fill", q:"2³ =", a:["8"], e:"2·2·2=8.", h:"2·2·2." },
+      { t:"fill", q:"5² =", a:["25"], e:"5·5=25.", h:"5·5." },
+      { t:"fill", q:"10² =", a:["100"], e:"1 y 2 ceros.", h:"10·10." },
+      { t:"fill", q:"10³ =", a:["1000"], e:"1 y 3 ceros.", h:"1 y 3 ceros." },
+      { t:"fill", q:"4² =", a:["16"], e:"4·4=16.", h:"4·4." },
+      { t:"fill", q:"2⁴ =", a:["16"], e:"2·2·2·2=16.", h:"2 cuatro veces." },
+      { t:"fill", q:"2⁵ =", a:["32"], e:"2·2·2·2·2=32.", h:"2 cinco veces." },
+      { t:"fill", q:"1⁷ =", a:["1"], e:"1 elevado a lo que sea = 1.", h:"1 siempre da 1." },
+      { t:"fill", q:"6² =", a:["36"], e:"6·6=36.", h:"6·6." },
+      { t:"fill", q:"7² =", a:["49"], e:"7·7=49.", h:"7·7." },
+      { t:"fill", q:"2⁶ =", a:["64"], e:"2·2·2·2·2·2=64.", h:"2 seis veces." },
+      { t:"fill", q:"3³ =", a:["27"], e:"3·3·3=27.", h:"3·3·3." },
+      { t:"fill", q:"9⁰ =", a:["1"], e:"Cualquier número⁰ = 1.", h:"exponente 0 → 1." },
+      { t:"fill", q:"10⁴ =", a:["10000"], e:"1 y 4 ceros.", h:"1 y 4 ceros." },
+      { t:"mc", q:"En 5³, el 5 es la…", o:["base","exponente"], a:"base", e:"La base es el número de abajo.", h:"el número de abajo." },
+      { t:"mc", q:"En 5³, el 3 es el…", o:["exponente","base"], a:"exponente", e:"El exponente es el número pequeño de arriba.", h:"el pequeño de arriba." },
+      { t:"fill", q:"8¹ =", a:["8"], e:"a¹ = a.", h:"exponente 1 → el mismo número." },
+      { t:"mc", q:"2³ significa:", o:["2·2·2","2·3"], a:"2·2·2", e:"El 2 tres veces.", h:"la base tantas veces como el exponente." },
+      { t:"mc", q:"'Al cuadrado' es elevar a:", o:["2","3"], a:"2", e:"cuadrado = exponente 2.", h:"cuadrado → 2." },
+      { t:"mc", q:"'Al cubo' es elevar a:", o:["3","2"], a:"3", e:"cubo = exponente 3.", h:"cubo → 3." },
+      { t:"fill", q:"2² · 2³ = 2 elevado a… (escribe el exponente)", a:["5"], e:"Misma base → 2+3=5.", h:"se suman los exponentes." },
+      { t:"fill", q:"10⁵ tiene cuántos ceros", a:["5"], e:"El exponente indica los ceros.", h:"tantos ceros como el exponente." },
+      { t:"fill", q:"0² =", a:["0"], e:"0·0=0.", h:"0·0." },
+      { t:"fill", q:"12² =", a:["144"], e:"12·12=144.", h:"12·12." },
+      { t:"fill", q:"2⁷ =", a:["128"], e:"2·…·2 (7 veces)=128.", h:"2⁶=64, ·2." },
+      { t:"fill", q:"3⁴ =", a:["81"], e:"3·3·3·3=81.", h:"9·9." },
+      { t:"mc", q:"Un número elevado a 0 vale:", o:["1","0"], a:"1", e:"a⁰ = 1.", h:"exponente 0 → 1." },
+      { t:"fill", q:"5⁰ =", a:["1"], e:"a⁰ = 1.", h:"exponente 0 → 1." },
+      { t:"fill", q:"5² · 5³ = 5 elevado a… (exponente)", a:["5"], e:"2+3=5.", h:"se suman los exponentes." }
+    ]
+  },
+  {
+    id: "divisores", emoji: "🧩", en: "Múltiplos y divisores", es: "Divisibilidad y primos",
+    slides: [
+      { k: "Múltiplos", t: "¿Qué es un <span class='en'>múltiplo</span>?", h: `
+        <p>Los múltiplos de un número son el resultado de multiplicarlo por 1, 2, 3, 4… (son infinitos).</p>
+        <ul class="ex">
+          <li>Múltiplos de 3: 3, 6, 9, 12, 15… </li>
+        </ul>
+        <div class="tip">💡 12 es múltiplo de 3 porque 3 cabe exacto (3·4 = 12).</div>` },
+      { k: "Divisores", t: "¿Qué es un <span class='en'>divisor</span>?", h: `
+        <p>Los divisores de un número son los que lo dividen de forma <b>exacta</b> (resto 0). Son finitos.</p>
+        <ul class="ex">
+          <li>Divisores de 12: 1, 2, 3, 4, 6, 12</li>
+        </ul>
+        <div class="tip">💡 El 1 y el propio número siempre son divisores.</div>` },
+      { k: "Criterios", t: "¿Entre qué es divisible?", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Entre</th><th>Si…</th></tr>
+          <tr><td>2</td><td>acaba en 0, 2, 4, 6, 8 (par)</td></tr>
+          <tr><td>3</td><td>la suma de sus cifras es múltiplo de 3</td></tr>
+          <tr><td>5</td><td>acaba en 0 o 5</td></tr>
+          <tr><td>10</td><td>acaba en 0</td></tr>
+        </table></div>` },
+      { k: "Primos", t: "Primos y compuestos", h: `
+        <p><b>Primo</b>: solo tiene 2 divisores (el 1 y él mismo). Ej: 2, 3, 5, 7, 11, 13…</p>
+        <p><b>Compuesto</b>: tiene más de 2 divisores. Ej: 4, 6, 8, 9…</p>
+        <div class="tip warn">⚠️ El 2 es el único primo par. El 1 no es primo.</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"¿Es 12 múltiplo de 3?", o:["Sí","No"], a:"Sí", e:"3·4=12.", h:"¿3 cabe exacto en 12?" },
+      { t:"mc", q:"¿Es 20 múltiplo de 3?", o:["Sí","No"], a:"No", e:"20:3 no es exacto (2+0=2).", h:"suma de cifras 2+0=2." },
+      { t:"fill", q:"El 3er múltiplo de 5 es", a:["15"], e:"5·3=15.", h:"5·3." },
+      { t:"mc", q:"¿Es 7 divisor de 21?", o:["Sí","No"], a:"Sí", e:"21:7=3 exacto.", h:"21:7=3." },
+      { t:"mc", q:"¿Es 4 divisor de 10?", o:["Sí","No"], a:"No", e:"10:4 no es exacto.", h:"10:4 deja resto." },
+      { t:"fill", q:"¿Cuántos divisores tiene 7?", a:["2"], e:"Solo 1 y 7 (es primo).", h:"7 es primo." },
+      { t:"mc", q:"¿Es 15 divisible por 5?", o:["Sí","No"], a:"Sí", e:"Acaba en 5.", h:"acaba en 0 o 5." },
+      { t:"mc", q:"¿Es 24 divisible por 2?", o:["Sí","No"], a:"Sí", e:"Es par.", h:"acaba en cifra par." },
+      { t:"mc", q:"¿Es 31 divisible por 3?", o:["Sí","No"], a:"No", e:"3+1=4, no es múltiplo de 3.", h:"suma de cifras." },
+      { t:"mc", q:"¿Es 45 divisible por 3?", o:["Sí","No"], a:"Sí", e:"4+5=9, múltiplo de 3.", h:"4+5=9." },
+      { t:"mc", q:"¿Es 100 divisible por 10?", o:["Sí","No"], a:"Sí", e:"Acaba en 0.", h:"acaba en 0." },
+      { t:"mc", q:"¿Es 7 un número primo?", o:["Sí","No"], a:"Sí", e:"Solo divisores 1 y 7.", h:"solo 2 divisores." },
+      { t:"mc", q:"¿Es 9 un número primo?", o:["Sí","No"], a:"No", e:"9 = 1,3,9 → compuesto.", h:"9 también lo divide el 3." },
+      { t:"mc", q:"¿Es 13 primo?", o:["Sí","No"], a:"Sí", e:"Solo 1 y 13.", h:"solo 2 divisores." },
+      { t:"fill", q:"El menor divisor de cualquier número es", a:["1"], e:"Siempre el 1.", h:"el 1." },
+      { t:"fill", q:"El mayor divisor de 12 es", a:["12"], e:"El propio número.", h:"él mismo." },
+      { t:"mc", q:"¿Es 50 divisible por 2?", o:["Sí","No"], a:"Sí", e:"Es par.", h:"par → sí." },
+      { t:"mc", q:"¿Es 63 divisible por 2?", o:["Sí","No"], a:"No", e:"Es impar.", h:"acaba en 3 (impar)." },
+      { t:"mc", q:"Divisible por 5: acaba en…", o:["0 o 5","1 o 2"], a:"0 o 5", e:"Criterio del 5.", h:"0 o 5." },
+      { t:"mc", q:"Divisible por 3: la suma de cifras es múltiplo de…", o:["3","2"], a:"3", e:"Criterio del 3.", h:"del 3." },
+      { t:"mc", q:"¿Es 18 múltiplo de 6?", o:["Sí","No"], a:"Sí", e:"6·3=18.", h:"6·3=18." },
+      { t:"fill", q:"El 1er múltiplo de 8 (sin contar el 0) es", a:["8"], e:"8·1=8.", h:"8·1." },
+      { t:"fill", q:"¿Cuántos divisores tiene 1?", a:["1"], e:"Solo el 1.", h:"solo uno." },
+      { t:"mc", q:"¿Es 2 primo?", o:["Sí","No"], a:"Sí", e:"Único primo par.", h:"el único primo par." },
+      { t:"mc", q:"¿Es 1 primo?", o:["Sí","No"], a:"No", e:"El 1 no es primo.", h:"el 1 no cuenta." },
+      { t:"fill", q:"Divisores de 6: 1, 2, 3 y…", a:["6"], e:"El propio 6.", h:"él mismo." },
+      { t:"mc", q:"¿Es 36 divisible por 6?", o:["Sí","No"], a:"Sí", e:"6·6=36.", h:"6·6=36." },
+      { t:"mc", q:"¿Es 48 divisible por 10?", o:["Sí","No"], a:"No", e:"No acaba en 0.", h:"no acaba en 0." },
+      { t:"fill", q:"El 4º múltiplo de 7 es", a:["28"], e:"7·4=28.", h:"7·4." },
+      { t:"mc", q:"¿Es 90 divisible por 3?", o:["Sí","No"], a:"Sí", e:"9+0=9, múltiplo de 3.", h:"9+0=9." }
+    ]
+  },
+  {
+    id: "mcmmcd", emoji: "🎯", en: "mcd y mcm", es: "Máximo común divisor y mínimo común múltiplo",
+    slides: [
+      { k: "mcd", t: "Máximo común divisor", h: `
+        <p>El <b>mcd</b> es el mayor número que divide a la vez a dos números. Sirve para <b>repartir en grupos iguales lo más grandes posible</b>.</p>
+        <ul class="ex">
+          <li>Divisores comunes de 12 y 18: 1, 2, 3, 6 → el mayor es <b>6</b>. mcd(12,18)=6</li>
+        </ul>` },
+      { k: "mcm", t: "Mínimo común múltiplo", h: `
+        <p>El <b>mcm</b> es el menor múltiplo común de dos números. Sirve para saber cuándo <b>vuelven a coincidir</b>.</p>
+        <ul class="ex">
+          <li>Múltiplos comunes de 4 y 6: 12, 24… → el menor es <b>12</b>. mcm(4,6)=12</li>
+        </ul>` },
+      { k: "Truco", t: "Cuando uno es múltiplo del otro", h: `
+        <p>Si un número es múltiplo del otro:</p>
+        <ul class="bul">
+          <li>el <b>mcd</b> es el <b>pequeño</b></li>
+          <li>el <b>mcm</b> es el <b>grande</b></li>
+        </ul>
+        <ul class="ex">
+          <li>mcd(3, 6) = 3 · mcm(3, 6) = 6</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"fill", q:"mcd(12, 18) =", a:["6"], e:"Mayor divisor común.", h:"divisores comunes: 1,2,3,6." },
+      { t:"fill", q:"mcm(4, 6) =", a:["12"], e:"Menor múltiplo común.", h:"múltiplos: 12,24…" },
+      { t:"fill", q:"mcd(8, 12) =", a:["4"], e:"Común mayor = 4.", h:"4 divide a los dos." },
+      { t:"fill", q:"mcm(3, 5) =", a:["15"], e:"3·5=15.", h:"primos entre sí → se multiplican." },
+      { t:"fill", q:"mcd(6, 9) =", a:["3"], e:"Común mayor = 3.", h:"3 divide a 6 y a 9." },
+      { t:"fill", q:"mcm(2, 3) =", a:["6"], e:"2·3=6.", h:"menor común: 6." },
+      { t:"fill", q:"mcd(10, 15) =", a:["5"], e:"Común mayor = 5.", h:"5 divide a los dos." },
+      { t:"fill", q:"mcm(4, 8) =", a:["8"], e:"8 es múltiplo de 4.", h:"8 es múltiplo de 4 → mcm=8." },
+      { t:"fill", q:"mcd(3, 6) =", a:["3"], e:"3 divide a 6.", h:"uno es múltiplo → mcd=pequeño." },
+      { t:"fill", q:"mcm(6, 8) =", a:["24"], e:"24 es el menor común.", h:"múltiplos de 8: 8,16,24…" },
+      { t:"fill", q:"mcd(20, 30) =", a:["10"], e:"Común mayor = 10.", h:"10 divide a los dos." },
+      { t:"fill", q:"mcm(5, 10) =", a:["10"], e:"10 es múltiplo de 5.", h:"uno múltiplo → mcm=grande." },
+      { t:"fill", q:"mcd(14, 21) =", a:["7"], e:"7 divide a los dos.", h:"7 divide a 14 y 21." },
+      { t:"fill", q:"mcm(3, 4) =", a:["12"], e:"3·4=12.", h:"primos entre sí → 3·4." },
+      { t:"fill", q:"mcd(16, 24) =", a:["8"], e:"Común mayor = 8.", h:"8 divide a los dos." },
+      { t:"fill", q:"mcm(2, 5) =", a:["10"], e:"2·5=10.", h:"primos entre sí → 2·5." },
+      { t:"fill", q:"mcd(9, 12) =", a:["3"], e:"Común mayor = 3.", h:"3 divide a los dos." },
+      { t:"fill", q:"mcm(4, 10) =", a:["20"], e:"Menor común = 20.", h:"múltiplos de 10: 10,20…" },
+      { t:"fill", q:"mcd(15, 25) =", a:["5"], e:"Común mayor = 5.", h:"5 divide a los dos." },
+      { t:"fill", q:"mcm(6, 9) =", a:["18"], e:"Menor común = 18.", h:"múltiplos de 9: 9,18…" },
+      { t:"fill", q:"mcd(7, 14) =", a:["7"], e:"7 divide a 14.", h:"uno múltiplo → mcd=pequeño." },
+      { t:"fill", q:"mcm(8, 12) =", a:["24"], e:"Menor común = 24.", h:"24." },
+      { t:"fill", q:"mcd(5, 7) =", a:["1"], e:"Primos entre sí → 1.", h:"no comparten divisores → 1." },
+      { t:"fill", q:"mcm(5, 7) =", a:["35"], e:"5·7=35.", h:"primos entre sí → 5·7." },
+      { t:"mc", q:"El mcd sirve para…", o:["repartir en grupos iguales","volver a coincidir"], a:"repartir en grupos iguales", e:"mcd → repartos.", h:"repartos iguales." },
+      { t:"mc", q:"El mcm sirve para…", o:["volver a coincidir","repartir"], a:"volver a coincidir", e:"mcm → coincidencias.", h:"cuándo vuelven a coincidir." },
+      { t:"fill", q:"mcd(24, 36) =", a:["12"], e:"Común mayor = 12.", h:"12 divide a los dos." },
+      { t:"fill", q:"mcm(10, 15) =", a:["30"], e:"Menor común = 30.", h:"30." },
+      { t:"fill", q:"mcd(18, 24) =", a:["6"], e:"Común mayor = 6.", h:"6 divide a los dos." },
+      { t:"fill", q:"mcm(12, 18) =", a:["36"], e:"Menor común = 36.", h:"36." }
+    ]
+  },
+  {
+    id: "fracciones", emoji: "🍕", en: "Fracciones", es: "Partes de un todo",
+    slides: [
+      { k: "Empezamos", t: "¿Qué es una <span class='en'>fracción</span>?", h: `
+        <p>Una fracción representa partes de un todo: <b>numerador / denominador</b>.</p>
+        <ul class="bul">
+          <li><b>Denominador</b> (abajo): en cuántas partes iguales se divide el total.</li>
+          <li><b>Numerador</b> (arriba): cuántas partes tomamos.</li>
+        </ul>
+        <div class="tip">💡 3/4 = 3 de 4 partes (como 3 trozos de una pizza partida en 4). 🍕</div>` },
+      { k: "Fracción de un número", t: "Calcular una parte", h: `
+        <p>Para hallar la fracción de un número: <b>divide</b> entre el denominador y <b>multiplica</b> por el numerador.</p>
+        <ul class="ex">
+          <li>3/4 de 20 = (20 : 4) · 3 = 5 · 3 = <b>15</b></li>
+        </ul>` },
+      { k: "Equivalentes", t: "Amplificar y simplificar", h: `
+        <p>Fracciones equivalentes valen lo mismo. Se obtienen multiplicando o dividiendo arriba y abajo por el mismo número.</p>
+        <ul class="ex">
+          <li>1/2 = 2/4 = 3/6</li>
+          <li>Simplificar: 4/8 = 1/2 (dividiendo entre 4)</li>
+        </ul>` },
+      { k: "Sumar y restar", t: "Con el mismo denominador", h: `
+        <p>Si tienen el mismo denominador, se suman o restan los numeradores y el denominador se mantiene.</p>
+        <ul class="ex">
+          <li>1/5 + 2/5 = 3/5</li>
+          <li>3/4 − 1/4 = 2/4 = 1/2</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"fill", q:"3/4 de 20 =", a:["15"], e:"(20:4)·3=15.", h:"divide entre 4, ·3." },
+      { t:"fill", q:"1/2 de 10 =", a:["5"], e:"10:2=5.", h:"la mitad." },
+      { t:"fill", q:"2/3 de 9 =", a:["6"], e:"(9:3)·2=6.", h:"divide entre 3, ·2." },
+      { t:"fill", q:"1/5 de 20 =", a:["4"], e:"20:5=4.", h:"divide entre 5." },
+      { t:"fill", q:"3/5 de 10 =", a:["6"], e:"(10:5)·3=6.", h:"divide entre 5, ·3." },
+      { t:"fill", q:"Simplifica 2/4 =", a:["1/2"], e:"Dividiendo entre 2.", h:"divide arriba y abajo entre 2." },
+      { t:"fill", q:"Simplifica 3/6 =", a:["1/2"], e:"Dividiendo entre 3.", h:"entre 3 arriba y abajo." },
+      { t:"fill", q:"Simplifica 4/8 =", a:["1/2"], e:"Dividiendo entre 4.", h:"entre 4." },
+      { t:"fill", q:"1/5 + 2/5 =", a:["3/5"], e:"Mismo denominador: 1+2=3.", h:"suma los de arriba." },
+      { t:"fill", q:"2/7 + 3/7 =", a:["5/7"], e:"2+3=5.", h:"suma los numeradores." },
+      { t:"fill", q:"4/9 − 1/9 =", a:["3/9","1/3"], e:"4−1=3 → 3/9 = 1/3.", h:"resta los de arriba." },
+      { t:"fill", q:"3/4 − 1/4 =", a:["2/4","1/2"], e:"3−1=2 → 2/4 = 1/2.", h:"resta los numeradores." },
+      { t:"mc", q:"En 3/4, el numerador es", o:["3","4"], a:"3", e:"El de arriba.", h:"el de arriba." },
+      { t:"mc", q:"En 3/4, el denominador es", o:["4","3"], a:"4", e:"El de abajo.", h:"el de abajo." },
+      { t:"fill", q:"Fracción equivalente a 1/2 con denominador 4 =", a:["2/4"], e:"1·2 / 2·2 = 2/4.", h:"multiplica por 2 arriba y abajo." },
+      { t:"fill", q:"Fracción equivalente a 1/3 con denominador 6 =", a:["2/6"], e:"1·2 / 3·2 = 2/6.", h:"multiplica por 2." },
+      { t:"fill", q:"3/4 de 100 =", a:["75"], e:"(100:4)·3=75.", h:"divide entre 4, ·3." },
+      { t:"fill", q:"2/5 de 25 =", a:["10"], e:"(25:5)·2=10.", h:"divide entre 5, ·2." },
+      { t:"fill", q:"1/4 de 40 =", a:["10"], e:"40:4=10.", h:"divide entre 4." },
+      { t:"fill", q:"5/6 de 12 =", a:["10"], e:"(12:6)·5=10.", h:"divide entre 6, ·5." },
+      { t:"fill", q:"1/6 + 4/6 =", a:["5/6"], e:"1+4=5.", h:"suma los de arriba." },
+      { t:"fill", q:"7/10 − 3/10 =", a:["4/10","2/5"], e:"7−3=4 → 4/10 = 2/5.", h:"resta los numeradores." },
+      { t:"mc", q:"Un entero completo es…", o:["4/4","3/4"], a:"4/4", e:"n/n = 1 entero.", h:"arriba igual que abajo." },
+      { t:"fill", q:"3/3 = (número entero)", a:["1"], e:"n/n = 1.", h:"arriba = abajo → 1." },
+      { t:"fill", q:"La mitad, en fracción, es", a:["1/2"], e:"La mitad = 1/2.", h:"1 de 2 partes." },
+      { t:"fill", q:"Un cuarto, en fracción, es", a:["1/4"], e:"Un cuarto = 1/4.", h:"1 de 4 partes." },
+      { t:"fill", q:"Simplifica 6/8 =", a:["3/4"], e:"Dividiendo entre 2.", h:"entre 2 arriba y abajo." },
+      { t:"fill", q:"2/3 de 30 =", a:["20"], e:"(30:3)·2=20.", h:"divide entre 3, ·2." },
+      { t:"fill", q:"1/10 de 100 =", a:["10"], e:"100:10=10.", h:"divide entre 10." },
+      { t:"fill", q:"5/8 + 1/8 =", a:["6/8","3/4"], e:"5+1=6 → 6/8 = 3/4.", h:"suma los numeradores." }
+    ]
+  },
+  {
+    id: "decimales", emoji: "🔢", en: "Números decimales", es: "Decimales y la coma",
+    slides: [
+      { k: "Empezamos", t: "¿Qué son los <span class='en'>decimales</span>?", h: `
+        <p>Un número decimal tiene parte entera y parte decimal, separadas por la <b>coma</b>.</p>
+        <ul class="ex">
+          <li>3,25 → 3 unidades, 2 <b>décimas</b>, 5 <b>centésimas</b></li>
+        </ul>
+        <div class="tip">💡 1ª cifra tras la coma = décimas, 2ª = centésimas, 3ª = milésimas.</div>` },
+      { k: "Sumar y restar", t: "Alinea la coma", h: `
+        <p>Para sumar o restar, coloca las comas una debajo de otra.</p>
+        <ul class="ex">
+          <li>2,5 + 1,25 = 3,75</li>
+          <li>5,5 − 2,5 = 3</li>
+        </ul>` },
+      { k: "Por 10, 100…", t: "Mover la coma", h: `
+        <ul class="ex">
+          <li>2,5 · 10 = 25 (coma una posición a la derecha)</li>
+          <li>25 : 10 = 2,5 (coma una posición a la izquierda)</li>
+        </ul>` },
+      { k: "Fracción ↔ decimal", t: "Los más usados", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>1/2 = 0,5</td><td>1/4 = 0,25</td></tr>
+          <tr><td>3/4 = 0,75</td><td>1/10 = 0,1</td></tr>
+          <tr><td>1/5 = 0,2</td><td>2/5 = 0,4</td></tr>
+        </table></div>` }
+    ],
+    pool: [
+      { t:"fill", q:"2,5 + 1,5 =", a:["4","4.0"], e:"2,5+1,5=4.", h:"alinea las comas." },
+      { t:"fill", q:"3,2 + 1,3 =", a:["4,5"], e:"3,2+1,3=4,5.", h:"suma décimas: 2+3." },
+      { t:"fill", q:"5,5 − 2,5 =", a:["3","3.0"], e:"5,5−2,5=3.", h:"resta normal." },
+      { t:"fill", q:"2,5 · 10 =", a:["25"], e:"Coma una a la derecha.", h:"·10 → coma a la derecha." },
+      { t:"fill", q:"3,75 · 100 =", a:["375"], e:"Coma dos a la derecha.", h:"·100 → dos a la derecha." },
+      { t:"fill", q:"25 : 10 =", a:["2,5"], e:"Coma una a la izquierda.", h:":10 → coma a la izquierda." },
+      { t:"fill", q:"1/2 en decimal =", a:["0,5"], e:"1/2 = 0,5.", h:"la mitad." },
+      { t:"fill", q:"1/4 en decimal =", a:["0,25"], e:"1/4 = 0,25.", h:"un cuarto." },
+      { t:"fill", q:"3/4 en decimal =", a:["0,75"], e:"3/4 = 0,75.", h:"tres cuartos." },
+      { t:"fill", q:"1/10 en decimal =", a:["0,1"], e:"1/10 = 0,1.", h:"una décima." },
+      { t:"fill", q:"0,5 + 0,5 =", a:["1","1.0"], e:"0,5+0,5=1.", h:"dos mitades = 1." },
+      { t:"fill", q:"1,2 + 2,8 =", a:["4","4.0"], e:"1,2+2,8=4.", h:"2+8 décimas = 10 = 1." },
+      { t:"fill", q:"10,5 − 0,5 =", a:["10","10.0"], e:"10,5−0,5=10.", h:"quita las décimas." },
+      { t:"fill", q:"0,25 · 4 =", a:["1","1.0"], e:"0,25·4=1.", h:"cuatro cuartos = 1." },
+      { t:"fill", q:"4,5 · 2 =", a:["9","9.0"], e:"4,5·2=9.", h:"4,5 dos veces." },
+      { t:"mc", q:"En 3,25 la cifra 2 son las…", o:["décimas","centésimas"], a:"décimas", e:"1ª tras la coma = décimas.", h:"1ª tras la coma." },
+      { t:"mc", q:"En 3,25 la cifra 5 son las…", o:["centésimas","décimas"], a:"centésimas", e:"2ª tras la coma = centésimas.", h:"2ª tras la coma." },
+      { t:"fill", q:"6,7 + 0,3 =", a:["7","7.0"], e:"6,7+0,3=7.", h:"7+3 décimas = 10 = 1." },
+      { t:"fill", q:"2,5 : 10 =", a:["0,25"], e:"Coma una a la izquierda.", h:":10 → izquierda." },
+      { t:"fill", q:"0,1 · 100 =", a:["10","10.0"], e:"Coma dos a la derecha.", h:"·100 → dos a la derecha." },
+      { t:"fill", q:"1/5 en decimal =", a:["0,2"], e:"1/5 = 0,2.", h:"un quinto." },
+      { t:"fill", q:"2/10 en decimal =", a:["0,2"], e:"2/10 = 0,2.", h:"dos décimas." },
+      { t:"fill", q:"3,6 − 1,6 =", a:["2","2.0"], e:"3,6−1,6=2.", h:"resta décimas iguales." },
+      { t:"fill", q:"0,75 + 0,25 =", a:["1","1.0"], e:"0,75+0,25=1.", h:"tres cuartos + un cuarto." },
+      { t:"fill", q:"5 : 2 =", a:["2,5"], e:"5:2=2,5.", h:"mitad de 5." },
+      { t:"fill", q:"9 : 4 =", a:["2,25"], e:"9:4=2,25.", h:"9 entre 4." },
+      { t:"mc", q:"¿Qué es mayor?", o:["0,5","0,45"], a:"0,5", e:"0,50 > 0,45.", h:"compara las décimas: 5 > 4." },
+      { t:"fill", q:"12,34 · 10 =", a:["123,4"], e:"Coma una a la derecha.", h:"·10 → una a la derecha." },
+      { t:"fill", q:"1 : 4 =", a:["0,25"], e:"1:4=0,25.", h:"un cuarto." },
+      { t:"fill", q:"7,5 + 2,5 =", a:["10","10.0"], e:"7,5+2,5=10.", h:"5+5 décimas = 10 = 1." }
+    ]
+  }
+];
+
+const PICK = 15; // preguntas por examen (de las 30 del banco)
+
+/* =======================================================================
+   MOTOR
+   ======================================================================= */
+const app = document.getElementById("app");
+const STORE_KEY = "math1_scores";
+
+const WEEK_MS = 7 * 24 * 60 * 60 * 1000; // las notas caducan a la semana
+function loadScores() {
+  // Devuelve solo las notas NO caducadas (y borra de paso las caducadas).
+  let raw = {};
+  try { raw = JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; }
+  const out = {}; const now = Date.now(); let changed = false;
+  for (const k in raw) {
+    let v = raw[k];
+    if (typeof v === "number") { v = { last: v, best: v, date: null, ts: 0 }; } // formato antiguo → caducado
+    if (typeof v.ts !== "number") v.ts = 0;
+    if (now - v.ts > WEEK_MS) { changed = true; continue; }                      // caducada → se descarta
+    out[k] = v;
+  }
+  if (changed) { try { localStorage.setItem(STORE_KEY, JSON.stringify(out)); } catch (e) {} }
+  return out;
+}
+function saveScore(id, pct) {
+  try {
+    const s = loadScores();
+    const prev = s[id] || { best: 0 };
+    s[id] = { last: pct, best: Math.max(pct, prev.best || 0), date: new Date().toISOString().slice(0, 10), ts: Date.now() };
+    localStorage.setItem(STORE_KEY, JSON.stringify(s));
+  } catch (e) {}
+}
+function daysLeft(rec) {
+  const ms = WEEK_MS - (Date.now() - (rec.ts || 0));
+  return Math.max(0, Math.ceil(ms / (24 * 60 * 60 * 1000)));
+}
+function caducaTxt(rec) { const d = daysLeft(rec); return d <= 1 ? "caduca hoy" : "caduca en " + d + " días"; }
+function resetScores() { try { localStorage.removeItem(STORE_KEY); } catch (e) {} }
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function norm(s) {
+  return (s || "").toString().toLowerCase().trim().replace(/[‘’]/g, "'").replace(/(\d),(\d)/g, "$1.$2").replace(/\s+/g, "").replace(/[?!]+$/, "");
+}
+function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+function gradeColor(p) { return p === 100 ? "var(--good)" : p >= 60 ? "var(--accent)" : "var(--bad)"; }
+
+/* ---------- HOME ---------- */
+// Secciones del mural. Dentro de cada una, lo pendiente sale primero.
+const CATEGORIES = [
+  { name: "Operaciones", emoji: "🧮", ids: ["combinadas", "multdiv", "potencias"] },
+  { name: "Divisibilidad", emoji: "🧩", ids: ["divisores", "mcmmcd"] },
+  { name: "Fracciones y decimales", emoji: "🍕", ids: ["fracciones", "decimales"] }
+];
+
+function renderHome() {
+  const scores = loadScores();
+  function cardHtml(t) {
+    const rec = scores[t.id];
+    const badge = rec
+      ? `<span class="pill done">✓ Hecha · ${rec.last}%</span><span class="pill">${caducaTxt(rec)}</span>`
+      : `<span class="pill n">Examen de ${PICK}</span>`;
+    return `<button class="card" data-id="${t.id}">
+      <span class="emoji">${t.emoji}</span>
+      <span class="t-en">${esc(t.en)}</span>
+      <span class="t-es">${esc(t.es)}</span>
+      <span class="foot">${badge}</span>
+    </button>`;
+  }
+
+  // Reúne los temas ya colocados en categorías; si alguno quedara suelto, va a "Más".
+  const placed = new Set();
+  const groups = CATEGORIES.map(cat => {
+    const topics = cat.ids.map(id => TOPICS.find(t => t.id === id)).filter(Boolean);
+    topics.forEach(t => placed.add(t.id));
+    return { name: cat.name, emoji: cat.emoji, topics };
+  });
+  const rest = TOPICS.filter(t => !placed.has(t.id));
+  if (rest.length) groups.push({ name: "Más", emoji: "📚", topics: rest });
+
+  const sections = groups.map(g => {
+    const pend = g.topics.filter(t => !scores[t.id]);
+    const done = g.topics.filter(t => scores[t.id]).sort((a, b) => daysLeft(scores[a.id]) - daysLeft(scores[b.id]));
+    const ordered = pend.concat(done);
+    const count = pend.length
+      ? `<span class="count">${pend.length} por practicar</span>`
+      : `<span class="count ok">✓ al día</span>`;
+    return `<h2 class="mural-h">${g.emoji} ${esc(g.name)} ${count}</h2>
+      <div class="grid">${ordered.map(cardHtml).join("")}</div>`;
+  }).join("");
+
+  app.innerHTML = `<div class="scroll"><div class="wrap">
+    <section class="hero">
+      <div class="eyebrow">Matemáticas · 1º ESO</div>
+      <h1>Repasa mates, paso a paso</h1>
+      <p>Elige un tema. Primero te lo explico pantalla a pantalla y luego haces un examen de ${PICK} preguntas (elegidas al azar entre 30, así nunca son las mismas). Te corrige al instante y, si te atascas, tienes el botón 💡 de pista.</p>
+    </section>
+    ${sections}
+    <footer>Hecho con cariño para estudiar · ${TOPICS.length} temas · banco de 30 preguntas por tema</footer>
+  </div></div>`;
+  app.querySelectorAll(".card").forEach(c => c.addEventListener("click", () => { location.hash = c.dataset.id; }));
+}
+
+/* ---------- WIZARD ---------- */
+let wiz = null; // { topic, index, questions:[...], answers:{qi:{given,ok}} }
+
+function startTopic(id) {
+  const topic = TOPICS.find(x => x.id === id);
+  if (!topic) { location.hash = ""; return; }
+  const questions = shuffle(topic.pool).slice(0, Math.min(PICK, topic.pool.length));
+  wiz = { topic, index: 0, questions, answers: {} };
+  app.innerHTML = `<div class="wizard">
+    <div class="wiz-top">
+      <div class="row">
+        <button class="wiz-close" id="wizClose" aria-label="Cerrar">×</button>
+        <div class="wiz-title"><span class="em">${topic.emoji}</span><span class="txt">${esc(topic.en)}</span></div>
+        <div class="wiz-step" id="wizStep"></div>
+      </div>
+      <div class="pbar"><i id="pbar"></i></div>
+    </div>
+    <div class="slide-area" id="slideArea"></div>
+    <div class="wiz-nav" id="wizNav"></div>
+  </div>`;
+  document.getElementById("wizClose").addEventListener("click", () => { location.hash = ""; });
+  renderSlide();
+}
+
+function totalSlides() { return wiz.topic.slides.length + wiz.questions.length + 1; }
+
+function renderSlide() {
+  const topic = wiz.topic;
+  const nSlides = topic.slides.length;
+  const nQ = wiz.questions.length;
+  const total = totalSlides();
+  const i = wiz.index;
+  const area = document.getElementById("slideArea");
+  const nav = document.getElementById("wizNav");
+
+  document.getElementById("wizStep").textContent = (i + 1) + " / " + total;
+  document.getElementById("pbar").style.width = ((i + 1) / total * 100) + "%";
+
+  // teach slide
+  if (i < nSlides) {
+    const s = topic.slides[i];
+    area.innerHTML = `<div class="slide-wrap"><div class="slide">
+      <div class="kicker">${esc(s.k)}</div><h2>${s.t}</h2>${s.h}
+    </div></div>`;
+    nav.innerHTML = `
+      <button class="btn ghost" id="prevBtn" ${i === 0 ? "disabled" : ""}>← Atrás</button>
+      <span class="grow"></span>
+      <button class="btn primary wide" id="nextBtn">${i === nSlides - 1 ? "Empezar examen →" : "Siguiente →"}</button>`;
+    document.getElementById("prevBtn").onclick = goPrev;
+    document.getElementById("nextBtn").onclick = goNext;
+    area.scrollTop = 0;
+    return;
+  }
+
+  // result slide
+  if (i >= nSlides + nQ) { renderResult(area, nav); return; }
+
+  // question slide
+  const qi = i - nSlides;
+  const q = wiz.questions[qi];
+  const ans = wiz.answers[qi];
+  const checked = !!ans;
+  const promptHtml = esc(q.q).replace("___", '<span class="blank">?</span>');
+
+  let control;
+  if (q.t === "mc") {
+    control = `<div class="opts">` + q.o.map(o => {
+      const isAns = norm(o) === norm(q.a);
+      const isSel = checked && norm(o) === norm(ans.given);
+      let cls = "opt";
+      if (!checked && isSel) cls += " sel";
+      if (checked && isAns) cls += " answer";
+      if (checked && isSel && !ans.ok) cls += " sel wrong";
+      return `<button class="${cls}" data-val="${esc(o)}" ${checked ? "disabled" : ""}>${esc(o)}</button>`;
+    }).join("") + `</div>`;
+  } else {
+    const val = checked ? esc(ans.given) : "";
+    const cls = checked ? (ans.ok ? "okin" : "noin") : "";
+    control = `<input class="fill ${cls}" id="fillInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" placeholder="escribe la respuesta…" value="${val}" ${checked ? "readonly" : ""}>`;
+  }
+
+  let feedback = "";
+  if (checked) {
+    const sol = Array.isArray(q.a) ? q.a[0] : q.a;
+    feedback = ans.ok
+      ? `<div class="feedback ok"><b>¡Correcto! ✓</b><span class="expl">${q.e}</span></div>`
+      : `<div class="feedback no"><b>Casi… ✗</b> Respuesta correcta: <span class="sol">${esc(sol)}</span>.<span class="expl">${q.e}</span></div>`;
+  }
+
+  area.innerHTML = `<div class="slide-wrap"><div class="slide q ${checked ? "checked" : ""}">
+    <div class="q-head">
+      <div class="q-kicker">Pregunta ${qi + 1} de ${nQ}</div>
+      <button class="hint-btn" id="hintBtn">💡 Pista</button>
+    </div>
+    <div class="q-prompt">${promptHtml}</div>
+    ${control}
+    ${feedback}
+  </div></div>`;
+  area.scrollTop = 0;
+
+  if (!checked) {
+    if (q.t === "mc") {
+      area.querySelectorAll(".opt").forEach(opt => opt.addEventListener("click", () => {
+        area.querySelectorAll(".opt").forEach(o => o.classList.remove("sel"));
+        opt.classList.add("sel");
+      }));
+    } else {
+      const inp = document.getElementById("fillInput");
+      inp.focus();
+      inp.addEventListener("keydown", e => { if (e.key === "Enter") { e.preventDefault(); checkCurrent(); } });
+    }
+  }
+  document.getElementById("hintBtn").onclick = () => openHint(qi);
+
+  nav.innerHTML = `
+    <button class="btn ghost" id="prevBtn">← Atrás</button>
+    <span class="grow"></span>
+    ${checked
+      ? `<button class="btn primary wide" id="nextBtn">${i === nSlides + nQ - 1 ? "Ver resultado →" : "Siguiente →"}</button>`
+      : `<button class="btn accent wide" id="checkBtn">Comprobar</button>`}`;
+  document.getElementById("prevBtn").onclick = goPrev;
+  if (checked) document.getElementById("nextBtn").onclick = goNext;
+  else document.getElementById("checkBtn").onclick = checkCurrent;
+}
+
+function checkCurrent() {
+  const topic = wiz.topic;
+  const qi = wiz.index - topic.slides.length;
+  const q = wiz.questions[qi];
+  let given = "", ok = false;
+  if (q.t === "mc") {
+    const sel = document.querySelector(".opt.sel");
+    if (!sel) return; // obliga a elegir
+    given = sel.dataset.val;
+    ok = norm(given) === norm(q.a);
+  } else {
+    const inp = document.getElementById("fillInput");
+    given = inp.value;
+    const valid = Array.isArray(q.a) ? q.a : [q.a];
+    ok = given.trim() !== "" && valid.some(a => norm(a) === norm(given));
+  }
+  wiz.answers[qi] = { given, ok };
+  renderSlide();
+}
+
+function renderResult(area, nav) {
+  const topic = wiz.topic;
+  const nQ = wiz.questions.length;
+  let correct = 0;
+  for (let k = 0; k < nQ; k++) if (wiz.answers[k] && wiz.answers[k].ok) correct++;
+  const pct = Math.round(correct / nQ * 100);
+  saveScore(topic.id, pct);
+
+  const msg = pct === 100 ? "¡Perfecto! Dominas este tema. 🎉"
+    : pct >= 60 ? "¡Muy bien! Repasa los fallos y vuelve a intentarlo."
+    : "Vuelve a leer la explicación y reinténtalo. ¡Tú puedes! 💪";
+
+  area.innerHTML = `<div class="slide-wrap"><div class="slide res">
+    <div class="ring" style="background:${gradeColor(pct)}">${pct}%</div>
+    <h2>${correct} de ${nQ} correctas</h2>
+    <p>${msg}</p>
+  </div></div>`;
+  area.scrollTop = 0;
+
+  nav.innerHTML = `
+    <button class="btn accent wide" id="retryBtn">↻ Repetir (otras preguntas)</button>
+    <span class="grow"></span>
+    <button class="btn primary wide" id="exitBtn">Salir al índice</button>`;
+  document.getElementById("retryBtn").onclick = () => startTopic(topic.id);
+  document.getElementById("exitBtn").onclick = () => { location.hash = ""; };
+}
+
+function goNext() { if (wiz.index < totalSlides() - 1) { wiz.index++; renderSlide(); } }
+function goPrev() { if (wiz.index > 0) { wiz.index--; renderSlide(); } }
+
+/* ---------- PISTA (ventana contextual) ---------- */
+function openHint(qi) {
+  const topic = wiz.topic;
+  const q = wiz.questions[qi];
+  const hint = q.h || "Repasa la explicación del tema.";
+  const ov = document.createElement("div");
+  ov.className = "modal-ov";
+  ov.innerHTML = `<div class="modal" role="dialog" aria-modal="true" aria-label="Pista">
+    <div class="modal-head"><span class="em">${topic.emoji}</span><span>Pista</span>
+      <button class="modal-x" aria-label="Cerrar">×</button></div>
+    <div class="modal-body">${hint}</div>
+    <button class="btn primary modal-ok">¡Entendido!</button>
+  </div>`;
+  document.body.appendChild(ov);
+  function close() { ov.remove(); document.removeEventListener("keydown", onEsc); }
+  function onEsc(e) { if (e.key === "Escape") close(); }
+  ov.addEventListener("click", e => { if (e.target === ov) close(); });
+  ov.querySelector(".modal-x").onclick = close;
+  ov.querySelector(".modal-ok").onclick = close;
+  document.addEventListener("keydown", onEsc);
+}
+
+/* ---------- PROGRESO ---------- */
+function renderProgress() {
+  const scores = loadScores();
+  const done = TOPICS.filter(t => scores[t.id]);
+  const avg = done.length ? Math.round(done.reduce((a, t) => a + scores[t.id].last, 0) / done.length) : null;
+  const rows = TOPICS.map(t => {
+    const rec = scores[t.id];
+    if (!rec) return `<tr class="pending"><td><span class="pemoji">${t.emoji}</span> ${esc(t.en)}</td><td colspan="3" class="muted">Sin hacer todavía</td></tr>`;
+    return `<tr>
+      <td><span class="pemoji">${t.emoji}</span> ${esc(t.en)}</td>
+      <td><span class="grade" style="background:${gradeColor(rec.last)}">${rec.last}%</span></td>
+      <td class="muted">${rec.best}%</td>
+      <td class="muted">${rec.date ? esc(rec.date) : "—"}<br><span style="font-size:.8em">${caducaTxt(rec)}</span></td>
+    </tr>`;
+  }).join("");
+
+  app.innerHTML = `<div class="scroll"><div class="wrap">
+    <button class="back" id="backBtn">← Todos los temas</button>
+    <div class="topic-head"><span class="emoji">📊</span><div><h1>Mi progreso</h1><div class="t-es">Última nota de cada prueba</div></div></div>
+    <div class="summary">
+      <div class="ring" style="background:${avg === null ? 'var(--muted)' : gradeColor(avg)}">${avg === null ? '—' : avg + '%'}</div>
+      <div><h3>${done.length} de ${TOPICS.length} temas practicados</h3><p>${avg === null ? 'Aún no hay notas. ¡Empieza por cualquier tema!' : 'Media de las últimas notas.'}</p></div>
+    </div>
+    <div class="table-wrap"><table class="grx progress">
+      <tr><th>Tema</th><th>Última</th><th>Mejor</th><th>Fecha</th></tr>${rows}
+    </table></div>
+    <div class="actions">
+      <button class="btn primary" id="backBtn2">← Volver a los temas</button>
+      <button class="btn ghost" id="resetBtn">Borrar progreso</button>
+    </div>
+    <footer>Las notas se guardan en este navegador y <b>caducan a los 7 días</b>: después hay que volver a hacer el tema.</footer>
+  </div></div>`;
+
+  document.getElementById("backBtn").onclick = () => { location.hash = ""; };
+  document.getElementById("backBtn2").onclick = () => { location.hash = ""; };
+  document.getElementById("resetBtn").addEventListener("click", function () {
+    if (this.dataset.armed === "1") { resetScores(); renderProgress(); }
+    else { this.dataset.armed = "1"; this.textContent = "¿Seguro? Pulsa otra vez"; }
+  });
+}
+
+/* ---------- router + tema ---------- */
+function route() {
+  const id = (location.hash || "").replace(/^#/, "");
+  if (id === "progreso") renderProgress();
+  else if (id && TOPICS.some(t => t.id === id)) startTopic(id);
+  else renderHome();
+}
+window.addEventListener("hashchange", route);
+document.getElementById("homeBtn").addEventListener("click", () => { location.hash = ""; });
+document.getElementById("progressBtn").addEventListener("click", () => { location.hash = "progreso"; });
+
+(function themeInit() {
+  const btn = document.getElementById("themeBtn");
+  let saved = null;
+  try { saved = localStorage.getItem("math1_theme"); } catch (e) {}
+  if (saved) document.documentElement.setAttribute("data-theme", saved);
+  btn.addEventListener("click", () => {
+    const cur = document.documentElement.getAttribute("data-theme");
+    const isDark = cur === "dark" || (!cur && matchMedia("(prefers-color-scheme: dark)").matches);
+    const next = isDark ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("math1_theme", next); } catch (e) {}
+  });
+})();
+
+route();
+</script>
