@@ -67,7 +67,8 @@
   .mural-h { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; color: var(--fg); }
   .mural-h:first-of-type { margin-top: 6px; }
   .mural-h.hdone { color: var(--muted); }
-  .mural-h .count { font-size: .76rem; font-weight: 800; background: var(--surface-2); color: var(--muted); border-radius: 999px; padding: 2px 9px; }
+  .mural-h .count { font-size: .76rem; font-weight: 800; background: var(--accent-soft); color: var(--accent); border-radius: 999px; padding: 2px 9px; }
+  .mural-h .count.ok { background: var(--good-soft); color: var(--good); }
 
   /* ---------- WIZARD ---------- */
   .wizard { flex: 1; min-height: 0; display: flex; flex-direction: column; }
@@ -1383,6 +1384,15 @@ function esc(s) { return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(
 function gradeColor(p) { return p === 100 ? "var(--good)" : p >= 60 ? "var(--accent)" : "var(--bad)"; }
 
 /* ---------- HOME ---------- */
+// Secciones del mural. Dentro de cada una, lo pendiente sale primero.
+const CATEGORIES = [
+  { name: "Para empezar", emoji: "🧱", ids: ["tobe", "havegot", "thereis", "quantifiers"] },
+  { name: "Tiempos verbales", emoji: "⏳", ids: ["presentsimple", "presentcont", "pastsimple", "pastcont"] },
+  { name: "Verbos", emoji: "🏃", ids: ["verbs", "irregular", "orders"] },
+  { name: "Gramática", emoji: "✍️", ids: ["possadj", "posspron", "saxon", "questions"] },
+  { name: "Vocabulario y repaso", emoji: "🗂️", ids: ["vocab", "ordinals", "time"] }
+];
+
 function renderHome() {
   const scores = loadScores();
   function cardHtml(t) {
@@ -1397,28 +1407,35 @@ function renderHome() {
       <span class="foot">${badge}</span>
     </button>`;
   }
-  // Pendientes (sin hacer o caducadas) primero; hechas al final, las que caducan antes arriba.
-  const pend = TOPICS.filter(t => !scores[t.id]);
-  const done = TOPICS.filter(t => scores[t.id]).sort((a, b) => daysLeft(scores[a.id]) - daysLeft(scores[b.id]));
 
-  let body;
-  if (pend.length && done.length) {
-    body = `
-      <h2 class="mural-h">📌 Por practicar <span class="count">${pend.length}</span></h2>
-      <div class="grid">${pend.map(cardHtml).join("")}</div>
-      <h2 class="mural-h hdone">✅ Hechas esta semana <span class="count">${done.length}</span></h2>
-      <div class="grid">${done.map(cardHtml).join("")}</div>`;
-  } else {
-    body = `<div class="grid">${pend.concat(done).map(cardHtml).join("")}</div>`;
-  }
+  // Reúne los temas ya colocados en categorías; si alguno quedara suelto, va a "Más".
+  const placed = new Set();
+  const groups = CATEGORIES.map(cat => {
+    const topics = cat.ids.map(id => TOPICS.find(t => t.id === id)).filter(Boolean);
+    topics.forEach(t => placed.add(t.id));
+    return { name: cat.name, emoji: cat.emoji, topics };
+  });
+  const rest = TOPICS.filter(t => !placed.has(t.id));
+  if (rest.length) groups.push({ name: "Más", emoji: "📚", topics: rest });
+
+  const sections = groups.map(g => {
+    const pend = g.topics.filter(t => !scores[t.id]);
+    const done = g.topics.filter(t => scores[t.id]).sort((a, b) => daysLeft(scores[a.id]) - daysLeft(scores[b.id]));
+    const ordered = pend.concat(done);
+    const count = pend.length
+      ? `<span class="count">${pend.length} por practicar</span>`
+      : `<span class="count ok">✓ al día</span>`;
+    return `<h2 class="mural-h">${g.emoji} ${esc(g.name)} ${count}</h2>
+      <div class="grid">${ordered.map(cardHtml).join("")}</div>`;
+  }).join("");
 
   app.innerHTML = `<div class="scroll"><div class="wrap">
     <section class="hero">
-      <div class="eyebrow">Inglés · Nivel A1+</div>
+      <div class="eyebrow">Inglés · 1º ESO</div>
       <h1>Aprende y practica, paso a paso</h1>
       <p>Elige un tema. Primero te lo explico pantalla a pantalla y luego haces un examen de ${PICK} preguntas (elegidas al azar entre 30, así nunca son las mismas). Te corrige al instante y, si te atascas, tienes el botón 💡 de pista.</p>
     </section>
-    ${body}
+    ${sections}
     <footer>Hecho con cariño para estudiar · ${TOPICS.length} temas · banco de 30 preguntas por tema</footer>
   </div></div>`;
   app.querySelectorAll(".card").forEach(c => c.addEventListener("click", () => { location.hash = c.dataset.id; }));
