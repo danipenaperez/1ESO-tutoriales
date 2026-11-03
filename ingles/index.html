@@ -1011,6 +1011,324 @@ const TOPICS = [
       { t:"mc", q:"Monday = ___", o:["lunes","martes"], a:"lunes", e:"Monday = lunes.", h:"El primer día de clase." },
       { t:"mc", q:"miércoles = ___", o:["Wednesday","Thursday"], a:"Wednesday", e:"miércoles = Wednesday.", h:"El día del medio de la semana." }
     ]
+  },
+  {
+    id: "presentcont", emoji: "🎬", en: "Present Continuous", es: "Acciones ahora mismo (-ing)",
+    slides: [
+      { k: "Empezamos", t: "¿Para qué sirve el <span class='en'>Present Continuous</span>?", h: `
+        <p>Para acciones que están ocurriendo <b>ahora, en este momento</b>.</p>
+        <ul class="ex">
+          <li>I <b>am reading</b> now. <span class="t">Estoy leyendo ahora.</span></li>
+          <li>Look! It <b>is raining</b>. <span class="t">¡Mira! Está lloviendo.</span></li>
+        </ul>
+        <div class="tip">💡 Pistas: now, at the moment, <b>Look!</b>, <b>Listen!</b>, today.</div>` },
+      { k: "La forma", t: "be (am/is/are) + verbo-<span class='hl'>ing</span>", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Sujeto</th><th>be</th><th>Ejemplo</th></tr>
+          <tr><td>I</td><td>am</td><td>I am playing.</td></tr>
+          <tr><td>He / She / It</td><td>is</td><td>She is playing.</td></tr>
+          <tr><td>You / We / They</td><td>are</td><td>They are playing.</td></tr>
+        </table></div>
+        <div class="tip warn">⚠️ Siempre hay <b>dos</b> partes: el verbo <i>be</i> + el verbo con <b>-ing</b>.</div>` },
+      { k: "Ortografía del -ing", t: "Cómo añadir -ing", h: `
+        <ul class="bul">
+          <li>normal: play → play<b>ing</b>, read → read<b>ing</b></li>
+          <li>acaba en <b>-e</b> → se quita: make → mak<b>ing</b>, write → writ<b>ing</b></li>
+          <li>1 vocal + 1 consonante corta → se <b>dobla</b>: run → run<b>ning</b>, swim → swim<b>ming</b>, sit → sit<b>ting</b></li>
+        </ul>` },
+      { k: "Negativa y preguntas", t: "NO y ¿…?", h: `
+        <ul class="ex">
+          <li>She <b>isn't</b> sleeping. <span class="t">No está durmiendo.</span></li>
+          <li><b>Are</b> you listening? — Yes, I am. / No, I'm not.</li>
+        </ul>
+        <div class="tip">💡 <b>Present Simple</b> (rutinas: every day) vs <b>Present Continuous</b> (ahora: now).</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"I ___ watching TV.", o:["am","is"], a:"am", e:"I → <b>am</b> + -ing.", h:"Con I → am." },
+      { t:"mc", q:"She ___ playing.", o:["is","are"], a:"is", e:"She → <b>is</b> + -ing.", h:"he/she/it → is." },
+      { t:"mc", q:"They ___ running.", o:["is","are"], a:"are", e:"They → <b>are</b> + -ing.", h:"you/we/they → are." },
+      { t:"mc", q:"We ___ eating lunch.", o:["am","are"], a:"are", e:"We → <b>are</b> + -ing.", h:"we → are." },
+      { t:"fill", q:"He is ___ a book. (read)", a:["reading"], e:"read → <b>reading</b>.", h:"read + ing = reading." },
+      { t:"mc", q:"run → -ing = ___", o:["runing","running"], a:"running", e:"Se dobla la n → <b>running</b>.", h:"vocal+consonante corta → se dobla." },
+      { t:"mc", q:"make → -ing = ___", o:["makeing","making"], a:"making", e:"Se quita la -e → <b>making</b>.", h:"acaba en -e → se quita." },
+      { t:"mc", q:"swim → -ing = ___", o:["swiming","swimming"], a:"swimming", e:"Se dobla la m → <b>swimming</b>.", h:"se dobla la consonante." },
+      { t:"mc", q:"write → -ing = ___", o:["writeing","writing"], a:"writing", e:"Se quita la -e → <b>writing</b>.", h:"acaba en -e → se quita." },
+      { t:"mc", q:"play → -ing = ___", o:["playing","plaing"], a:"playing", e:"Normal → <b>playing</b>.", h:"normal: + ing." },
+      { t:"mc", q:"Look! It ___ raining.", o:["is","are"], a:"is", e:"It → <b>is</b>.", h:"it → is." },
+      { t:"mc", q:"___ you listening?", o:["Is","Are"], a:"Are", e:"Pregunta con you → <b>Are</b>.", h:"you → Are." },
+      { t:"mc", q:"___ she sleeping?", o:["Is","Are"], a:"Is", e:"Pregunta con she → <b>Is</b>.", h:"she → Is." },
+      { t:"mc", q:"He ___ working now. (negativa)", o:["isn't","aren't"], a:"isn't", e:"He → <b>isn't</b>.", h:"he → isn't." },
+      { t:"mc", q:"They ___ playing. (negativa)", o:["isn't","aren't"], a:"aren't", e:"They → <b>aren't</b>.", h:"they → aren't." },
+      { t:"fill", q:"I'm ___ on the sofa. (sit)", a:["sitting"], e:"Se dobla la t → <b>sitting</b>.", h:"sit → se dobla la t." },
+      { t:"mc", q:"sit → -ing = ___", o:["siting","sitting"], a:"sitting", e:"Se dobla la t → <b>sitting</b>.", h:"se dobla la consonante." },
+      { t:"mc", q:"Is he cooking? — Yes, he ___.", o:["is","are"], a:"is", e:"Respuesta: he <b>is</b>.", h:"respuesta corta con he → is." },
+      { t:"mc", q:"Are they dancing? — No, they ___.", o:["isn't","aren't"], a:"aren't", e:"They → <b>aren't</b>.", h:"they → aren't." },
+      { t:"fill", q:"She is ___ now. (dance)", a:["dancing"], e:"Se quita la -e → <b>dancing</b>.", h:"dance → se quita la -e." },
+      { t:"mc", q:"dance → -ing = ___", o:["danceing","dancing"], a:"dancing", e:"Se quita la -e → <b>dancing</b>.", h:"acaba en -e → se quita." },
+      { t:"mc", q:"The baby ___ crying.", o:["is","are"], a:"is", e:"Baby = it → <b>is</b>.", h:"the baby = it → is." },
+      { t:"mc", q:"We ___ watching TV. (negativa)", o:["isn't","aren't"], a:"aren't", e:"We → <b>aren't</b>.", h:"we → aren't." },
+      { t:"mc", q:"Right now I ___ studying.", o:["am","is"], a:"am", e:"I → <b>am</b>.", h:"Con I → am." },
+      { t:"mc", q:"Listen! The birds ___ singing.", o:["is","are"], a:"are", e:"Birds = they → <b>are</b>.", h:"birds es plural → are." },
+      { t:"mc", q:"stop → -ing = ___", o:["stoping","stopping"], a:"stopping", e:"Se dobla la p → <b>stopping</b>.", h:"se dobla la consonante." },
+      { t:"mc", q:"La palabra 'now' pide presente ___.", o:["continuous","simple"], a:"continuous", e:"now → Present Continuous.", h:"now = algo ocurriendo ahora." },
+      { t:"mc", q:"I ___ wearing a red shirt today.", o:["am","is"], a:"am", e:"I → <b>am</b>.", h:"Con I → am." },
+      { t:"mc", q:"study → -ing = ___", o:["studing","studying"], a:"studying", e:"Normal → <b>studying</b>.", h:"study + ing (no cambia)." },
+      { t:"mc", q:"Is it working? — No, it ___.", o:["isn't","aren't"], a:"isn't", e:"It → <b>isn't</b>.", h:"it → isn't." }
+    ]
+  },
+  {
+    id: "pastsimple", emoji: "🕰️", en: "Past Simple", es: "El pasado (yesterday, last week)",
+    slides: [
+      { k: "Empezamos", t: "¿Para qué sirve el <span class='en'>Past Simple</span>?", h: `
+        <p>Para acciones <b>terminadas</b> en el pasado.</p>
+        <ul class="ex">
+          <li>I <b>played</b> football yesterday. <span class="t">Jugué al fútbol ayer.</span></li>
+          <li>She <b>went</b> to Paris last year. <span class="t">Fue a París el año pasado.</span></li>
+        </ul>
+        <div class="tip">💡 Pistas: yesterday, last week/year, in 2010, two days <b>ago</b>.</div>` },
+      { k: "Verbos regulares", t: "Se añade <span class='hl'>-ed</span>", h: `
+        <ul class="bul">
+          <li>normal: play → play<b>ed</b>, watch → watch<b>ed</b></li>
+          <li>acaba en <b>-e</b> → solo +d: like → like<b>d</b></li>
+          <li>consonante + <b>y</b> → <b>ied</b>: study → stud<b>ied</b>, cry → cr<b>ied</b></li>
+          <li>vocal+consonante corta → se dobla: stop → stop<b>ped</b></li>
+        </ul>` },
+      { k: "Verbos irregulares", t: "No siguen la regla", h: `
+        <p>Muchos verbos son <b>irregulares</b>: hay que memorizarlos.</p>
+        <div class="table-wrap"><table class="grx">
+          <tr><td>go → <b>went</b></td><td>have → <b>had</b></td></tr>
+          <tr><td>see → <b>saw</b></td><td>eat → <b>ate</b></td></tr>
+          <tr><td>make → <b>made</b></td><td>buy → <b>bought</b></td></tr>
+        </table></div>
+        <div class="tip">💡 Tienes una lección entera: <b>Irregular Verbs</b> 🗒️.</div>` },
+      { k: "Negativa y preguntas", t: "didn't / Did…?", h: `
+        <ul class="ex">
+          <li>I <b>didn't</b> go. <span class="t">No fui.</span></li>
+          <li><b>Did</b> you see it? — Yes, I did. / No, I didn't.</li>
+        </ul>
+        <div class="tip warn">⚠️ Con <b>did/didn't</b> el verbo vuelve a la <b>forma base</b>: He didn't <b>go</b> (no "went").</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"play → past = ___", o:["played","plaied"], a:"played", e:"Regular → <b>played</b>.", h:"regular: + ed." },
+      { t:"mc", q:"watch → past = ___", o:["watched","watchs"], a:"watched", e:"Regular → <b>watched</b>.", h:"regular: + ed." },
+      { t:"mc", q:"study → past = ___", o:["studied","studyed"], a:"studied", e:"consonante+y → <b>studied</b>.", h:"consonante + y → ied." },
+      { t:"mc", q:"stop → past = ___", o:["stopped","stoped"], a:"stopped", e:"Se dobla la p → <b>stopped</b>.", h:"se dobla la consonante." },
+      { t:"mc", q:"like → past = ___", o:["liked","likeed"], a:"liked", e:"acaba en -e → solo +d → <b>liked</b>.", h:"acaba en -e → +d." },
+      { t:"fill", q:"cry → past = ___", a:["cried"], e:"consonante+y → <b>cried</b>.", h:"consonante + y → ied." },
+      { t:"mc", q:"go → past = ___", o:["went","goed"], a:"went", e:"Irregular → <b>went</b>.", h:"irregular (go-went)." },
+      { t:"mc", q:"have → past = ___", o:["had","haved"], a:"had", e:"Irregular → <b>had</b>.", h:"irregular (have-had)." },
+      { t:"mc", q:"see → past = ___", o:["saw","seed"], a:"saw", e:"Irregular → <b>saw</b>.", h:"irregular (see-saw)." },
+      { t:"mc", q:"eat → past = ___", o:["ate","eated"], a:"ate", e:"Irregular → <b>ate</b>.", h:"irregular (eat-ate)." },
+      { t:"fill", q:"I ___ tennis yesterday. (play)", a:["played"], e:"Regular → <b>played</b>.", h:"play + ed." },
+      { t:"mc", q:"She ___ to school yesterday. (go)", o:["went","goed"], a:"went", e:"Irregular → <b>went</b>.", h:"go-went." },
+      { t:"mc", q:"They ___ come. (negativa)", o:["didn't","doesn't"], a:"didn't", e:"Pasado negativo → <b>didn't</b>.", h:"negativa en pasado → didn't." },
+      { t:"mc", q:"___ you see the film?", o:["Did","Do"], a:"Did", e:"Pregunta en pasado → <b>Did</b>.", h:"pregunta en pasado → Did." },
+      { t:"mc", q:"He ___ a sandwich. (eat, pasado)", o:["ate","eat"], a:"ate", e:"Afirmativa pasado → <b>ate</b>.", h:"eat-ate." },
+      { t:"fill", q:"We ___ TV last night. (watch)", a:["watched"], e:"Regular → <b>watched</b>.", h:"watch + ed." },
+      { t:"mc", q:"Did she call you? — Yes, she ___.", o:["did","does"], a:"did", e:"Respuesta: she <b>did</b>.", h:"respuesta corta en pasado → did." },
+      { t:"mc", q:"Did they win? — No, they ___.", o:["didn't","don't"], a:"didn't", e:"They → <b>didn't</b>.", h:"negativa corta → didn't." },
+      { t:"mc", q:"Después de 'didn't' el verbo va en ___.", o:["base","pasado"], a:"base", e:"Con didn't, verbo base.", h:"didn't + verbo base." },
+      { t:"mc", q:"I didn't ___ it. (see)", o:["see","saw"], a:"see", e:"Con didn't → base <b>see</b>.", h:"didn't + base (see, no saw)." },
+      { t:"mc", q:"I ___ at home yesterday. (be)", o:["was","were"], a:"was", e:"I → <b>was</b>.", h:"pasado de be: I → was." },
+      { t:"mc", q:"They ___ happy. (be, pasado)", o:["was","were"], a:"were", e:"They → <b>were</b>.", h:"pasado de be: they → were." },
+      { t:"mc", q:"make → past = ___", o:["made","maked"], a:"made", e:"Irregular → <b>made</b>.", h:"make-made." },
+      { t:"mc", q:"buy → past = ___", o:["bought","buyed"], a:"bought", e:"Irregular → <b>bought</b>.", h:"buy-bought." },
+      { t:"mc", q:"do → past = ___", o:["did","doed"], a:"did", e:"Irregular → <b>did</b>.", h:"do-did." },
+      { t:"fill", q:"She ___ a lot last week. (study)", a:["studied"], e:"consonante+y → <b>studied</b>.", h:"study → studied." },
+      { t:"mc", q:"We ___ like it. (negativa)", o:["didn't","wasn't"], a:"didn't", e:"Negativa de acción → <b>didn't</b>.", h:"negativa en pasado → didn't." },
+      { t:"mc", q:"'Yesterday' pide tiempo ___.", o:["pasado","presente"], a:"pasado", e:"yesterday → pasado.", h:"yesterday = ayer → pasado." },
+      { t:"mc", q:"get → past = ___", o:["got","getted"], a:"got", e:"Irregular → <b>got</b>.", h:"get-got." },
+      { t:"mc", q:"Did he ___ home? (come)", o:["come","came"], a:"come", e:"Con Did → base <b>come</b>.", h:"Did + base (come, no came)." }
+    ]
+  },
+  {
+    id: "irregular", emoji: "🗒️", en: "Irregular Verbs", es: "Verbos irregulares (3 formas)",
+    slides: [
+      { k: "Empezamos", t: "Las <span class='en'>3 formas</span>", h: `
+        <p>Los verbos irregulares <b>no</b> siguen la regla -ed. Hay que memorizar 3 formas:</p>
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Base</th><th>Pasado</th><th>Participio</th></tr>
+          <tr><td>go</td><td>went</td><td>gone</td></tr>
+          <tr><td>eat</td><td>ate</td><td>eaten</td></tr>
+        </table></div>
+        <p>El <b>pasado</b> se usa en Past Simple; el <b>participio</b>, en tiempos perfectos (have gone).</p>` },
+      { k: "Grupo fácil", t: "Formas que se repiten", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Base</th><th>Pasado</th><th>Participio</th></tr>
+          <tr><td>cut</td><td>cut</td><td>cut</td></tr>
+          <tr><td>put</td><td>put</td><td>put</td></tr>
+          <tr><td>come</td><td>came</td><td>come</td></tr>
+          <tr><td>run</td><td>ran</td><td>run</td></tr>
+        </table></div>` },
+      { k: "Pasado = participio", t: "Solo 2 formas distintas", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Base</th><th>Pasado / Participio</th></tr>
+          <tr><td>have</td><td>had</td></tr><tr><td>make</td><td>made</td></tr>
+          <tr><td>buy</td><td>bought</td></tr><tr><td>think</td><td>thought</td></tr>
+          <tr><td>find</td><td>found</td></tr><tr><td>get</td><td>got</td></tr>
+        </table></div>` },
+      { k: "Tres distintas", t: "Las que cambian del todo", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Base</th><th>Pasado</th><th>Participio</th></tr>
+          <tr><td>see</td><td>saw</td><td>seen</td></tr>
+          <tr><td>do</td><td>did</td><td>done</td></tr>
+          <tr><td>write</td><td>wrote</td><td>written</td></tr>
+          <tr><td>take</td><td>took</td><td>taken</td></tr>
+          <tr><td>drink</td><td>drank</td><td>drunk</td></tr>
+          <tr><td>speak</td><td>spoke</td><td>spoken</td></tr>
+        </table></div>` }
+    ],
+    pool: [
+      { t:"mc", q:"go → pasado simple = ___", o:["went","goed"], a:"went", e:"go – went – gone.", h:"2ª columna (pasado)." },
+      { t:"fill", q:"go → participio = ___", a:["gone"], e:"go – went – gone.", h:"3ª columna (participio)." },
+      { t:"mc", q:"eat → pasado simple = ___", o:["ate","eated"], a:"ate", e:"eat – ate – eaten.", h:"2ª columna." },
+      { t:"fill", q:"eat → participio = ___", a:["eaten"], e:"eat – ate – eaten.", h:"3ª columna." },
+      { t:"mc", q:"see → pasado simple = ___", o:["saw","seen"], a:"saw", e:"see – saw – seen.", h:"pasado = saw; participio = seen." },
+      { t:"fill", q:"see → participio = ___", a:["seen"], e:"see – saw – seen.", h:"3ª columna." },
+      { t:"mc", q:"do → participio = ___", o:["done","did"], a:"done", e:"do – did – done.", h:"participio = done (did es pasado)." },
+      { t:"fill", q:"write → participio = ___", a:["written"], e:"write – wrote – written.", h:"3ª columna (doble t)." },
+      { t:"mc", q:"write → pasado simple = ___", o:["wrote","writed"], a:"wrote", e:"write – wrote – written.", h:"2ª columna." },
+      { t:"fill", q:"take → participio = ___", a:["taken"], e:"take – took – taken.", h:"3ª columna." },
+      { t:"mc", q:"take → pasado simple = ___", o:["took","taked"], a:"took", e:"take – took – taken.", h:"2ª columna." },
+      { t:"fill", q:"give → participio = ___", a:["given"], e:"give – gave – given.", h:"3ª columna." },
+      { t:"mc", q:"have → pasado = ___", o:["had","haved"], a:"had", e:"have – had – had.", h:"pasado = participio = had." },
+      { t:"mc", q:"make → pasado = ___", o:["made","maked"], a:"made", e:"make – made – made.", h:"pasado = participio = made." },
+      { t:"fill", q:"buy → pasado = ___", a:["bought"], e:"buy – bought – bought.", h:"pasado = bought." },
+      { t:"fill", q:"bring → pasado = ___", a:["brought"], e:"bring – brought – brought.", h:"como buy → bought." },
+      { t:"mc", q:"think → pasado = ___", o:["thought","thinked"], a:"thought", e:"think – thought – thought.", h:"think → thought." },
+      { t:"fill", q:"find → pasado = ___", a:["found"], e:"find – found – found.", h:"find → found." },
+      { t:"mc", q:"get → pasado = ___", o:["got","getted"], a:"got", e:"get – got – got.", h:"get → got." },
+      { t:"fill", q:"speak → participio = ___", a:["spoken"], e:"speak – spoke – spoken.", h:"3ª columna." },
+      { t:"mc", q:"drink → pasado simple = ___", o:["drank","drinked"], a:"drank", e:"drink – drank – drunk.", h:"2ª columna = drank." },
+      { t:"fill", q:"drink → participio = ___", a:["drunk"], e:"drink – drank – drunk.", h:"3ª columna = drunk." },
+      { t:"mc", q:"swim → pasado simple = ___", o:["swam","swimmed"], a:"swam", e:"swim – swam – swum.", h:"2ª columna = swam." },
+      { t:"fill", q:"break → participio = ___", a:["broken"], e:"break – broke – broken.", h:"3ª columna." },
+      { t:"mc", q:"sing → pasado simple = ___", o:["sang","singed"], a:"sang", e:"sing – sang – sung.", h:"2ª columna = sang." },
+      { t:"fill", q:"know → participio = ___", a:["known"], e:"know – knew – known.", h:"3ª columna." },
+      { t:"mc", q:"come → pasado simple = ___", o:["came","comed"], a:"came", e:"come – came – come.", h:"2ª columna = came." },
+      { t:"fill", q:"come → participio = ___", a:["come"], e:"come – came – come.", h:"participio = come (igual que base)." },
+      { t:"mc", q:"put → pasado simple = ___", o:["put","putted"], a:"put", e:"put – put – put.", h:"no cambia: put." },
+      { t:"fill", q:"fly → pasado simple = ___", a:["flew"], e:"fly – flew – flown.", h:"2ª columna = flew." }
+    ]
+  },
+  {
+    id: "pastcont", emoji: "🎞️", en: "Past Continuous", es: "Estaba haciendo (was/were + -ing)",
+    slides: [
+      { k: "Empezamos", t: "¿Para qué sirve el <span class='en'>Past Continuous</span>?", h: `
+        <p>Para una acción <b>en progreso</b> en un momento del pasado.</p>
+        <ul class="ex">
+          <li>At 8 pm I <b>was watching</b> TV. <span class="t">A las 8 estaba viendo la tele.</span></li>
+          <li>I <b>was reading</b> when he called. <span class="t">Estaba leyendo cuando llamó.</span></li>
+        </ul>` },
+      { k: "La forma", t: "was / were + verbo-<span class='hl'>ing</span>", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><th>Sujeto</th><th>be (pasado)</th></tr>
+          <tr><td>I / He / She / It</td><td><b>was</b></td></tr>
+          <tr><td>You / We / They</td><td><b>were</b></td></tr>
+        </table></div>
+        <p>Ejemplo: She <b>was</b> cook<b>ing</b>. · They <b>were</b> play<b>ing</b>.</p>` },
+      { k: "Negativa y preguntas", t: "wasn't / weren't · Was…?", h: `
+        <ul class="ex">
+          <li>He <b>wasn't</b> listening.</li>
+          <li><b>Were</b> you sleeping? — Yes, I was. / No, I wasn't.</li>
+        </ul>
+        <div class="tip">💡 El -ing se forma igual que en Present Continuous (run → running).</div>` }
+    ],
+    pool: [
+      { t:"mc", q:"I ___ watching TV.", o:["was","were"], a:"was", e:"I → <b>was</b>.", h:"I/he/she/it → was." },
+      { t:"mc", q:"They ___ playing.", o:["was","were"], a:"were", e:"They → <b>were</b>.", h:"you/we/they → were." },
+      { t:"mc", q:"She ___ reading.", o:["was","were"], a:"was", e:"She → <b>was</b>.", h:"she → was." },
+      { t:"mc", q:"We ___ sleeping.", o:["was","were"], a:"were", e:"We → <b>were</b>.", h:"we → were." },
+      { t:"mc", q:"He ___ running.", o:["was","were"], a:"was", e:"He → <b>was</b>.", h:"he → was." },
+      { t:"mc", q:"You ___ singing.", o:["was","were"], a:"were", e:"You → <b>were</b>.", h:"you → were." },
+      { t:"fill", q:"I was ___ dinner. (cook)", a:["cooking"], e:"cook → <b>cooking</b>.", h:"cook + ing." },
+      { t:"mc", q:"___ she dancing?", o:["Was","Were"], a:"Was", e:"Pregunta con she → <b>Was</b>.", h:"she → Was." },
+      { t:"mc", q:"___ they studying?", o:["Was","Were"], a:"Were", e:"Pregunta con they → <b>Were</b>.", h:"they → Were." },
+      { t:"mc", q:"He ___ listening. (negativa)", o:["wasn't","weren't"], a:"wasn't", e:"He → <b>wasn't</b>.", h:"he → wasn't." },
+      { t:"mc", q:"We ___ talking. (negativa)", o:["wasn't","weren't"], a:"weren't", e:"We → <b>weren't</b>.", h:"we → weren't." },
+      { t:"mc", q:"It ___ raining at 6.", o:["was","were"], a:"was", e:"It → <b>was</b>.", h:"it → was." },
+      { t:"fill", q:"They were ___ in the sea. (swim)", a:["swimming"], e:"swim → <b>swimming</b>.", h:"swim → se dobla la m." },
+      { t:"mc", q:"Was he working? — Yes, he ___.", o:["was","were"], a:"was", e:"he <b>was</b>.", h:"respuesta corta con he → was." },
+      { t:"mc", q:"Were you sleeping? — No, I ___.", o:["wasn't","weren't"], a:"wasn't", e:"I → <b>wasn't</b>.", h:"I → wasn't." },
+      { t:"mc", q:"The children ___ playing outside.", o:["was","were"], a:"were", e:"children = they → <b>were</b>.", h:"children es plural → were." },
+      { t:"fill", q:"She was ___ a letter. (write)", a:["writing"], e:"write → <b>writing</b>.", h:"write → se quita la -e." },
+      { t:"mc", q:"I ___ reading when you called.", o:["was","were"], a:"was", e:"I → <b>was</b>.", h:"I → was." },
+      { t:"mc", q:"My parents ___ cooking.", o:["was","were"], a:"were", e:"parents = they → <b>were</b>.", h:"parents plural → were." },
+      { t:"mc", q:"What ___ you doing?", o:["was","were"], a:"were", e:"you → <b>were</b>.", h:"you → were." },
+      { t:"fill", q:"He was ___ fast. (run)", a:["running"], e:"run → <b>running</b>.", h:"run → se dobla la n." },
+      { t:"mc", q:"The dog ___ barking.", o:["was","were"], a:"was", e:"dog = it → <b>was</b>.", h:"the dog = it → was." },
+      { t:"mc", q:"We ___ watching a film at 9.", o:["was","were"], a:"were", e:"We → <b>were</b>.", h:"we → were." },
+      { t:"mc", q:"___ it working?", o:["Was","Were"], a:"Was", e:"it → <b>Was</b>.", h:"it → Was." },
+      { t:"mc", q:"They ___ paying attention. (negativa)", o:["wasn't","weren't"], a:"weren't", e:"They → <b>weren't</b>.", h:"they → weren't." },
+      { t:"fill", q:"I was ___ a cake. (make)", a:["making"], e:"make → <b>making</b>.", h:"make → se quita la -e." },
+      { t:"mc", q:"She ___ crying.", o:["was","were"], a:"was", e:"She → <b>was</b>.", h:"she → was." },
+      { t:"mc", q:"You and Tom ___ laughing.", o:["was","were"], a:"were", e:"You and Tom = they → <b>were</b>.", h:"dos personas → were." },
+      { t:"mc", q:"At midnight we ___ sleeping.", o:["was","were"], a:"were", e:"We → <b>were</b>.", h:"we → were." },
+      { t:"mc", q:"Was he driving? — No, he ___.", o:["wasn't","weren't"], a:"wasn't", e:"He → <b>wasn't</b>.", h:"he → wasn't." }
+    ]
+  },
+  {
+    id: "orders", emoji: "🚦", en: "Orders & Obligation", es: "Imperativo y obligación (must, should…)",
+    slides: [
+      { k: "Empezamos", t: "El <span class='en'>imperativo</span>: dar órdenes", h: `
+        <p>Para órdenes e instrucciones usamos el <b>verbo base</b>, sin sujeto.</p>
+        <ul class="ex">
+          <li><b>Open</b> the door. <span class="t">Abre la puerta.</span></li>
+          <li><b>Don't</b> run! <span class="t">¡No corras!</span></li>
+          <li><b>Please</b> sit down. <span class="t">Siéntate, por favor.</span></li>
+        </ul>
+        <div class="tip">💡 Negativo: <b>Don't</b> + verbo base.</div>` },
+      { k: "must / mustn't", t: "Obligación y prohibición", h: `
+        <ul class="ex">
+          <li>You <b>must</b> wear a helmet. <span class="t">Debes llevar casco. (obligación)</span></li>
+          <li>You <b>mustn't</b> smoke here. <span class="t">No debes / está prohibido fumar.</span></li>
+        </ul>
+        <div class="tip warn">⚠️ Después de <b>must</b> va el verbo <b>base</b> (must <b>go</b>, no "must to go").</div>` },
+      { k: "should / shouldn't", t: "Consejos", h: `
+        <ul class="ex">
+          <li>You <b>should</b> study more. <span class="t">Deberías estudiar más. (consejo)</span></li>
+          <li>You <b>shouldn't</b> eat so much. <span class="t">No deberías comer tanto.</span></li>
+        </ul>
+        <div class="tip">💡 <b>should</b> = recomendación, no obligación fuerte.</div>` },
+      { k: "have to", t: "Obligación (de fuera)", h: `
+        <ul class="ex">
+          <li>I <b>have to</b> wear a uniform. <span class="t">Tengo que llevar uniforme.</span></li>
+          <li>She <b>has to</b> get up early. <span class="t">(he/she/it → has to)</span></li>
+          <li>We <b>don't have to</b> go. <span class="t">No hace falta ir.</span></li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"mc", q:"___ the door, please. (orden)", o:["Open","You open"], a:"Open", e:"Imperativo → verbo base <b>Open</b>.", h:"orden → verbo base sin sujeto." },
+      { t:"mc", q:"___ run! (orden negativa)", o:["Don't","Not"], a:"Don't", e:"Negativo → <b>Don't</b> + base.", h:"orden negativa → Don't." },
+      { t:"mc", q:"Para dar una orden usamos el verbo en ___.", o:["base","-ing"], a:"base", e:"Imperativo = verbo base.", h:"imperativo → forma base." },
+      { t:"mc", q:"Imperativo negativo: ___ + base.", o:["Don't","Doesn't"], a:"Don't", e:"Siempre <b>Don't</b>.", h:"Don't + base, para todos." },
+      { t:"mc", q:"___ down, please.", o:["Sit","Sitting"], a:"Sit", e:"Imperativo → <b>Sit</b>.", h:"orden → verbo base." },
+      { t:"mc", q:"___ talk in the exam!", o:["Don't","No"], a:"Don't", e:"Negativo → <b>Don't</b>.", h:"orden negativa → Don't." },
+      { t:"mc", q:"You ___ wear a seatbelt. (obligación)", o:["must","mustn't"], a:"must", e:"Obligación → <b>must</b>.", h:"obligación → must." },
+      { t:"mc", q:"You ___ smoke here. (prohibido)", o:["must","mustn't"], a:"mustn't", e:"Prohibición → <b>mustn't</b>.", h:"prohibido → mustn't." },
+      { t:"mc", q:"Después de 'must' el verbo va en ___.", o:["base","-ing"], a:"base", e:"must + verbo base.", h:"must + base (sin to)." },
+      { t:"mc", q:"We ___ be quiet in the library. (obligación)", o:["must","mustn't"], a:"must", e:"Obligación → <b>must</b>.", h:"obligación → must." },
+      { t:"mc", q:"You ___ touch that, it's dangerous.", o:["mustn't","must"], a:"mustn't", e:"Prohibición → <b>mustn't</b>.", h:"peligro/prohibido → mustn't." },
+      { t:"mc", q:"You ___ study for the exam. (consejo)", o:["should","shouldn't"], a:"should", e:"Consejo → <b>should</b>.", h:"consejo → should." },
+      { t:"mc", q:"You ___ eat so much sugar. (mal consejo)", o:["should","shouldn't"], a:"shouldn't", e:"Consejo negativo → <b>shouldn't</b>.", h:"no deberías → shouldn't." },
+      { t:"mc", q:"I'm tired. — You ___ go to bed.", o:["should","shouldn't"], a:"should", e:"Consejo → <b>should</b>.", h:"consejo → should." },
+      { t:"mc", q:"'Should' se usa para dar ___.", o:["consejos","órdenes"], a:"consejos", e:"should = consejos.", h:"should = recomendación." },
+      { t:"mc", q:"He ___ be so rude. (consejo negativo)", o:["shouldn't","mustn't"], a:"shouldn't", e:"Consejo negativo → <b>shouldn't</b>.", h:"consejo → should/shouldn't." },
+      { t:"mc", q:"I ___ wear a uniform at school. (obligación)", o:["have to","don't have to"], a:"have to", e:"Obligación → <b>have to</b>.", h:"tengo que → have to." },
+      { t:"mc", q:"She ___ get up early. (he/she)", o:["has to","have to"], a:"has to", e:"she → <b>has to</b>.", h:"he/she/it → has to." },
+      { t:"mc", q:"It's Sunday, we ___ go to school.", o:["don't have to","have to"], a:"don't have to", e:"No es necesario → <b>don't have to</b>.", h:"no hace falta → don't have to." },
+      { t:"mc", q:"Does he ___ work today?", o:["have to","has to"], a:"have to", e:"Con Does → <b>have to</b> (base).", h:"Does + have to (base)." },
+      { t:"mc", q:"Please ___ quiet. (orden)", o:["be","being"], a:"be", e:"Imperativo del verbo be → <b>be</b>.", h:"orden → verbo base (be)." },
+      { t:"mc", q:"You ___ park here. (prohibido)", o:["mustn't","should"], a:"mustn't", e:"Prohibición → <b>mustn't</b>.", h:"prohibido → mustn't." },
+      { t:"mc", q:"You look ill. You ___ see a doctor. (consejo)", o:["should","shouldn't"], a:"should", e:"Consejo → <b>should</b>.", h:"consejo → should." },
+      { t:"mc", q:"Children ___ obey their parents. (obligación)", o:["must","mustn't"], a:"must", e:"Obligación → <b>must</b>.", h:"obligación → must." },
+      { t:"mc", q:"___ be late! (orden negativa)", o:["Don't","Not"], a:"Don't", e:"Negativo → <b>Don't</b>.", h:"orden negativa → Don't." },
+      { t:"mc", q:"We ___ finish this today. (obligación externa)", o:["have to","must to"], a:"have to", e:"<b>have to</b> (nunca 'must to').", h:"obligación externa → have to." },
+      { t:"mc", q:"'mustn't' significa ___.", o:["prohibido","opcional"], a:"prohibido", e:"mustn't = prohibido.", h:"mustn't = no debes / prohibido." },
+      { t:"mc", q:"You ___ worry, everything is fine.", o:["shouldn't","must"], a:"shouldn't", e:"Tranquilizar → <b>shouldn't</b> worry.", h:"no deberías → shouldn't." },
+      { t:"mc", q:"___ your homework before dinner. (orden)", o:["Do","Doing"], a:"Do", e:"Imperativo → <b>Do</b>.", h:"orden → verbo base." },
+      { t:"mc", q:"He has to ___ early. (verbo base)", o:["wake up","wakes up"], a:"wake up", e:"have/has to + base → <b>wake up</b>.", h:"has to + verbo base." }
+    ]
   }
 ];
 
