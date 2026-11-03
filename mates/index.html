@@ -611,6 +611,128 @@ const TOPICS = [
       { t:"fill", q:"1 : 4 =", a:["0,25"], e:"1:4=0,25.", h:"un cuarto." },
       { t:"fill", q:"7,5 + 2,5 =", a:["10","10.0"], e:"7,5+2,5=10.", h:"5+5 décimas = 10 = 1." }
     ]
+  },
+  {
+    id: "estadistica", emoji: "📊", en: "Estadística", es: "Media, moda, mediana y frecuencias",
+    slides: [
+      { k: "Empezamos", t: "Las <span class='en'>frecuencias</span>", h: `
+        <p>Al recoger datos los contamos en una tabla.</p>
+        <ul class="bul">
+          <li><b>Frecuencia absoluta (fa)</b>: cuántas veces aparece un valor.</li>
+          <li><b>Frecuencia relativa (fr)</b>: fa : total (sale un número entre 0 y 1).</li>
+        </ul>
+        <div class="tip">💡 La suma de todas las fr siempre da <b>1</b>.</div>` },
+      { k: "La media", t: "Media aritmética", h: `
+        <p>Se suman <b>todos</b> los datos y se divide entre el <b>número de datos</b>.</p>
+        <ul class="ex">
+          <li>Media de 2, 4, 6 = (2+4+6) : 3 = 12 : 3 = <b>4</b></li>
+        </ul>` },
+      { k: "Moda y mediana", t: "Los otros parámetros", h: `
+        <ul class="bul">
+          <li><b>Moda</b>: el valor que <b>más se repite</b> (mayor fa).</li>
+          <li><b>Mediana</b>: el valor del <b>centro</b> al ordenar los datos.</li>
+          <li><b>Rango</b>: valor mayor − valor menor.</li>
+        </ul>
+        <ul class="ex">
+          <li>En 2, 3, 3, 5 → moda = 3. En 1, 3, 5 → mediana = 3.</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"fill", q:"Media de 2, 4, 6 =", a:["4"], e:"(2+4+6):3 = 12:3 = 4.", h:"suma y divide entre 3." },
+      { t:"fill", q:"Media de 10 y 20 =", a:["15"], e:"(10+20):2 = 15.", h:"suma y divide entre 2." },
+      { t:"fill", q:"Media de 1, 2, 3, 4 =", a:["2,5"], e:"10:4 = 2,5.", h:"10 entre 4." },
+      { t:"fill", q:"Media de 5, 5, 5 =", a:["5"], e:"Todos iguales → 5.", h:"si son iguales, esa es la media." },
+      { t:"fill", q:"Media de 3, 7 =", a:["5"], e:"(3+7):2 = 5.", h:"suma y divide entre 2." },
+      { t:"fill", q:"Moda de 2, 3, 3, 4 =", a:["3"], e:"El 3 se repite más.", h:"el que más se repite." },
+      { t:"fill", q:"Moda de 1, 1, 2, 5, 5, 5 =", a:["5"], e:"El 5 aparece 3 veces.", h:"el más repetido." },
+      { t:"fill", q:"Moda de 4, 4, 6, 9 =", a:["4"], e:"El 4 se repite.", h:"el más repetido." },
+      { t:"fill", q:"Mediana de 1, 3, 5 =", a:["3"], e:"El del centro es 3.", h:"el del centro." },
+      { t:"fill", q:"Mediana de 2, 4, 6, 8, 10 =", a:["6"], e:"El central es 6.", h:"el valor central." },
+      { t:"fill", q:"Mediana de 7, 3, 5 (ordena primero) =", a:["5"], e:"Ordenado: 3,5,7 → 5.", h:"ordena y coge el del centro." },
+      { t:"fill", q:"Rango de 2, 5, 9 =", a:["7"], e:"9 − 2 = 7.", h:"mayor − menor." },
+      { t:"fill", q:"Rango de 10, 4, 7 =", a:["6"], e:"10 − 4 = 6.", h:"mayor − menor." },
+      { t:"mc", q:"La moda es el valor que…", o:["más se repite","está en el centro"], a:"más se repite", e:"Moda = más repetido.", h:"el más repetido." },
+      { t:"mc", q:"La mediana es el valor que…", o:["está en el centro","más se repite"], a:"está en el centro", e:"Mediana = central.", h:"el del centro." },
+      { t:"mc", q:"Para la media hay que…", o:["sumar y dividir","ordenar"], a:"sumar y dividir", e:"Sumar todo y dividir.", h:"sumar y dividir." },
+      { t:"fill", q:"Un valor aparece 5 veces. Su fa =", a:["5"], e:"fa = nº de veces = 5.", h:"fa = veces que aparece." },
+      { t:"fill", q:"fr = fa : total. Si fa=5 y total=20, fr =", a:["0,25"], e:"5:20 = 0,25.", h:"5 entre 20." },
+      { t:"fill", q:"La suma de todas las fr es…", a:["1"], e:"Siempre 1.", h:"todas las fr suman 1." },
+      { t:"fill", q:"Media de 6, 6, 6, 6 =", a:["6"], e:"Todos iguales → 6.", h:"todos iguales." },
+      { t:"fill", q:"Media de 0, 10 =", a:["5"], e:"(0+10):2 = 5.", h:"suma y divide entre 2." },
+      { t:"fill", q:"Moda de 8, 8, 8, 2 =", a:["8"], e:"El 8 se repite.", h:"el más repetido." },
+      { t:"fill", q:"Mediana de 4, 2, 8, 6 (media de los 2 centrales) =", a:["5"], e:"Ordenado 2,4,6,8 → (4+6):2=5.", h:"ordena: (4+6):2." },
+      { t:"fill", q:"Rango de 3, 3, 3 =", a:["0"], e:"3 − 3 = 0.", h:"mayor − menor." },
+      { t:"fill", q:"Media de 12, 14, 16 =", a:["14"], e:"42:3 = 14.", h:"suma y divide entre 3." },
+      { t:"mc", q:"La frecuencia absoluta (fa) es…", o:["cuántas veces aparece","el porcentaje"], a:"cuántas veces aparece", e:"fa = nº de veces.", h:"veces que aparece." },
+      { t:"fill", q:"Datos 1, 2, 2, 3. La fa del 2 es", a:["2"], e:"El 2 aparece 2 veces.", h:"cuenta los 2." },
+      { t:"fill", q:"Media de 2, 4, 4, 2 =", a:["3"], e:"12:4 = 3.", h:"suma (12) entre 4." },
+      { t:"fill", q:"Mediana de 5, 1, 9, 3, 7 =", a:["5"], e:"Ordenado 1,3,5,7,9 → 5.", h:"ordena y coge el centro." },
+      { t:"fill", q:"Si total=10 y fa=3, fr =", a:["0,3"], e:"3:10 = 0,3.", h:"3 entre 10." }
+    ]
+  },
+  {
+    id: "geometria", emoji: "📐", en: "Geometría", es: "Rectas, polígonos y ángulos",
+    slides: [
+      { k: "Rectas", t: "Tipos de <span class='en'>rectas</span>", h: `
+        <ul class="bul">
+          <li><b>Paralelas</b>: nunca se cortan (como las vías del tren).</li>
+          <li><b>Secantes</b>: se cortan en un punto.</li>
+          <li><b>Perpendiculares</b>: se cortan formando un ángulo recto (90°).</li>
+        </ul>` },
+      { k: "Polígonos", t: "Según sus lados", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>Triángulo</td><td>3 lados</td></tr>
+          <tr><td>Cuadrilátero</td><td>4 lados</td></tr>
+          <tr><td>Pentágono</td><td>5 lados</td></tr>
+          <tr><td>Hexágono</td><td>6 lados</td></tr>
+        </table></div>
+        <div class="tip">💡 El <b>perímetro</b> es la suma de todos los lados.</div>` },
+      { k: "Cuadriláteros", t: "Los de 4 lados", h: `
+        <div class="table-wrap"><table class="grx">
+          <tr><td>Cuadrado</td><td>4 lados iguales y 4 ángulos rectos</td></tr>
+          <tr><td>Rectángulo</td><td>lados iguales 2 a 2, 4 ángulos rectos</td></tr>
+          <tr><td>Rombo</td><td>4 lados iguales, sin ángulos rectos</td></tr>
+          <tr><td>Trapecio</td><td>un par de lados paralelos</td></tr>
+          <tr><td>Trapezoide</td><td>ningún lado paralelo</td></tr>
+        </table></div>` },
+      { k: "Ángulos", t: "Cómo se miden", h: `
+        <ul class="bul">
+          <li><b>Recto</b> = 90° · <b>Llano</b> = 180° · <b>Vuelta completa</b> = 360°</li>
+          <li><b>Agudo</b>: menos de 90° · <b>Obtuso</b>: entre 90° y 180°</li>
+        </ul>` }
+    ],
+    pool: [
+      { t:"mc", q:"Dos rectas que nunca se cortan son…", o:["paralelas","secantes"], a:"paralelas", e:"Paralelas no se cortan.", h:"como las vías del tren." },
+      { t:"mc", q:"Dos rectas que se cortan en 90° son…", o:["perpendiculares","paralelas"], a:"perpendiculares", e:"90° → perpendiculares.", h:"forman ángulo recto." },
+      { t:"mc", q:"Dos rectas que se cortan (no en 90°) son…", o:["secantes","paralelas"], a:"secantes", e:"Se cortan en un punto.", h:"se cruzan en un punto." },
+      { t:"fill", q:"Un triángulo tiene ___ lados.", a:["3"], e:"Triángulo = 3 lados.", h:"tri = 3." },
+      { t:"fill", q:"Un cuadrilátero tiene ___ lados.", a:["4"], e:"Cuadrilátero = 4 lados.", h:"cuadri = 4." },
+      { t:"fill", q:"Un pentágono tiene ___ lados.", a:["5"], e:"Pentágono = 5 lados.", h:"penta = 5." },
+      { t:"fill", q:"Un hexágono tiene ___ lados.", a:["6"], e:"Hexágono = 6 lados.", h:"hexa = 6." },
+      { t:"mc", q:"4 lados iguales y 4 ángulos rectos:", o:["cuadrado","rombo"], a:"cuadrado", e:"Es el cuadrado.", h:"iguales + rectos." },
+      { t:"mc", q:"4 lados iguales pero sin ángulos rectos:", o:["rombo","cuadrado"], a:"rombo", e:"Es el rombo.", h:"iguales, inclinado." },
+      { t:"mc", q:"Lados iguales 2 a 2 y 4 ángulos rectos:", o:["rectángulo","trapecio"], a:"rectángulo", e:"Es el rectángulo.", h:"como una puerta." },
+      { t:"mc", q:"Cuadrilátero con un solo par de lados paralelos:", o:["trapecio","cuadrado"], a:"trapecio", e:"Es el trapecio.", h:"un par paralelo." },
+      { t:"mc", q:"Cuadrilátero sin lados paralelos:", o:["trapezoide","rombo"], a:"trapezoide", e:"Es el trapezoide.", h:"ninguno paralelo." },
+      { t:"fill", q:"Un ángulo recto mide ___ grados.", a:["90"], e:"Recto = 90°.", h:"la esquina de un folio." },
+      { t:"fill", q:"Un ángulo llano mide ___ grados.", a:["180"], e:"Llano = 180°.", h:"una línea recta." },
+      { t:"mc", q:"Un ángulo menor de 90° es…", o:["agudo","obtuso"], a:"agudo", e:"Menos de 90° → agudo.", h:"pequeño → agudo." },
+      { t:"mc", q:"Un ángulo mayor de 90° es…", o:["obtuso","agudo"], a:"obtuso", e:"Más de 90° → obtuso.", h:"grande → obtuso." },
+      { t:"fill", q:"Una vuelta completa mide ___ grados.", a:["360"], e:"Vuelta completa = 360°.", h:"círculo entero." },
+      { t:"fill", q:"Perímetro de un cuadrado de lado 5 =", a:["20"], e:"4 · 5 = 20.", h:"4 lados iguales." },
+      { t:"fill", q:"Perímetro de un rectángulo de lados 4 y 6 =", a:["20"], e:"2·(4+6) = 20.", h:"suma los 4 lados." },
+      { t:"fill", q:"Perímetro de un triángulo de lados 3, 4, 5 =", a:["12"], e:"3+4+5 = 12.", h:"suma los lados." },
+      { t:"fill", q:"Perímetro de un cuadrado de lado 10 =", a:["40"], e:"4 · 10 = 40.", h:"4 · lado." },
+      { t:"fill", q:"Perímetro de un cuadrado de lado 7 =", a:["28"], e:"4 · 7 = 28.", h:"4 · lado." },
+      { t:"mc", q:"El perímetro es…", o:["la suma de los lados","el espacio interior"], a:"la suma de los lados", e:"Perímetro = contorno.", h:"la suma de los lados." },
+      { t:"fill", q:"Un octógono tiene ___ lados.", a:["8"], e:"Octógono = 8 lados.", h:"octo = 8." },
+      { t:"mc", q:"Las vías del tren son rectas…", o:["paralelas","perpendiculares"], a:"paralelas", e:"Nunca se cortan.", h:"no se cortan." },
+      { t:"mc", q:"Figura de 3 lados:", o:["triángulo","cuadrado"], a:"triángulo", e:"3 lados = triángulo.", h:"tri = 3." },
+      { t:"fill", q:"Perímetro de un pentágono regular de lado 5 =", a:["25"], e:"5 · 5 = 25.", h:"5 lados iguales." },
+      { t:"mc", q:"Un ángulo de 90° es…", o:["recto","llano"], a:"recto", e:"90° = recto.", h:"esquina de folio." },
+      { t:"mc", q:"Los lados de un cuadrado son todos…", o:["iguales","distintos"], a:"iguales", e:"Cuadrado = lados iguales.", h:"todos iguales." },
+      { t:"fill", q:"Perímetro de un rectángulo de lados 5 y 9 =", a:["28"], e:"2·(5+9) = 28.", h:"2·(5+9)." }
+    ]
   }
 ];
 
@@ -669,7 +791,8 @@ function gradeColor(p) { return p === 100 ? "var(--good)" : p >= 60 ? "var(--acc
 const CATEGORIES = [
   { name: "Operaciones", emoji: "🧮", ids: ["combinadas", "multdiv", "potencias"] },
   { name: "Divisibilidad", emoji: "🧩", ids: ["divisores", "mcmmcd"] },
-  { name: "Fracciones y decimales", emoji: "🍕", ids: ["fracciones", "decimales"] }
+  { name: "Fracciones y decimales", emoji: "🍕", ids: ["fracciones", "decimales"] },
+  { name: "Datos y figuras", emoji: "📊", ids: ["estadistica", "geometria"] }
 ];
 
 function renderHome() {
